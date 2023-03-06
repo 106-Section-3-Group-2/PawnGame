@@ -29,17 +29,22 @@ namespace PawnGame.GameObjects
 
         private void ReadInputs()
         {
-            throw new System.NotImplementedException;
+            throw new System.NotImplementedException();
         }
 
         private void UseAbility()
         {
-            throw new System.NotImplementedException;
+            throw new System.NotImplementedException();
         }
 
         private void GetAbility(Enemy enemy)
         {
-            throw new System.NotImplementedException;
+            throw new System.NotImplementedException();
+        }
+
+        protected override void OnDeath()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
