@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PawnGame.GameObjects
+﻿namespace PawnGame.GameObjects
 {
     public abstract class GameObject
     {
+        #region Fields
         protected Texture2D Texture;
         protected Rectangle Hitbox;
+        #endregion
 
         #region Properties (might not use)
         public int Width { get { return Hitbox.Width; } }
@@ -22,22 +18,30 @@ namespace PawnGame.GameObjects
         #endregion
 
         /// <summary>
-        /// 
+        /// Gives values to the texture and hitbox
         /// </summary>
         /// <param name="texture"></param>
         /// <param name="hitbox"></param>
-        public GameObject(Texture2D texture,
-            Rectangle hitbox)
+        protected GameObject(Texture2D texture, Rectangle hitbox)
         {
             Texture = texture;
             Hitbox = hitbox;
         }
 
         /// <summary>
-        /// 
+        /// Checks if the game object is coliding with another game object
         /// </summary>
         /// <param name="other"></param>
-        /// <returns></returns>
-        public virtual bool CheckCollision(GameObject other) { return Hitbox.Intersects(other.Hitbox); }
+        /// <returns>True if game objects are intersecting, otherwise false</returns>
+        protected virtual bool CheckCollision(GameObject other) { return Hitbox.Intersects(other.Hitbox); }
+
+        /// <summary>
+        /// Draws the game object to the screen
+        /// </summary>
+        /// <param name="sb"></param>
+        protected virtual void Draw(SpriteBatch sb)
+        {
+            sb.Draw(Texture, Hitbox, Color.White);
+        }
     }
 }
