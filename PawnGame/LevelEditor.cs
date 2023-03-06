@@ -11,12 +11,17 @@ namespace PawnGame
     internal class LevelEditor
     {
         #region fields
-        private string filePath;
-        private Tile[] palette;
-        private Level level;
+        private string _filePath;
+        private Tile[] _palette;
+        private Level _level;
         #endregion
 
-        public void Draw()
+        public LevelEditor(int x, int y)
+        {
+
+        }
+
+        public void Draw(SpriteBatch sb)
         {
 
         }
