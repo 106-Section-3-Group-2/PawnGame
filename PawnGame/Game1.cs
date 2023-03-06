@@ -1,6 +1,7 @@
 ﻿global using Microsoft.Xna.Framework;
 global using Microsoft.Xna.Framework.Graphics;
 global using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace PawnGame
 {
@@ -23,13 +24,23 @@ namespace PawnGame
 
         private GameState _gameState;
 
-        private MouseState _currMState;
-        private MouseState _prevMState;
+        private KeyboardState _currKbState;
+        private KeyboardState _prevKbState;
 
         private Vector2 _windowSize;
 
         // Menu buttons
+        private List<Button> _menuButtons = new List<Button>();
 
+        /* Not sure whether it would be better to store buttons are seperate
+         variables, or under one list
+         Right now, it's under a list, but I'll change it if necessary
+         - Troy
+
+         private Button _newGameBtn;
+         private Button _loadGameBtn;
+         private Button _lvlEditorBtn;*/
+         
         // This font is temporary
         // Will use for creating menu skeleton
         // for implementation of clicking from menu to game
@@ -38,6 +49,7 @@ namespace PawnGame
 
         public Game1()
         {
+
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
@@ -58,6 +70,17 @@ namespace PawnGame
 
             // TODO: use this.Content to load your game content here
             font = this.Content.Load<SpriteFont>("Arial");
+
+            // Adding all 3 buttons on the menu screen to the list
+            _menuButtons.Add(new(font, "New Game",
+                    new Vector2(_windowSize.X / 2 - font.MeasureString("New Game").X / 2, _windowSize.Y - 100),
+                Color.LightGray));
+            _menuButtons.Add(new(font, "Load Game",
+                    new Vector2(_windowSize.X / 2 - font.MeasureString("Load Game").X / 2, _windowSize.Y - 75),
+                    Color.LightGray));
+            _menuButtons.Add(new(font, "Level Editor",
+                    new Vector2(_windowSize.X / 2 - font.MeasureString("Level Editor").X / 2, _windowSize.Y - 50),
+                    Color.LightGray));
         }
 
         protected override void Update(GameTime gameTime)
@@ -65,11 +88,39 @@ namespace PawnGame
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            _currKbState = Keyboard.GetState();
+
             switch (_gameState)
             {
                 #region Menu State
                 case GameState.Menu:
 
+                    // Updating the states depending on what button is clicked
+                    // or what key is pressed
+                    for (int i = 0; i < _menuButtons.Count; i++)
+                    {
+                        if (_menuButtons[i].Clicked())
+                        {
+                            if (i == 0)
+                            {
+                                // Start a new game
+                                // (whatever that means)
+                                _gameState = GameState.Game;
+                            }
+                            else if (i == 1)
+                            {
+                                // Load a level from a file
+                                _gameState = GameState.Game;
+                            }
+                            else
+                            {
+                                // Open the level editor
+                                _gameState = GameState.LevelEditor;
+                            }
+                        }
+                    }
+
+                    
                     #endregion
                     break;
 
@@ -98,6 +149,14 @@ namespace PawnGame
                     break;
             }
 
+            // Regradless of state, you can get to the debug menu
+            if (_currKbState.IsKeyDown(Keys.F))
+            {
+                _gameState = GameState.DebugMenu;
+            }
+
+            _prevKbState = _currKbState;
+
             base.Update(gameTime);
         }
 
@@ -106,25 +165,46 @@ namespace PawnGame
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _spriteBatch.Begin();
-            // TODO: Add your drawing code here
+
             switch (_gameState)
             {
+                #region Menu State
                 case GameState.Menu:
-                    Button newGameBtn = new Button(font, "New Game",
-                        new Vector2(_windowSize.X / 2 - font.MeasureString("New Game").X / 2, _windowSize.Y - 100), Color.LightGray);
-                    newGameBtn.Draw(_spriteBatch);
+
+                    // Menu skeleton containing the buttons
+                    // that will be able to be clicked
+                    foreach (Button b in _menuButtons)
+                    {
+                        b.Draw(_spriteBatch);
+                    }
+
+                    #endregion
+                    break;
+
+                #region DebugMenu State
+                case GameState.DebugMenu:
+
+                    #endregion
+                    break;
+
+                #region Game State
+                case GameState.Game:
+
+                    #endregion
+                    break;
+
+                #region LevelEditor State
+                case GameState.LevelEditor:
+
+                    #endregion
+                    break;
+
+                #region Victory State
+                case GameState.Victory:
+
+                    #endregion
                     break;
             }
-            #region Menu Skeleton
-
-            _spriteBatch.DrawString(font, "Load Game",
-                new Vector2(_windowSize.X / 2 - font.MeasureString("Load Game").X / 2, _windowSize.Y - 75),
-                Color.White);
-
-            _spriteBatch.DrawString(font, "Level Editor",
-                new Vector2(_windowSize.X / 2 - font.MeasureString("Level Editor").X / 2, _windowSize.Y - 50), 
-                Color.White);
-            #endregion
 
             _spriteBatch.End();
             base.Draw(gameTime);
