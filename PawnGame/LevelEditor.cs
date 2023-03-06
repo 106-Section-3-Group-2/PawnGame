@@ -13,6 +13,7 @@ namespace PawnGame
         #region fields
         private string filePath;
         private Tile[] palette;
+        private Level level;
         #endregion
 
         public void Draw()

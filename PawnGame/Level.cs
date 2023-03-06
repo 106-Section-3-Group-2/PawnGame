@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json;
+using System.IO;
 
 namespace PawnGame
 {
@@ -50,6 +52,40 @@ namespace PawnGame
             foreach(Tile tile in Tiles)
             {
                 tile.Draw(sb);
+            }
+        }
+
+        /// <summary>
+        /// writes the level to a filePath
+        /// </summary>
+        /// <param name="level"></param>
+        /// <param name="filePath"></param>
+        public static void Write(Level level, string filePath)
+        {
+            try
+            {
+                new StreamWriter(filePath, false).Write(JsonSerializer.Serialize(level));
+            }
+            catch
+            {
+                throw new Exception("Could not write the file.");
+            }
+        }
+
+        /// <summary>
+        /// returns a level loaded from the filePath. Throws an exception if there was an error writing to the file.
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static Level Read(string filePath)
+        {
+            try
+            {
+                return JsonSerializer.Deserialize<Level>(filePath);
+            }
+            catch
+            {
+                throw new FileLoadException("The file could not be found, or was corrupted.");
             }
         }
     }
