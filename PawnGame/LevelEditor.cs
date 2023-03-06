@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PawnGame.GameObjects;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace PawnGame
     {
         #region fields
         private string filePath;
+        private Tile[] palette;
         #endregion
 
         public void Draw()

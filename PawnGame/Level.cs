@@ -14,9 +14,18 @@ namespace PawnGame
     internal class Level
     {
         #region fields
-        private Tile[,] tiles;
-        private Enemy[] enemySpawns;
-        private Vector2 spawnPoint;
+        /// <summary>
+        /// the array of tiles which make up the level
+        /// </summary>
+        public Tile[,] Tiles { get; set; }
+        /// <summary>
+        /// the spawn locations of enemies
+        /// </summary>
+        public Enemy[] EnemySpawns { get; set; }
+        /// <summary>
+        /// the spawn location of the player
+        /// </summary>
+        public Vector2 SpawnPoint { get; set; }
         #endregion
 
         /// <summary>
@@ -27,14 +36,18 @@ namespace PawnGame
         /// <param name="spawnPoint"></param>
         public Level(Tile[,] tiles, Enemy[] enemies, Vector2 spawnPoint)
         {
-            this.tiles = tiles;
-            this.enemySpawns = enemies;
-            this.spawnPoint = spawnPoint;
+            Tiles = tiles;
+            EnemySpawns = enemies;
+            SpawnPoint = spawnPoint;
         }
 
+        /// <summary>
+        /// draw the level
+        /// </summary>
+        /// <param name="sb"></param>
         public void Draw(SpriteBatch sb)
         {
-            foreach(Tile tile in tiles)
+            foreach(Tile tile in Tiles)
             {
                 tile.Draw(sb);
             }
