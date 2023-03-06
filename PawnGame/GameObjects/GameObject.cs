@@ -39,7 +39,7 @@
         /// Draws the game object to the screen
         /// </summary>
         /// <param name="sb"></param>
-        protected virtual void Draw(SpriteBatch sb)
+        public virtual void Draw(SpriteBatch sb)
         {
             sb.Draw(Texture, Hitbox, Color.White);
         }
