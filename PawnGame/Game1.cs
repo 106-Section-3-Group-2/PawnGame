@@ -4,10 +4,33 @@ global using Microsoft.Xna.Framework.Input;
 
 namespace PawnGame
 {
+    /// <summary>
+    /// Represents the current screen that the game is on
+    /// </summary>
+    public enum GameState
+    {
+        Menu,
+        Game,
+        DebugMenu,
+        Victory,
+        LevelEditor
+    }
+
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+
+        private GameState _gameState;
+
+        private MouseState _currMState;
+        private MouseState _prevMState;
+
+        // This font is temporary
+        // Will use for creating menu skeleton
+        // for implementation of clicking from menu to game
+        private SpriteFont font;
+
 
         public Game1()
         {
@@ -35,7 +58,38 @@ namespace PawnGame
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            switch (_gameState)
+            {
+                #region Menu State
+                case GameState.Menu:
+
+                    #endregion
+                    break;
+
+                #region DebugMenu State
+                case GameState.DebugMenu:
+
+                    #endregion
+                    break;
+
+                #region Game State
+                case GameState.Game:
+
+                    #endregion
+                    break;
+
+                #region LevelEditor State
+                case GameState.LevelEditor:
+
+                    #endregion
+                    break;
+
+                #region Victory State
+                case GameState.Victory:
+
+                    #endregion
+                    break;
+            }
 
             base.Update(gameTime);
         }
