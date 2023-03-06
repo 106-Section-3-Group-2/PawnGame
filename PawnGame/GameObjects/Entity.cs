@@ -19,7 +19,7 @@
         /// <summary>
         /// Should update all values needed for the entety, then move/attack
         /// </summary>
-        protected abstract void Update();
+        public abstract void Update();
         /// <summary>
         /// Should move the entity based on velocity
         /// </summary>
@@ -28,5 +28,9 @@
         /// Should cause the entity to attack
         /// </summary>
         protected abstract void Attack();
+        /// <summary>
+        /// Should occur when the entity dies
+        /// </summary>
+        protected abstract void OnDeath();
     }
 }
