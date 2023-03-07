@@ -23,6 +23,7 @@ namespace PawnGame
         private SpriteBatch _spriteBatch;
 
         private GameState _gameState;
+        private GameState _prevGameState;
 
         private KeyboardState _currKbState;
         private KeyboardState _prevKbState;
@@ -126,32 +127,44 @@ namespace PawnGame
 
                 #region DebugMenu State
                 case GameState.DebugMenu:
+                    // Make a button to each screen
+                    // but make the previous one disabled since they were already on it
 
+                    // If the user presses escape, goes back to the previous state
+                    // Note: Escape closes the window, so i'm using enter as a placeholder to test
+                    if (_currKbState.IsKeyDown(Keys.Enter) && _prevKbState.IsKeyUp(Keys.Enter))
+                    {
+                        _gameState = _prevGameState;
+                    }
                     #endregion
                     break;
 
                 #region Game State
                 case GameState.Game:
+                    // Play the game here
 
                     #endregion
                     break;
 
                 #region LevelEditor State
                 case GameState.LevelEditor:
+                    // Update logic for level editor
 
                     #endregion
                     break;
 
                 #region Victory State
                 case GameState.Victory:
+                    // Check for buttons clicked to go back to menu
 
                     #endregion
                     break;
             }
 
             // Regradless of state, you can get to the debug menu
-            if (_currKbState.IsKeyDown(Keys.F))
+            if (_currKbState.IsKeyDown(Keys.F) && _prevKbState.IsKeyUp(Keys.F))
             {
+                _prevGameState = _gameState;
                 _gameState = GameState.DebugMenu;
             }
 
@@ -183,25 +196,39 @@ namespace PawnGame
 
                 #region DebugMenu State
                 case GameState.DebugMenu:
+                    // Draw debug menu on top of last frame of previous
+                    // state
 
+                    // Replace these tests later obviously
+                    _spriteBatch.DrawString(font, "Debug Menu",
+                        new Vector2(_windowSize.X / 2 - font.MeasureString("Debug Menu").X/2, 100), Color.White);
                     #endregion
                     break;
 
                 #region Game State
                 case GameState.Game:
+                    // Draw.. the game?
 
+                    _spriteBatch.DrawString(font, "HIPUR (the game)",
+                        new Vector2(_windowSize.X / 2 - font.MeasureString("HIPUR (the game)").X / 2, _windowSize.Y / 2), Color.White);
                     #endregion
                     break;
 
                 #region LevelEditor State
                 case GameState.LevelEditor:
+                    // Draw level editor interface
 
+                    _spriteBatch.DrawString(font, "Level Editor",
+                        new Vector2(_windowSize.X / 2 - font.MeasureString("LevelEditor").X / 2, _windowSize.Y / 2), Color.White);
                     #endregion
                     break;
 
                 #region Victory State
                 case GameState.Victory:
+                    // Draw victory screen
 
+                    _spriteBatch.DrawString(font, "You win",
+                        new Vector2(_windowSize.X / 2 - font.MeasureString("You win").X / 2, _windowSize.Y / 2), Color.White);
                     #endregion
                     break;
             }
