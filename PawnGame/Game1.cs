@@ -88,17 +88,6 @@ namespace PawnGame
 
             // TODO: use this.Content to load your game content here
             font = this.Content.Load<SpriteFont>("Arial");
-
-            // Adding all 3 buttons on the menu screen to the list
-            _menuButtons.Add(new(font, "New Game",
-                    new Vector2(WindowWidth / 2 - font.MeasureString("New Game").X / 2, WindowHeight - 100),
-                Color.LightGray));
-            _menuButtons.Add(new(font, "Load Game",
-                    new Vector2(WindowWidth / 2 - font.MeasureString("Load Game").X / 2, WindowHeight - 75),
-                    Color.LightGray));
-            _menuButtons.Add(new(font, "Level Editor",
-                    new Vector2(WindowWidth / 2 - font.MeasureString("Level Editor").X / 2, WindowHeight - 50),
-                    Color.LightGray));
         }
 
         protected override void Update(GameTime gameTime)
@@ -138,7 +127,9 @@ namespace PawnGame
 
                     _menuButtons.Clear();
 
-                    // Adding all 3 buttons on the menu screen to the list
+                    // Adding all 3 buttons on the menu screen
+                    // Note: Doing this in update so that their position updates
+                    // when  the window is fullscreened
                     _menuButtons.Add(new(font, "New Game",
                             new Vector2(WindowWidth / 2 - font.MeasureString("New Game").X / 2, WindowHeight - 100),
                         Color.LightGray));
