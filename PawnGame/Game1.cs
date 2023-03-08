@@ -28,7 +28,24 @@ namespace PawnGame
         private KeyboardState _currKbState;
         private KeyboardState _prevKbState;
 
-        private Vector2 _windowSize;
+        private int _width;
+        private int _height;
+
+        /// <summary>
+        /// Gets the width of the window
+        /// </summary>
+        public float WindowWidth
+        {
+            get { return Window.ClientBounds.Width; }
+        }
+
+        /// <summary>
+        /// Gets the height of the window
+        /// </summary>
+        public float WindowHeight
+        {
+            get { return Window.ClientBounds.Height; }
+        }
 
         //Entities
         private Player _player;
@@ -53,12 +70,12 @@ namespace PawnGame
 
         public Game1()
         {
+            _width = 0;
+            _height = 0;
 
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
-
-            _windowSize = new Vector2(_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
+            IsMouseVisible = true;     
         }
 
         protected override void Initialize()
@@ -66,7 +83,7 @@ namespace PawnGame
             // TODO: Add your initialization logic here
             _prevKbState = Keyboard.GetState();
             base.Initialize();
-        }
+        } 
 
         protected override void LoadContent()
         {
@@ -77,13 +94,13 @@ namespace PawnGame
 
             // Adding all 3 buttons on the menu screen to the list
             _menuButtons.Add(new(font, "New Game",
-                    new Vector2(_windowSize.X / 2 - font.MeasureString("New Game").X / 2, _windowSize.Y - 100),
+                    new Vector2(WindowWidth / 2 - font.MeasureString("New Game").X / 2, WindowHeight - 100),
                 Color.LightGray));
             _menuButtons.Add(new(font, "Load Game",
-                    new Vector2(_windowSize.X / 2 - font.MeasureString("Load Game").X / 2, _windowSize.Y - 75),
+                    new Vector2(WindowWidth / 2 - font.MeasureString("Load Game").X / 2, WindowHeight - 75),
                     Color.LightGray));
             _menuButtons.Add(new(font, "Level Editor",
-                    new Vector2(_windowSize.X / 2 - font.MeasureString("Level Editor").X / 2, _windowSize.Y - 50),
+                    new Vector2(WindowWidth / 2 - font.MeasureString("Level Editor").X / 2, WindowHeight - 50),
                     Color.LightGray));
             
             //
@@ -91,15 +108,51 @@ namespace PawnGame
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
             _currKbState = Keyboard.GetState();
+
+            // Toggling fullscreen
+            if (_currKbState.IsKeyDown(Keys.F11) && _prevKbState.IsKeyUp(Keys.F11))
+            {
+                
+                if (_graphics.IsFullScreen)
+                {
+                    // Changes the width and height back to the original size
+                    _graphics.PreferredBackBufferWidth = _width;
+                    _graphics.PreferredBackBufferHeight = _height;
+                }
+                else
+                {
+                    // Stores the width and height of the screen when it is not full screen
+                    // so that it is easy to revert it
+                    _width = Window.ClientBounds.Width;
+                    _height = Window.ClientBounds.Height;
+
+                    // Updating the width and the height to the resolution of the user's screen
+                    _graphics.PreferredBackBufferWidth = GraphicsDevice.Adapter.CurrentDisplayMode.Width;
+                    _graphics.PreferredBackBufferHeight = GraphicsDevice.Adapter.CurrentDisplayMode.Height;
+                }
+
+                _graphics.IsFullScreen = !_graphics.IsFullScreen;
+                _graphics.ApplyChanges();
+            }
 
             switch (_gameState)
             {
                 #region Menu State
                 case GameState.Menu:
+
+                    _menuButtons.Clear();
+
+                    // Adding all 3 buttons on the menu screen to the list
+                    _menuButtons.Add(new(font, "New Game",
+                            new Vector2(WindowWidth / 2 - font.MeasureString("New Game").X / 2, WindowHeight - 100),
+                        Color.LightGray));
+                    _menuButtons.Add(new(font, "Load Game",
+                            new Vector2(WindowWidth / 2 - font.MeasureString("Load Game").X / 2, WindowHeight - 75),
+                            Color.LightGray));
+                    _menuButtons.Add(new(font, "Level Editor",
+                            new Vector2(WindowWidth / 2 - font.MeasureString("Level Editor").X / 2, WindowHeight - 50),
+                            Color.LightGray));
 
                     // Updating the states depending on what button is clicked
                     // or what key is pressed
@@ -136,8 +189,7 @@ namespace PawnGame
                     // but make the previous one disabled since they were already on it
 
                     // If the user presses escape, goes back to the previous state
-                    // Note: Escape closes the window, so i'm using enter as a placeholder to test
-                    if (_currKbState.IsKeyDown(Keys.Enter) && _prevKbState.IsKeyUp(Keys.Enter))
+                    if (_currKbState.IsKeyDown(Keys.Escape) && _prevKbState.IsKeyUp(Keys.Escape))
                     {
                         _gameState = _prevGameState;
                     }
@@ -191,6 +243,9 @@ namespace PawnGame
 
                     // Menu skeleton containing the buttons
                     // that will be able to be clicked
+
+                    
+
                     foreach (Button b in _menuButtons)
                     {
                         b.Draw(_spriteBatch);
@@ -206,7 +261,7 @@ namespace PawnGame
 
                     // Replace these tests later obviously
                     _spriteBatch.DrawString(font, "Debug Menu",
-                        new Vector2(_windowSize.X / 2 - font.MeasureString("Debug Menu").X/2, 100), Color.White);
+                        new Vector2(WindowWidth / 2 - font.MeasureString("Debug Menu").X/2, 100), Color.White);
                     #endregion
                     break;
 
@@ -215,7 +270,7 @@ namespace PawnGame
                     // Draw.. the game?
 
                     _spriteBatch.DrawString(font, "HIPUR (the game)",
-                        new Vector2(_windowSize.X / 2 - font.MeasureString("HIPUR (the game)").X / 2, _windowSize.Y / 2), Color.White);
+                        new Vector2(WindowWidth / 2 - font.MeasureString("HIPUR (the game)").X / 2, WindowHeight / 2), Color.White);
                     #endregion
                     break;
 
@@ -224,7 +279,7 @@ namespace PawnGame
                     // Draw level editor interface
 
                     _spriteBatch.DrawString(font, "Level Editor",
-                        new Vector2(_windowSize.X / 2 - font.MeasureString("LevelEditor").X / 2, _windowSize.Y / 2), Color.White);
+                        new Vector2(WindowWidth / 2 - font.MeasureString("LevelEditor").X / 2, WindowHeight / 2), Color.White);
                     #endregion
                     break;
 
@@ -233,7 +288,7 @@ namespace PawnGame
                     // Draw victory screen
 
                     _spriteBatch.DrawString(font, "You win",
-                        new Vector2(_windowSize.X / 2 - font.MeasureString("You win").X / 2, _windowSize.Y / 2), Color.White);
+                        new Vector2(WindowWidth / 2 - font.MeasureString("You win").X / 2, WindowHeight / 2), Color.White);
                     #endregion
                     break;
             }

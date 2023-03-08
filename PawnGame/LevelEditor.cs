@@ -5,6 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PawnGame;
+using PawnGame.GameObjects;
+using PawnGame.GameObjects.Enemies;
+
 
 namespace PawnGame
 {
@@ -18,7 +22,7 @@ namespace PawnGame
 
         public LevelEditor(int x, int y)
         {
-
+            _level = new Level(new Tile[x, y], new List<Enemy>(), new Vector2());
         }
 
         public void Draw(SpriteBatch sb)
