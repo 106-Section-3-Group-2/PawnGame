@@ -11,8 +11,6 @@
             IsAlerted = false;
             AbilityToDrop = null;
         }
-        public void Update()
-        {
-        }
+        public abstract void Update();
     }
 }

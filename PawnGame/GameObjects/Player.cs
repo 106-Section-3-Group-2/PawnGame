@@ -121,6 +121,7 @@ namespace PawnGame.GameObjects
                 
 
                 default:
+                    break;
             }
 
             

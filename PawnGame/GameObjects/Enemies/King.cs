@@ -8,22 +8,22 @@
 
         public override void Update()
         {
-            throw new NotImplementedException();
+            throw new System.NotImplementedException();
         }
 
         protected override void Attack()
         {
-            throw new NotImplementedException();
+            throw new System.NotImplementedException();
         }
 
         protected override void Move()
         {
-            throw new NotImplementedException();
+            throw new System.NotImplementedException();
         }
 
         protected override void OnDeath()
         {
-            throw new NotImplementedException();
+            throw new System.NotImplementedException();
         }
     }
 }
