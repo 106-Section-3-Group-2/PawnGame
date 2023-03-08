@@ -21,6 +21,23 @@ namespace PawnGame
         /// </summary>
         public Tile[,] Tiles { get; set; }
         /// <summary>
+        /// indexer property to access tile array
+        /// </summary>
+        /// <param name="index1"></param>
+        /// <param name="index2"></param>
+        /// <returns></returns>
+        public Tile this[int index1, int index2]
+        {
+            get
+            {
+                return Tiles[index1, index2];
+            }
+            set
+            {
+                Tiles[index1, index2] = value;
+            }
+        }
+        /// <summary>
         /// the spawn locations of enemies
         /// </summary>
         public Enemy[] EnemySpawns { get; set; }
