@@ -2,7 +2,7 @@
 global using Microsoft.Xna.Framework.Graphics;
 global using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
-
+using PawnGame.GameObjects;
 namespace PawnGame
 {
     /// <summary>
@@ -47,6 +47,9 @@ namespace PawnGame
             get { return Window.ClientBounds.Height; }
         }
 
+        //Entities
+        private Player _player;
+
         // Menu buttons
         private List<Button> _menuButtons = new List<Button>();
 
@@ -78,7 +81,7 @@ namespace PawnGame
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            _prevKbState = Keyboard.GetState();
             base.Initialize();
         } 
 
@@ -86,7 +89,7 @@ namespace PawnGame
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            //Debug font
             font = this.Content.Load<SpriteFont>("Arial");
         }
 
@@ -185,7 +188,7 @@ namespace PawnGame
                 #region Game State
                 case GameState.Game:
                     // Play the game here
-
+                    _player.Update(_currKbState,_prevKbState);
                     #endregion
                     break;
 
@@ -218,7 +221,7 @@ namespace PawnGame
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.DarkOliveGreen);
 
             _spriteBatch.Begin();
 
