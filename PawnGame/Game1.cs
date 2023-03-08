@@ -2,7 +2,7 @@
 global using Microsoft.Xna.Framework.Graphics;
 global using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
-
+using PawnGame.GameObjects;
 namespace PawnGame
 {
     /// <summary>
@@ -28,15 +28,27 @@ namespace PawnGame
         private KeyboardState _currKbState;
         private KeyboardState _prevKbState;
 
+        private int _width;
+        private int _height;
+
+        /// <summary>
+        /// Gets the width of the window
+        /// </summary>
         public float WindowWidth
         {
             get { return Window.ClientBounds.Width; }
         }
 
+        /// <summary>
+        /// Gets the height of the window
+        /// </summary>
         public float WindowHeight
         {
             get { return Window.ClientBounds.Height; }
         }
+
+        //Entities
+        private Player _player;
 
         // Menu buttons
         private List<Button> _menuButtons = new List<Button>();
@@ -58,6 +70,9 @@ namespace PawnGame
 
         public Game1()
         {
+            _width = 0;
+            _height = 0;
+
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;     
@@ -66,39 +81,67 @@ namespace PawnGame
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            _graphics.PreferredBackBufferWidth = GraphicsDevice.Adapter.CurrentDisplayMode.Width;
-            _graphics.PreferredBackBufferHeight = GraphicsDevice.Adapter.CurrentDisplayMode.Height;
-            _graphics.ApplyChanges();
+            _prevKbState = Keyboard.GetState();
             base.Initialize();
-        }
+        } 
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            //Debug font
             font = this.Content.Load<SpriteFont>("Arial");
-
-            // Adding all 3 buttons on the menu screen to the list
-            _menuButtons.Add(new(font, "New Game",
-                    new Vector2(WindowWidth / 2 - font.MeasureString("New Game").X / 2, WindowHeight - 100),
-                Color.LightGray));
-            _menuButtons.Add(new(font, "Load Game",
-                    new Vector2(WindowWidth / 2 - font.MeasureString("Load Game").X / 2, WindowHeight - 75),
-                    Color.LightGray));
-            _menuButtons.Add(new(font, "Level Editor",
-                    new Vector2(WindowWidth / 2 - font.MeasureString("Level Editor").X / 2, WindowHeight - 50),
-                    Color.LightGray));
         }
 
         protected override void Update(GameTime gameTime)
         {
             _currKbState = Keyboard.GetState();
 
+            // Toggling fullscreen
+            if (_currKbState.IsKeyDown(Keys.F11) && _prevKbState.IsKeyUp(Keys.F11))
+            {
+                
+                if (_graphics.IsFullScreen)
+                {
+                    // Changes the width and height back to the original size
+                    _graphics.PreferredBackBufferWidth = _width;
+                    _graphics.PreferredBackBufferHeight = _height;
+                }
+                else
+                {
+                    // Stores the width and height of the screen when it is not full screen
+                    // so that it is easy to revert it
+                    _width = Window.ClientBounds.Width;
+                    _height = Window.ClientBounds.Height;
+
+                    // Updating the width and the height to the resolution of the user's screen
+                    _graphics.PreferredBackBufferWidth = GraphicsDevice.Adapter.CurrentDisplayMode.Width;
+                    _graphics.PreferredBackBufferHeight = GraphicsDevice.Adapter.CurrentDisplayMode.Height;
+                }
+
+                _graphics.IsFullScreen = !_graphics.IsFullScreen;
+                _graphics.ApplyChanges();
+            }
+
             switch (_gameState)
             {
                 #region Menu State
                 case GameState.Menu:
+
+                    _menuButtons.Clear();
+
+                    // Adding all 3 buttons on the menu screen
+                    // Note: Doing this in update so that their position updates
+                    // when  the window is fullscreened
+                    _menuButtons.Add(new(font, "New Game",
+                            new Vector2(WindowWidth / 2 - font.MeasureString("New Game").X / 2, WindowHeight - 100),
+                        Color.LightGray));
+                    _menuButtons.Add(new(font, "Load Game",
+                            new Vector2(WindowWidth / 2 - font.MeasureString("Load Game").X / 2, WindowHeight - 75),
+                            Color.LightGray));
+                    _menuButtons.Add(new(font, "Level Editor",
+                            new Vector2(WindowWidth / 2 - font.MeasureString("Level Editor").X / 2, WindowHeight - 50),
+                            Color.LightGray));
 
                     // Updating the states depending on what button is clicked
                     // or what key is pressed
@@ -145,7 +188,7 @@ namespace PawnGame
                 #region Game State
                 case GameState.Game:
                     // Play the game here
-
+                    _player.Update(_currKbState,_prevKbState);
                     #endregion
                     break;
 
@@ -178,7 +221,7 @@ namespace PawnGame
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.DarkOliveGreen);
 
             _spriteBatch.Begin();
 
@@ -189,6 +232,9 @@ namespace PawnGame
 
                     // Menu skeleton containing the buttons
                     // that will be able to be clicked
+
+                    
+
                     foreach (Button b in _menuButtons)
                     {
                         b.Draw(_spriteBatch);

@@ -11,5 +11,8 @@
             IsAlerted = false;
             AbilityToDrop = null;
         }
+        public void Update()
+        {
+        }
     }
 }
