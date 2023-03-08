@@ -4,17 +4,29 @@ namespace PawnGame.GameObjects
 {
     internal class Player : Entity
     {
+        private enum PlayerState
+        {
+            Moving,
+            Attacking,
+            Dashing,
+            NoControl,
+        }
         private Ability _activeAbility;
         private Weapon _currentWeapon;
+        private int _speed;
+        private PlayerState playerState;
+
 
         public Player(Texture2D texture, Rectangle hitbox) : base(texture, hitbox)
         {
-
+            _speed = 3;
         }
 
-        public override void Update()
+        public void Update(KeyboardState currentState, KeyboardState previousState)
         {
-            throw new System.NotImplementedException();
+            ReadInputs(currentState, previousState);
+            Move();
+            
         }
 
         protected override void Attack()
@@ -24,16 +36,102 @@ namespace PawnGame.GameObjects
 
         protected override void Move()
         {
-            throw new System.NotImplementedException();
+            Hitbox.Location += Velocity.ToPoint();
+
         }        
 
-        private void ReadInputs()
+        private void ReadInputs(KeyboardState currentState, KeyboardState previousState)
         {
-            throw new System.NotImplementedException();
+
+            switch (playerState)
+            {
+                case PlayerState.Moving: //If the player is able to move, but is not taking other special actions
+                                         //Check WASD, Space, and mouse
+                    //Up
+                    if (currentState.IsKeyDown(Keys.W))
+                    {
+                        Velocity.Y -= _speed;
+                    }
+                    //Down
+                    if (currentState.IsKeyDown(Keys.S))
+                    {
+                        Velocity.Y += _speed;
+                    }
+                    //Right
+                    if (currentState.IsKeyDown(Keys.D))
+                    {
+                        Velocity.X += _speed;
+                    }
+                    //Left
+                    if (currentState.IsKeyDown(Keys.A))
+                    {
+                        Velocity.X -= _speed;
+                    }
+                    //Space
+                    if (currentState.IsKeyDown(Keys.Space))
+                    {
+                        UseAbility();
+                    }
+                    //Mouse
+                    if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+                    {
+                        Attack();
+                    }
+                    break;
+
+                case PlayerState.Attacking: //If an attack is in process, check wasd and space
+                    //Up
+                    if (currentState.IsKeyDown(Keys.W))
+                    {
+                        Velocity.Y -= _speed;
+                    }
+                    //Down
+                    if (currentState.IsKeyDown(Keys.S))
+                    {
+                        Velocity.Y += _speed;
+                    }
+                    //Right
+                    if (currentState.IsKeyDown(Keys.D))
+                    {
+                        Velocity.X += _speed;
+                    }
+                    //Left
+                    if (currentState.IsKeyDown(Keys.A))
+                    {
+                        Velocity.X -= _speed;
+                    }
+                    //Space
+                    if (currentState.IsKeyDown(Keys.Space))
+                    {
+                        UseAbility();
+                    }
+
+
+                    break;
+
+                case PlayerState.Dashing: //If the player is using an ability that makes them dash
+                                          //Check Space
+                    break;
+
+                case PlayerState.NoControl: //If the player is not able to move (cutscenes)
+
+                    break;
+                
+
+                
+
+                default:
+            }
+
+            
+
+            
+
         }
 
         private void UseAbility()
         {
+            
             throw new System.NotImplementedException();
         }
 

@@ -16,10 +16,8 @@
             Velocity = Vector2.Zero;
         }
 
-        /// <summary>
-        /// Should update all values needed for the entety, then move/attack
-        /// </summary>
-        public abstract void Update();
+        //*** public void Update() should be implemented in player and enemy
+
         /// <summary>
         /// Should move the entity based on velocity
         /// </summary>
