@@ -108,16 +108,21 @@ namespace PawnGame
             // Toggling fullscreen
             if (_currKbState.IsKeyDown(Keys.F11) && _prevKbState.IsKeyUp(Keys.F11))
             {
-
+                
                 if (_graphics.IsFullScreen)
                 {
+                    // Changes the width and height back to the original size
                     _graphics.PreferredBackBufferWidth = _width;
                     _graphics.PreferredBackBufferHeight = _height;
                 }
                 else
                 {
+                    // Stores the width and height of the screen when it is not full screen
+                    // so that it is easy to revert it
                     _width = Window.ClientBounds.Width;
                     _height = Window.ClientBounds.Height;
+
+                    // Updating the width and the height to the resolution of the user's screen
                     _graphics.PreferredBackBufferWidth = GraphicsDevice.Adapter.CurrentDisplayMode.Width;
                     _graphics.PreferredBackBufferHeight = GraphicsDevice.Adapter.CurrentDisplayMode.Height;
                 }

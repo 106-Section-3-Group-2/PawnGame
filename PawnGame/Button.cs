@@ -10,7 +10,7 @@ namespace PawnGame
     /// Represents a text box that is able to be clicked
     /// (In the future we pwant to be able to also use textures)
     /// </summary>
-    internal class Button
+    internal struct Button
     {
         private string _text;
         private SpriteFont _font;
