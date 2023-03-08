@@ -61,10 +61,19 @@ namespace PawnGame
         }
 
         /// <summary>
+        /// update the level
+        /// </summary>
+        /// <param name="gameTime"></param>
+        public void Update(GameTime gameTime)
+        {
+
+        }
+
+        /// <summary>
         /// draw the level
         /// </summary>
         /// <param name="sb"></param>
-        public void Draw(SpriteBatch sb)
+        public void Draw(SpriteBatch sb, Vector2 location)
         {
             foreach(Tile tile in Tiles)
             {
