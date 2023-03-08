@@ -21,9 +21,26 @@ namespace PawnGame
         /// </summary>
         public Tile[,] Tiles { get; set; }
         /// <summary>
+        /// indexer property to access tile array
+        /// </summary>
+        /// <param name="index1"></param>
+        /// <param name="index2"></param>
+        /// <returns></returns>
+        public Tile this[int index1, int index2]
+        {
+            get
+            {
+                return Tiles[index1, index2];
+            }
+            set
+            {
+                Tiles[index1, index2] = value;
+            }
+        }
+        /// <summary>
         /// the spawn locations of enemies
         /// </summary>
-        public Enemy[] EnemySpawns { get; set; }
+        public List<Enemy> EnemySpawns { get; set; }
         /// <summary>
         /// the spawn location of the player
         /// </summary>
@@ -36,7 +53,7 @@ namespace PawnGame
         /// <param name="tiles"></param>
         /// <param name="enemies"></param>
         /// <param name="spawnPoint"></param>
-        public Level(Tile[,] tiles, Enemy[] enemies, Vector2 spawnPoint)
+        public Level(Tile[,] tiles, List<Enemy> enemies, Vector2 spawnPoint)
         {
             Tiles = tiles;
             EnemySpawns = enemies;
