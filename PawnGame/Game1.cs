@@ -28,7 +28,15 @@ namespace PawnGame
         private KeyboardState _currKbState;
         private KeyboardState _prevKbState;
 
-        private Vector2 _windowSize;
+        public float WindowWidth
+        {
+            get { return Window.ClientBounds.Width; }
+        }
+
+        public float WindowHeight
+        {
+            get { return Window.ClientBounds.Height; }
+        }
 
         // Menu buttons
         private List<Button> _menuButtons = new List<Button>();
@@ -50,18 +58,17 @@ namespace PawnGame
 
         public Game1()
         {
-
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
-
-            _windowSize = new Vector2(_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
+            IsMouseVisible = true;     
         }
 
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            _graphics.PreferredBackBufferWidth = GraphicsDevice.Adapter.CurrentDisplayMode.Width;
+            _graphics.PreferredBackBufferHeight = GraphicsDevice.Adapter.CurrentDisplayMode.Height;
+            _graphics.ApplyChanges();
             base.Initialize();
         }
 
@@ -74,13 +81,13 @@ namespace PawnGame
 
             // Adding all 3 buttons on the menu screen to the list
             _menuButtons.Add(new(font, "New Game",
-                    new Vector2(_windowSize.X / 2 - font.MeasureString("New Game").X / 2, _windowSize.Y - 100),
+                    new Vector2(WindowWidth / 2 - font.MeasureString("New Game").X / 2, WindowHeight - 100),
                 Color.LightGray));
             _menuButtons.Add(new(font, "Load Game",
-                    new Vector2(_windowSize.X / 2 - font.MeasureString("Load Game").X / 2, _windowSize.Y - 75),
+                    new Vector2(WindowWidth / 2 - font.MeasureString("Load Game").X / 2, WindowHeight - 75),
                     Color.LightGray));
             _menuButtons.Add(new(font, "Level Editor",
-                    new Vector2(_windowSize.X / 2 - font.MeasureString("Level Editor").X / 2, _windowSize.Y - 50),
+                    new Vector2(WindowWidth / 2 - font.MeasureString("Level Editor").X / 2, WindowHeight - 50),
                     Color.LightGray));
         }
 
@@ -128,8 +135,7 @@ namespace PawnGame
                     // but make the previous one disabled since they were already on it
 
                     // If the user presses escape, goes back to the previous state
-                    // Note: Escape closes the window, so i'm using enter as a placeholder to test
-                    if (_currKbState.IsKeyDown(Keys.Enter) && _prevKbState.IsKeyUp(Keys.Enter))
+                    if (_currKbState.IsKeyDown(Keys.Escape) && _prevKbState.IsKeyUp(Keys.Escape))
                     {
                         _gameState = _prevGameState;
                     }
@@ -198,7 +204,7 @@ namespace PawnGame
 
                     // Replace these tests later obviously
                     _spriteBatch.DrawString(font, "Debug Menu",
-                        new Vector2(_windowSize.X / 2 - font.MeasureString("Debug Menu").X/2, 100), Color.White);
+                        new Vector2(WindowWidth / 2 - font.MeasureString("Debug Menu").X/2, 100), Color.White);
                     #endregion
                     break;
 
@@ -207,7 +213,7 @@ namespace PawnGame
                     // Draw.. the game?
 
                     _spriteBatch.DrawString(font, "HIPUR (the game)",
-                        new Vector2(_windowSize.X / 2 - font.MeasureString("HIPUR (the game)").X / 2, _windowSize.Y / 2), Color.White);
+                        new Vector2(WindowWidth / 2 - font.MeasureString("HIPUR (the game)").X / 2, WindowHeight / 2), Color.White);
                     #endregion
                     break;
 
@@ -216,7 +222,7 @@ namespace PawnGame
                     // Draw level editor interface
 
                     _spriteBatch.DrawString(font, "Level Editor",
-                        new Vector2(_windowSize.X / 2 - font.MeasureString("LevelEditor").X / 2, _windowSize.Y / 2), Color.White);
+                        new Vector2(WindowWidth / 2 - font.MeasureString("LevelEditor").X / 2, WindowHeight / 2), Color.White);
                     #endregion
                     break;
 
@@ -225,7 +231,7 @@ namespace PawnGame
                     // Draw victory screen
 
                     _spriteBatch.DrawString(font, "You win",
-                        new Vector2(_windowSize.X / 2 - font.MeasureString("You win").X / 2, _windowSize.Y / 2), Color.White);
+                        new Vector2(WindowWidth / 2 - font.MeasureString("You win").X / 2, WindowHeight / 2), Color.White);
                     #endregion
                     break;
             }
