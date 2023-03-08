@@ -28,11 +28,20 @@ namespace PawnGame
         private KeyboardState _currKbState;
         private KeyboardState _prevKbState;
 
+        private int _width;
+        private int _height;
+
+        /// <summary>
+        /// Gets the width of the window
+        /// </summary>
         public float WindowWidth
         {
             get { return Window.ClientBounds.Width; }
         }
 
+        /// <summary>
+        /// Gets the height of the window
+        /// </summary>
         public float WindowHeight
         {
             get { return Window.ClientBounds.Height; }
@@ -58,6 +67,9 @@ namespace PawnGame
 
         public Game1()
         {
+            _width = 0;
+            _height = 0;
+
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;     
@@ -66,11 +78,9 @@ namespace PawnGame
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            _graphics.PreferredBackBufferWidth = GraphicsDevice.Adapter.CurrentDisplayMode.Width;
-            _graphics.PreferredBackBufferHeight = GraphicsDevice.Adapter.CurrentDisplayMode.Height;
-            _graphics.ApplyChanges();
+
             base.Initialize();
-        }
+        } 
 
         protected override void LoadContent()
         {
@@ -95,10 +105,44 @@ namespace PawnGame
         {
             _currKbState = Keyboard.GetState();
 
+            // Toggling fullscreen
+            if (_currKbState.IsKeyDown(Keys.F11) && _prevKbState.IsKeyUp(Keys.F11))
+            {
+
+                if (_graphics.IsFullScreen)
+                {
+                    _graphics.PreferredBackBufferWidth = _width;
+                    _graphics.PreferredBackBufferHeight = _height;
+                }
+                else
+                {
+                    _width = Window.ClientBounds.Width;
+                    _height = Window.ClientBounds.Height;
+                    _graphics.PreferredBackBufferWidth = GraphicsDevice.Adapter.CurrentDisplayMode.Width;
+                    _graphics.PreferredBackBufferHeight = GraphicsDevice.Adapter.CurrentDisplayMode.Height;
+                }
+
+                _graphics.IsFullScreen = !_graphics.IsFullScreen;
+                _graphics.ApplyChanges();
+            }
+
             switch (_gameState)
             {
                 #region Menu State
                 case GameState.Menu:
+
+                    _menuButtons.Clear();
+
+                    // Adding all 3 buttons on the menu screen to the list
+                    _menuButtons.Add(new(font, "New Game",
+                            new Vector2(WindowWidth / 2 - font.MeasureString("New Game").X / 2, WindowHeight - 100),
+                        Color.LightGray));
+                    _menuButtons.Add(new(font, "Load Game",
+                            new Vector2(WindowWidth / 2 - font.MeasureString("Load Game").X / 2, WindowHeight - 75),
+                            Color.LightGray));
+                    _menuButtons.Add(new(font, "Level Editor",
+                            new Vector2(WindowWidth / 2 - font.MeasureString("Level Editor").X / 2, WindowHeight - 50),
+                            Color.LightGray));
 
                     // Updating the states depending on what button is clicked
                     // or what key is pressed
@@ -189,6 +233,9 @@ namespace PawnGame
 
                     // Menu skeleton containing the buttons
                     // that will be able to be clicked
+
+                    
+
                     foreach (Button b in _menuButtons)
                     {
                         b.Draw(_spriteBatch);
