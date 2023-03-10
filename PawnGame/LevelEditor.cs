@@ -115,7 +115,7 @@ namespace PawnGame
                         }
                         if (_mState.RightButton == ButtonState.Pressed)
                         {
-
+                            //_level.Tiles[i, j] = new Tile()
                         }
                     }
                 }
