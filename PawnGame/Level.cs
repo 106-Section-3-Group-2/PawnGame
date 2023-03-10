@@ -40,7 +40,7 @@ namespace PawnGame
         /// <summary>
         /// the spawn locations of enemies
         /// </summary>
-        public List<Enemy> EnemySpawns { get; set; }
+        public List<Enemy> Enemies { get; set; }
         /// <summary>
         /// the spawn location of the player
         /// </summary>
@@ -56,7 +56,7 @@ namespace PawnGame
         public Level(Tile[,] tiles, List<Enemy> enemies, Vector2 spawnPoint)
         {
             Tiles = tiles;
-            EnemySpawns = enemies;
+            Enemies = enemies;
             SpawnPoint = spawnPoint;
         }
 
