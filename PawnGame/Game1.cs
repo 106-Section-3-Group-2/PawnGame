@@ -174,13 +174,13 @@ namespace PawnGame
                     // Play the game here
                     _player.Update(_currKbState,_prevKbState);
 
-                    //for (int i = 0; i < _currLevel.EnemySpawns.Count; i++)
-                    //{
-                    //    if (_currLevel.EnemySpawns[i].)
-                     //   {
+                    for (int i = 0; i < _currLevel.Enemies.Count; i++)
+                    {
+                        if (_currLevel.Enemies[i].Chec)
+                        {
 
-                       // }
-                    //}
+                        }
+                    }
                     #endregion
                     break;
 
