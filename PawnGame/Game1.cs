@@ -91,19 +91,6 @@ namespace PawnGame
 
             //Debug font
             font = this.Content.Load<SpriteFont>("Arial");
-
-            // Adding all 3 buttons on the menu screen to the list
-            _menuButtons.Add(new(font, "New Game",
-                    new Vector2(WindowWidth / 2 - font.MeasureString("New Game").X / 2, WindowHeight - 100),
-                Color.LightGray));
-            _menuButtons.Add(new(font, "Load Game",
-                    new Vector2(WindowWidth / 2 - font.MeasureString("Load Game").X / 2, WindowHeight - 75),
-                    Color.LightGray));
-            _menuButtons.Add(new(font, "Level Editor",
-                    new Vector2(WindowWidth / 2 - font.MeasureString("Level Editor").X / 2, WindowHeight - 50),
-                    Color.LightGray));
-            
-            //
         }
 
         protected override void Update(GameTime gameTime)
@@ -111,39 +98,23 @@ namespace PawnGame
             _currKbState = Keyboard.GetState();
 
             // Toggling fullscreen
+            // Kinda wanna make it a button in an options menu somewhere instead
+            // of F11
             if (_currKbState.IsKeyDown(Keys.F11) && _prevKbState.IsKeyUp(Keys.F11))
             {
-                
-                if (_graphics.IsFullScreen)
-                {
-                    // Changes the width and height back to the original size
-                    _graphics.PreferredBackBufferWidth = _width;
-                    _graphics.PreferredBackBufferHeight = _height;
-                }
-                else
-                {
-                    // Stores the width and height of the screen when it is not full screen
-                    // so that it is easy to revert it
-                    _width = Window.ClientBounds.Width;
-                    _height = Window.ClientBounds.Height;
-
-                    // Updating the width and the height to the resolution of the user's screen
-                    _graphics.PreferredBackBufferWidth = GraphicsDevice.Adapter.CurrentDisplayMode.Width;
-                    _graphics.PreferredBackBufferHeight = GraphicsDevice.Adapter.CurrentDisplayMode.Height;
-                }
-
-                _graphics.IsFullScreen = !_graphics.IsFullScreen;
-                _graphics.ApplyChanges();
+                ToggleFullscreen();
             }
 
-            switch (_gameState)
+                switch (_gameState)
             {
                 #region Menu State
                 case GameState.Menu:
 
                     _menuButtons.Clear();
 
-                    // Adding all 3 buttons on the menu screen to the list
+                    // Adding all 3 buttons on the menu screen
+                    // Note: Doing this in update so that their position updates
+                    // when  the window is fullscreened
                     _menuButtons.Add(new(font, "New Game",
                             new Vector2(WindowWidth / 2 - font.MeasureString("New Game").X / 2, WindowHeight - 100),
                         Color.LightGray));
@@ -295,6 +266,33 @@ namespace PawnGame
 
             _spriteBatch.End();
             base.Draw(gameTime);
+        }
+
+        /// <summary>
+        /// Fullscreens or unfullscreens the window accordingly
+        /// </summary>
+        private void ToggleFullscreen()
+        {
+            if (_graphics.IsFullScreen)
+            {
+                // Changes the width and height back to the original size
+                _graphics.PreferredBackBufferWidth = _width;
+                _graphics.PreferredBackBufferHeight = _height;
+            }
+            else
+            {
+                // Stores the width and height of the screen when it is not full screen
+                // so that it is easy to revert it
+                _width = Window.ClientBounds.Width;
+                _height = Window.ClientBounds.Height;
+
+                // Updating the width and the height to the resolution of the user's screen
+                _graphics.PreferredBackBufferWidth = GraphicsDevice.Adapter.CurrentDisplayMode.Width;
+                _graphics.PreferredBackBufferHeight = GraphicsDevice.Adapter.CurrentDisplayMode.Height;
+            }
+
+            _graphics.IsFullScreen = !_graphics.IsFullScreen;
+            _graphics.ApplyChanges();
         }
     }
 }
