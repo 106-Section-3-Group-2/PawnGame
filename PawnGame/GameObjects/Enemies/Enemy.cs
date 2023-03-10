@@ -8,7 +8,7 @@
         public Enemy(Texture2D texture, Rectangle hitbox) : base(texture, hitbox)
         {
             IsAlerted = false;
-            AbilityToDrop = null;
+            //AbilityToDrop = null;
         }
         public abstract void Update();
     }
