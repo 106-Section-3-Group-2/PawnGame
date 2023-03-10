@@ -31,7 +31,7 @@ namespace PawnGame.GameObjects.Enemies
 
         protected override void OnDeath()
         {
-            throw new NotImplementedException(); 
+            IsAlive = false;
         }
     }
 }
