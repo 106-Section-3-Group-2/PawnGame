@@ -46,7 +46,7 @@ namespace PawnGame.GameObjects
 
         protected override void Move()
         {
-            Hitbox.Location += Velocity.ToPoint();
+            _hitbox.Location += _velocity.ToPoint();
 
         }        
 
@@ -65,25 +65,25 @@ namespace PawnGame.GameObjects
                     if (currentState.IsKeyDown(Keys.W))
                     {
                         dirY -= 1;
-                        Velocity.Y -= _speed;
+                        _velocity.Y -= _speed;
                     }
                     //Down
                     if (currentState.IsKeyDown(Keys.S))
                     {
                         dirY += 1;
-                        Velocity.Y += _speed;
+                        _velocity.Y += _speed;
                     }
                     //Right
                     if (currentState.IsKeyDown(Keys.D))
                     {
                         dirX += 1;
-                        Velocity.X += _speed;
+                        _velocity.X += _speed;
                     }
                     //Left
                     if (currentState.IsKeyDown(Keys.A))
                     {
                         dirX -= 1;
-                        Velocity.X -= _speed;
+                        _velocity.X -= _speed;
                     }
                     //Space
                     if (currentState.IsKeyDown(Keys.Space))
@@ -102,25 +102,25 @@ namespace PawnGame.GameObjects
                     if (currentState.IsKeyDown(Keys.W))
                     {
                         dirY -= 1;
-                        Velocity.Y -= _speed;
+                        _velocity.Y -= _speed;
                     }
                     //Down
                     if (currentState.IsKeyDown(Keys.S))
                     {
                         dirY += 1;
-                        Velocity.Y += _speed;
+                        _velocity.Y += _speed;
                     }
                     //Right
                     if (currentState.IsKeyDown(Keys.D))
                     {
                         dirX += 1;
-                        Velocity.X += _speed;
+                        _velocity.X += _speed;
                     }
                     //Left
                     if (currentState.IsKeyDown(Keys.A))
                     {
                         dirX -= 1;
-                        Velocity.X -= _speed;
+                        _velocity.X -= _speed;
                     }
                     //Space
                     if (currentState.IsKeyDown(Keys.Space))

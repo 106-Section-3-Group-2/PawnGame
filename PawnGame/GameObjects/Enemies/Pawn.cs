@@ -16,7 +16,7 @@ namespace PawnGame.GameObjects.Enemies
         {
             Move();
 
-            if (!IsAlive) OnDeath();
+            if (!_isAlive) OnDeath();
         }
 
         protected override void Attack()
@@ -31,7 +31,7 @@ namespace PawnGame.GameObjects.Enemies
 
         protected override void OnDeath()
         {
-            IsAlive = false;
+            _isAlive = false;
         }
     }
 }

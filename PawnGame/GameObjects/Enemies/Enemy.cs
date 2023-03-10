@@ -3,11 +3,11 @@
 
     internal abstract class Enemy : Entity
     {
-        protected bool IsAlerted;
+        protected bool _isAlerted;
 
         public Enemy(Texture2D texture, Rectangle hitbox) : base(texture, hitbox)
         {
-            IsAlerted = false;
+            _isAlerted = false;
             //AbilityToDrop = null;
         }
         public abstract void Update();
