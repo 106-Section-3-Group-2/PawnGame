@@ -1,5 +1,4 @@
 ﻿using PawnGame.GameObjects.Enemies;
-
 namespace PawnGame.GameObjects
 {
     internal class Player : Entity
@@ -20,7 +19,6 @@ namespace PawnGame.GameObjects
             Rook,
             Queen,
         }
-
         private Ability _heldAbility;
         private Ability _activeAbility;
         private Weapon _currentWeapon;
@@ -29,7 +27,6 @@ namespace PawnGame.GameObjects
         private int _abilityTimer;
         private float _posX;
         private float _posY;
-
         public float X
         {
             get
@@ -44,7 +41,6 @@ namespace PawnGame.GameObjects
                 return _posY;
             }
         }
-
         public Player(Texture2D texture, Rectangle hitbox) : base(texture, hitbox)
         {
             _abilityTimer = 0;
@@ -52,36 +48,29 @@ namespace PawnGame.GameObjects
             _heldAbility = Ability.None;
             _activeAbility = Ability.None;
         }
-
         public void Update(KeyboardState currentState, KeyboardState previousState)
         {
             ReadInputs(currentState, previousState);
             Move();
-            
-        }
 
+        }
         protected override void Attack()
         {
             if (_activeAbility == Ability.None)
             {
-
             }
         }
-
         protected override void Move()
         {
-            _hitbox.Location += _velocity.ToPoint();
             switch (_playerState)
             {
                 case PlayerState.Moving:
-                    _posX += _velocity.X;
-                    _posY += _velocity.Y;
-                    _hitbox.Location = new Point((int)_posX,(int)_posY);
-
+                    _posX += Velocity.X;
+                    _posY += Velocity.Y;
+                    Hitbox.Location = new Point((int)_posX, (int)_posY);
                     break;
-
                 case PlayerState.Abilitying:
-                    
+
                     if (_abilityTimer > 0)
                     {
                         switch (_activeAbility)
@@ -98,6 +87,7 @@ namespace PawnGame.GameObjects
                                 break;
                             case Ability.None:
                                 throw new System.Exception("Error! Entered Abilitying state without an active ability");
+                                break;
                         }
                         _abilityTimer--;
                     }
@@ -106,46 +96,19 @@ namespace PawnGame.GameObjects
                         _playerState = PlayerState.Moving;
                     }
                     break;
-
                 case PlayerState.NoControl:
                     break;
             }
-        }        
 
+        }
         private void ReadInputs(KeyboardState currentState, KeyboardState previousState)
         {
             //Returns a normalized 2D vector of player's input direction
             Vector2 direction = GetDirection(currentState);
-
             switch (_playerState)
             {
                 case PlayerState.Moving: //If the player is able to move, but is not taking other special actions
                                          //Check WASD, Space, and mouse
-
-                    //Up
-                    if (currentState.IsKeyDown(Keys.W))
-                    {
-                        dirY -= 1;
-                        _velocity.Y -= _speed;
-                    }
-                    //Down
-                    if (currentState.IsKeyDown(Keys.S))
-                    {
-                        dirY += 1;
-                        _velocity.Y += _speed;
-                    }
-                    //Right
-                    if (currentState.IsKeyDown(Keys.D))
-                    {
-                        dirX += 1;
-                        _velocity.X += _speed;
-                    }
-                    //Left
-                    if (currentState.IsKeyDown(Keys.A))
-                    {
-                        dirX -= 1;
-                        _velocity.X -= _speed;
-                    }
                     Velocity = _speed * direction;
                     //Space
                     if (currentState.IsKeyDown(Keys.Space))
@@ -158,60 +121,31 @@ namespace PawnGame.GameObjects
                         Attack();
                     }
                     break;
-                case PlayerState.Attacking: //If an attack is in process, check wasd and space
-                    //Up
-                    if (currentState.IsKeyDown(Keys.W))
-                    {
-                        dirY -= 1;
-                        _velocity.Y -= _speed;
-                    }
-                    //Down
-                    if (currentState.IsKeyDown(Keys.S))
-                    {
-                        dirY += 1;
-                        _velocity.Y += _speed;
-                    }
-                    //Right
-                    if (currentState.IsKeyDown(Keys.D))
-                    {
-                        dirX += 1;
-                        _velocity.X += _speed;
-                    }
-                    //Left
-                    if (currentState.IsKeyDown(Keys.A))
-                    {
-                        dirX -= 1;
-                        _velocity.X -= _speed;
-                    }
                 case PlayerState.Attacking: //If the player is able to move, but is not taking other special actions
-                                         //Check WASD, Space, and mouse
+                                            //Check WASD, Space, and mouse
                     Velocity = _speed * direction;
-                    if (currentState.IsKeyDown(Keys.Space))
-                    {
-                        UseAbility(direction);
-                    }
-                    break;
-
-                case PlayerState.Abilitying: //If the player is using an ability that makes them dash
-                                          //WASD do not change velocity, but still change direction for abilities
-                                          //Check WASD and Space
                     //Space
                     if (currentState.IsKeyDown(Keys.Space))
                     {
                         UseAbility(direction);
                     }
                     break;
-
-                case PlayerState.NoControl: //If the player is not able to move (cutscenes)
-
+                case PlayerState.Abilitying: //If the player is using an ability that makes them dash
+                                             //WASD do not change velocity, but still change direction for abilities
+                                             //Check WASD and Space
+                                             //Space
+                    if (currentState.IsKeyDown(Keys.Space))
+                    {
+                        UseAbility(direction);
+                    }
                     break;
-                
+                case PlayerState.NoControl: //If the player is not able to move (cutscenes)
+                    break;
+
                 default:
                     break;
             }
-
         }
-
         /// <summary>
         /// Returns a 
         /// </summary>
@@ -219,7 +153,7 @@ namespace PawnGame.GameObjects
         /// <returns></returns>
         private Vector2 GetDirection(KeyboardState currentState)
         {
-            
+
             Vector2 output = Vector2.Zero;
             //Up
             if (currentState.IsKeyDown(Keys.W))
@@ -241,54 +175,38 @@ namespace PawnGame.GameObjects
             {
                 output.X -= 1;
             }
-
             output.Normalize();
-
             return output;
-
         }
-
         private void UseAbility(Vector2 direction)
         {
             if (_heldAbility != Ability.None)
             {
                 _playerState = PlayerState.Abilitying;
-
                 switch (_heldAbility)
                 {
                     case Ability.Pawn:
                         _activeAbility = Ability.Pawn;
                         _abilityTimer = 40;
-
                         break;
-
                     case Ability.Knight:
                         _activeAbility = Ability.Knight;
-
                         break;
-
                     case Ability.Bishop:
                         _activeAbility = Ability.Bishop;
-
                         break;
-
                     case Ability.Rook:
                         _activeAbility = Ability.Rook;
-
                         break;
-
                     case Ability.Queen:
                         _activeAbility = Ability.Queen;
-
                         break;
                 }
-
                 _heldAbility = Ability.None;
             }
-            
-            
-        }
 
+
+        }
         private void GetAbility(Ability ability)
         {
             if (_heldAbility == Ability.None)
@@ -296,7 +214,6 @@ namespace PawnGame.GameObjects
                 _heldAbility = ability;
             }
         }
-
         protected override void OnDeath()
         {
             throw new System.NotImplementedException();

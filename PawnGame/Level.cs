@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json;
 using System.IO;
-
 namespace PawnGame
 {
     /// <summary>
@@ -15,7 +14,7 @@ namespace PawnGame
     /// </summary>
     internal class Level
     {
-        #region fields
+        #region properties
         /// <summary>
         /// the array of tiles which make up the level
         /// </summary>
@@ -46,7 +45,6 @@ namespace PawnGame
         /// </summary>
         public Vector2 SpawnPoint { get; set; }
         #endregion
-
         /// <summary>
         /// create a level that holds an array of tiles, an array of enemies, and a spawnpoint.
         /// </summary>
@@ -59,28 +57,24 @@ namespace PawnGame
             Enemies = enemies;
             SpawnPoint = spawnPoint;
         }
-
         /// <summary>
         /// update the level
         /// </summary>
         /// <param name="gameTime"></param>
         public void Update(GameTime gameTime)
         {
-
         }
-
         /// <summary>
         /// draw the level
         /// </summary>
         /// <param name="sb"></param>
         public void Draw(SpriteBatch sb, Vector2 location)
         {
-            foreach(Tile tile in Tiles)
+            foreach (Tile tile in Tiles)
             {
                 tile.Draw(sb);
             }
         }
-
         /// <summary>
         /// writes the level to a filePath
         /// </summary>
@@ -97,7 +91,6 @@ namespace PawnGame
                 throw new Exception("Could not write the file.");
             }
         }
-
         /// <summary>
         /// returns a level loaded from the filePath. Throws an exception if there was an error writing to the file.
         /// </summary>

@@ -2,13 +2,8 @@
 {
     internal abstract class Entity : GameObject
     {
-        protected bool _isAlive;
-        protected Vector2 _velocity;
-
-        public bool IsAlive
-        {
-            get { return _isAlive; }
-        }
+        protected bool IsAlive;
+        protected Vector2 Velocity;
 
         /// <summary>
         /// Makes a new entity object that is alive and has a velocity of 0
@@ -17,8 +12,8 @@
         /// <param name="hitbox"></param>
         protected Entity(Texture2D texture, Rectangle hitbox) : base(texture, hitbox)
         {
-            _isAlive = true;
-            _velocity = Vector2.Zero;
+            IsAlive = true;
+            Velocity = Vector2.Zero;
         }
 
         //*** public void Update() should be implemented in player and enemy
