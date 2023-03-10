@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 namespace PawnGame.GameObjects.Enemies
 {
     internal class EnemyManager
@@ -23,6 +24,7 @@ namespace PawnGame.GameObjects.Enemies
         }
         #endregion
         private List<Enemy> _enemies;
+
         private EnemyManager()
         {
             _enemies = null;
@@ -42,7 +44,7 @@ namespace PawnGame.GameObjects.Enemies
         {
             for (int i = 0; i < _enemies.Count; i++)
             {
-                if (false)
+                if (!_enemies[i].IsAlive)
                 {
                     continue;
                 }
@@ -57,7 +59,7 @@ namespace PawnGame.GameObjects.Enemies
         {
             for (int i = 0; i < _enemies.Count; i++)
             {
-                if (false)
+                if (!_enemies[i].IsAlive)
                 {
                     continue;
                 }

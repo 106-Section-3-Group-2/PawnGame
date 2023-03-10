@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 namespace PawnGame.GameObjects.Enemies
 {
     internal class Pawn : Enemy
@@ -13,7 +14,7 @@ namespace PawnGame.GameObjects.Enemies
         public override void Update()
         {
             Move();
-            if (!IsAlive) OnDeath();
+            if (!_isAlive) OnDeath();
         }
         protected override void Attack()
         {
@@ -25,7 +26,7 @@ namespace PawnGame.GameObjects.Enemies
         }
         protected override void OnDeath()
         {
-            IsAlive = false;
+            throw new NotImplementedException();
         }
     }
 }

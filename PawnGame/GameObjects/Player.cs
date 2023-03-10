@@ -65,9 +65,9 @@ namespace PawnGame.GameObjects
             switch (_playerState)
             {
                 case PlayerState.Moving:
-                    _posX += Velocity.X;
-                    _posY += Velocity.Y;
-                    Hitbox.Location = new Point((int)_posX, (int)_posY);
+                    _posX += _velocity.X;
+                    _posY += _velocity.Y;
+                    _hitbox.Location = new Point((int)_posX, (int)_posY);
                     break;
                 case PlayerState.Abilitying:
 
@@ -109,7 +109,7 @@ namespace PawnGame.GameObjects
             {
                 case PlayerState.Moving: //If the player is able to move, but is not taking other special actions
                                          //Check WASD, Space, and mouse
-                    Velocity = _speed * direction;
+                    _velocity = _speed * direction;
                     //Space
                     if (currentState.IsKeyDown(Keys.Space))
                     {
@@ -123,7 +123,7 @@ namespace PawnGame.GameObjects
                     break;
                 case PlayerState.Attacking: //If the player is able to move, but is not taking other special actions
                                             //Check WASD, Space, and mouse
-                    Velocity = _speed * direction;
+                    _velocity = _speed * direction;
                     //Space
                     if (currentState.IsKeyDown(Keys.Space))
                     {
