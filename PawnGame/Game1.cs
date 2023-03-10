@@ -74,7 +74,6 @@ namespace PawnGame
         {
             _prevWidth = 0;
             _prevHeight = 0;
-
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;     
@@ -84,6 +83,7 @@ namespace PawnGame
         {
             // TODO: Add your initialization logic here
             _prevKbState = Keyboard.GetState();
+
             base.Initialize();
         } 
 
