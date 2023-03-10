@@ -23,9 +23,7 @@ namespace PawnGame
         private Vector2 _cameraPosition;
         #endregion
 
-
-        
-
+        #region constructors
         /// <summary>
         /// load the level editor to create a new x*y level
         /// </summary>
@@ -55,6 +53,7 @@ namespace PawnGame
             }
             initialize();
         }
+        #endregion
 
         /// <summary>
         /// runs initialization code
@@ -104,12 +103,34 @@ namespace PawnGame
         /// <param name="sb"></param>
         public void Draw(SpriteBatch sb)
         {
+            #region graphical elements
             _level.Draw(sb, _cameraPosition);
+            //draw tile palette
+            for (int i = 0; i < _paletteTiles.Length; i++)
+            {
+
+            }
+
+            //draw enemy palette
+            for (int i = 0; i < _paletteEnemies.Length; i++)
+            {
+
+            }
+            #endregion
+
+            #region buttons
+            //no buttons yet
+            #endregion
         }
 
+        /// <summary>
+        /// return whether the mouse is over a GameObject
+        /// </summary>
+        /// <param name="g"></param>
         private void CheckMouseOn(GameObject g)
         {
-            
+            MouseState mState = Mouse.GetState();
+            //return (mState.X > g.X && mState.Y > g. && mState.X < g.X + width &&)
         }
     }
 }

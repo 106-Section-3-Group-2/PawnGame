@@ -100,32 +100,14 @@ namespace PawnGame
             _currKbState = Keyboard.GetState();
 
             // Toggling fullscreen
+            // Kinda wanna make it a button in an options menu somewhere instead
+            // of F11
             if (_currKbState.IsKeyDown(Keys.F11) && _prevKbState.IsKeyUp(Keys.F11))
             {
-                
-                if (_graphics.IsFullScreen)
-                {
-                    // Changes the width and height back to the original size
-                    _graphics.PreferredBackBufferWidth = _prevWidth;
-                    _graphics.PreferredBackBufferHeight = _prevHeight;
-                }
-                else
-                {
-                    // Stores the width and height of the screen when it is not full screen
-                    // so that it is easy to revert it
-                    _prevWidth = Window.ClientBounds.Width;
-                    _prevHeight = Window.ClientBounds.Height;
-
-                    // Updating the width and the height to the resolution of the user's screen
-                    _graphics.PreferredBackBufferWidth = GraphicsDevice.Adapter.CurrentDisplayMode.Width;
-                    _graphics.PreferredBackBufferHeight = GraphicsDevice.Adapter.CurrentDisplayMode.Height;
-                }
-
-                _graphics.IsFullScreen = !_graphics.IsFullScreen;
-                _graphics.ApplyChanges();
+                ToggleFullscreen();
             }
 
-            switch (_gameState)
+                switch (_gameState)
             {
                 #region Menu State
                 case GameState.Menu:
@@ -192,10 +174,13 @@ namespace PawnGame
                     // Play the game here
                     _player.Update(_currKbState,_prevKbState);
 
-                    for (int i = 0; i < _currLevel.EnemySpawns.Count; i++)
-                    {
-                        if (_currLevel.EnemySpawns[i].)
-                    }
+                    //for (int i = 0; i < _currLevel.EnemySpawns.Count; i++)
+                    //{
+                    //    if (_currLevel.EnemySpawns[i].)
+                     //   {
+
+                       // }
+                    //}
                     #endregion
                     break;
 
@@ -289,6 +274,33 @@ namespace PawnGame
 
             _spriteBatch.End();
             base.Draw(gameTime);
+        }
+
+        /// <summary>
+        /// Fullscreens or unfullscreens the window accordingly
+        /// </summary>
+        private void ToggleFullscreen()
+        {
+            if (_graphics.IsFullScreen)
+            {
+                // Changes the width and height back to the original size
+                _graphics.PreferredBackBufferWidth = _prevWidth;
+                _graphics.PreferredBackBufferHeight = _prevHeight;
+            }
+            else
+            {
+                // Stores the width and height of the screen when it is not full screen
+                // so that it is easy to revert it
+                _prevWidth = Window.ClientBounds.Width;
+                _prevHeight = Window.ClientBounds.Height;
+
+                // Updating the width and the height to the resolution of the user's screen
+                _graphics.PreferredBackBufferWidth = GraphicsDevice.Adapter.CurrentDisplayMode.Width;
+                _graphics.PreferredBackBufferHeight = GraphicsDevice.Adapter.CurrentDisplayMode.Height;
+            }
+
+            _graphics.IsFullScreen = !_graphics.IsFullScreen;
+            _graphics.ApplyChanges();
         }
     }
 }
