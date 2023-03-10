@@ -21,6 +21,8 @@ namespace PawnGame
         private GameObject _selected;
         private Level _level;
         private Vector2 _cameraPosition;
+        private bool _canClick;
+        private MouseState _mState;
         #endregion
 
         #region constructors
@@ -68,6 +70,7 @@ namespace PawnGame
             };
             _selected = _paletteTiles[0];
             _cameraPosition = new Vector2(100, 100);
+            _canClick = true;
         }
 
         /// <summary>
@@ -75,16 +78,28 @@ namespace PawnGame
         /// </summary>
         public void Update()
         {
+            //manage clicking
+            _mState = Mouse.GetState();
+            if(!_canClick && _mState.LeftButton == ButtonState.Released)
+            {
+                _canClick = true;
+            }
             //check for clicks on tile palette
             for(int i = 0; i < _paletteTiles.Length; i++)
             {
-                
+                if(CheckClicked(_paletteTiles[i]))
+                {
+                    _selected = _paletteTiles[i];
+                }
             }
 
             //check for clicks on enemy palette
             for (int i = 0; i < _paletteEnemies.Length; i++)
             {
-
+                if (CheckClicked(_paletteEnemies[i]))
+                {
+                    _selected = _paletteEnemies[i];
+                }
             }
 
             //check for clicks on tiles in the level
@@ -92,7 +107,17 @@ namespace PawnGame
             {
                 for (int j = 0; j < _level.Tiles.GetLength(1); j++)
                 {
-
+                    if (CheckMouseOn(_level.Tiles[i, j]))
+                    {
+                        if(_mState.LeftButton == ButtonState.Pressed)
+                        {
+                            
+                        }
+                        if (_mState.RightButton == ButtonState.Pressed)
+                        {
+                            //_level.Tiles[i, j] = new Tile()
+                        }
+                    }
                 }
             }
         }
@@ -127,10 +152,19 @@ namespace PawnGame
         /// return whether the mouse is over a GameObject
         /// </summary>
         /// <param name="g"></param>
-        private void CheckMouseOn(GameObject g)
+        private bool CheckMouseOn(GameObject g)
         {
-            MouseState mState = Mouse.GetState();
-            //return (mState.X > g.X && mState.Y > g. && mState.X < g.X + width &&)
+            return (_mState.X > g.X && _mState.Y > g.Y && _mState.X < g.X + g.Width && _mState.Y < g.Y + g.Height);
+        }
+
+        /// <summary>
+        /// return whether a GameObject has been clicked
+        /// </summary>
+        /// <param name="g"></param>
+        /// <returns></returns>
+        private bool CheckClicked(GameObject g)
+        {
+            return (CheckMouseOn(g) && _mState.LeftButton == ButtonState.Pressed && _canClick);
         }
     }
 }
