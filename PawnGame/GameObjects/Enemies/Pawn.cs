@@ -14,7 +14,9 @@ namespace PawnGame.GameObjects.Enemies
 
         public override void Update()
         {
-            throw new NotImplementedException();
+            Move();
+
+            if (!IsAlive) OnDeath();
         }
 
         protected override void Attack()
@@ -29,7 +31,7 @@ namespace PawnGame.GameObjects.Enemies
 
         protected override void OnDeath()
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException(); 
         }
     }
 }
