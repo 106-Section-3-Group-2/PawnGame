@@ -174,13 +174,15 @@ namespace PawnGame
                     // Play the game here
                     _player.Update(_currKbState,_prevKbState);
 
+                    // Make an enemy manager class that handles collisions
                     for (int i = 0; i < _currLevel.Enemies.Count; i++)
                     {
-                        if (_currLevel.Enemies[i].Chec)
+                        if (_currLevel.Enemies[i].CheckCollision(_player))
                         {
-
+                            //_currLevel.Enemies[i].
                         }
                     }
+
                     #endregion
                     break;
 
