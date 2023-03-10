@@ -25,11 +25,13 @@ namespace PawnGame
         private GameState _gameState;
         private GameState _prevGameState;
 
+        private Level _currLevel;
+
         private KeyboardState _currKbState;
         private KeyboardState _prevKbState;
 
-        private int _width;
-        private int _height;
+        private int _prevWidth;
+        private int _prevHeight;
 
         /// <summary>
         /// Gets the width of the window
@@ -70,8 +72,8 @@ namespace PawnGame
 
         public Game1()
         {
-            _width = 0;
-            _height = 0;
+            _prevWidth = 0;
+            _prevHeight = 0;
 
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -104,15 +106,15 @@ namespace PawnGame
                 if (_graphics.IsFullScreen)
                 {
                     // Changes the width and height back to the original size
-                    _graphics.PreferredBackBufferWidth = _width;
-                    _graphics.PreferredBackBufferHeight = _height;
+                    _graphics.PreferredBackBufferWidth = _prevWidth;
+                    _graphics.PreferredBackBufferHeight = _prevHeight;
                 }
                 else
                 {
                     // Stores the width and height of the screen when it is not full screen
                     // so that it is easy to revert it
-                    _width = Window.ClientBounds.Width;
-                    _height = Window.ClientBounds.Height;
+                    _prevWidth = Window.ClientBounds.Width;
+                    _prevHeight = Window.ClientBounds.Height;
 
                     // Updating the width and the height to the resolution of the user's screen
                     _graphics.PreferredBackBufferWidth = GraphicsDevice.Adapter.CurrentDisplayMode.Width;
@@ -189,6 +191,11 @@ namespace PawnGame
                 case GameState.Game:
                     // Play the game here
                     _player.Update(_currKbState,_prevKbState);
+
+                    for (int i = 0; i < _currLevel.EnemySpawns.Count; i++)
+                    {
+                        if (_currLevel.EnemySpawns[i].)
+                    }
                     #endregion
                     break;
 
@@ -232,8 +239,6 @@ namespace PawnGame
 
                     // Menu skeleton containing the buttons
                     // that will be able to be clicked
-
-                    
 
                     foreach (Button b in _menuButtons)
                     {
