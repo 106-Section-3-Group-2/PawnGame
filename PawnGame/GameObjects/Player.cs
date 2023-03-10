@@ -74,9 +74,9 @@ namespace PawnGame.GameObjects
             switch (_playerState)
             {
                 case PlayerState.Moving:
-                    _posX += Velocity.X;
-                    _posY += Velocity.Y;
-                    Hitbox.Location = new Point((int)_posX,(int)_posY);
+                    _posX += _velocity.X;
+                    _posY += _velocity.Y;
+                    _hitbox.Location = new Point((int)_posX,(int)_posY);
 
                     break;
 
@@ -98,7 +98,6 @@ namespace PawnGame.GameObjects
                                 break;
                             case Ability.None:
                                 throw new System.Exception("Error! Entered Abilitying state without an active ability");
-                                break;
                         }
                         _abilityTimer--;
                     }

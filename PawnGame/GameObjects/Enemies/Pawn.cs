@@ -14,9 +14,13 @@ namespace PawnGame.GameObjects.Enemies
 
         public override void Update()
         {
+<<<<<<< HEAD
             Move();
 
             if (!_isAlive) OnDeath();
+=======
+            throw new NotImplementedException();
+>>>>>>> parent of 7b2df1c (Merge branch 'main' of https://github.com/106-Section-3-Group-2/PawnGame)
         }
 
         protected override void Attack()
@@ -31,7 +35,11 @@ namespace PawnGame.GameObjects.Enemies
 
         protected override void OnDeath()
         {
+<<<<<<< HEAD
             _isAlive = false;
+=======
+            throw new NotImplementedException();
+>>>>>>> parent of 7b2df1c (Merge branch 'main' of https://github.com/106-Section-3-Group-2/PawnGame)
         }
     }
 }

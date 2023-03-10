@@ -33,9 +33,6 @@ namespace PawnGame
         private int _prevWidth;
         private int _prevHeight;
 
-        // Textures
-        private Texture2D _logo;
-
         /// <summary>
         /// Gets the width of the window
         /// </summary>
@@ -96,8 +93,6 @@ namespace PawnGame
 
             //Debug font
             font = this.Content.Load<SpriteFont>("Arial");
-
-            _logo = this.Content.Load<Texture2D>("logo");
         }
 
         protected override void Update(GameTime gameTime)
@@ -179,15 +174,13 @@ namespace PawnGame
                     // Play the game here
                     _player.Update(_currKbState,_prevKbState);
 
-                    // Make an enemy manager class that handles collisions
-                    for (int i = 0; i < _currLevel.Enemies.Count; i++)
-                    {
-                        if (_currLevel.Enemies[i].CheckCollision(_player))
-                        {
-                            //_currLevel.Enemies[i].
-                        }
-                    }
+                    //for (int i = 0; i < _currLevel.EnemySpawns.Count; i++)
+                    //{
+                    //    if (_currLevel.EnemySpawns[i].)
+                     //   {
 
+                       // }
+                    //}
                     #endregion
                     break;
 
@@ -220,7 +213,7 @@ namespace PawnGame
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.DarkOliveGreen);
 
             _spriteBatch.Begin();
 
@@ -231,13 +224,6 @@ namespace PawnGame
 
                     // Menu skeleton containing the buttons
                     // that will be able to be clicked
-
-                    // Drawing the logo to the screen
-                    // Note: Doesn't scale properly on fullscreen
-                    _spriteBatch.Draw(_logo,
-                        new Rectangle((int)WindowWidth/4 - _logo.Width/4, 
-                        (int)WindowHeight/4 - _logo.Height/2, 
-                        _logo.Width*2, _logo.Height*2), Color.White);
 
                     foreach (Button b in _menuButtons)
                     {

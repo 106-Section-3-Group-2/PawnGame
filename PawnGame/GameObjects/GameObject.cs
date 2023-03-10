@@ -33,7 +33,11 @@
         /// </summary>
         /// <param name="other"></param>
         /// <returns>True if game objects are intersecting, otherwise false</returns>
+<<<<<<< HEAD
         public virtual bool CheckCollision(GameObject other) { return _hitbox.Intersects(other._hitbox); }
+=======
+        protected virtual bool CheckCollision(GameObject other) { return Hitbox.Intersects(other.Hitbox); }
+>>>>>>> parent of 7b2df1c (Merge branch 'main' of https://github.com/106-Section-3-Group-2/PawnGame)
 
         /// <summary>
         /// Draws the game object to the screen

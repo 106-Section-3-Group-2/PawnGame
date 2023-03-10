@@ -15,7 +15,7 @@ namespace PawnGame
     /// </summary>
     internal class Level
     {
-        #region properties
+        #region fields
         /// <summary>
         /// the array of tiles which make up the level
         /// </summary>
