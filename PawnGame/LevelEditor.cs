@@ -22,6 +22,7 @@ namespace PawnGame
         private bool _canClick;
         private MouseState _mState;
         #endregion
+
         #region constructors
         /// <summary>
         /// load the level editor to create a new x*y level
@@ -31,7 +32,7 @@ namespace PawnGame
         public LevelEditor(int x, int y)
         {
             _level = new Level(new Tile[x, y], new List<Enemy>(), new Vector2());
-            initialize();
+            Initialize();
         }
         /// <summary>
         /// load the level editor with a file path. If the file is not read, creates a new 8*8 level instead and throws an exception with a relevant message.
@@ -49,20 +50,23 @@ namespace PawnGame
                 _level = new Level(new Tile[8, 8], new List<Enemy>(), new Vector2());
                 throw e;
             }
-            initialize();
+            Initialize();
         }
         #endregion
+
         /// <summary>
         /// runs initialization code
         /// </summary>
-        private void initialize()
+        private void Initialize()
         {
             _paletteTiles = new Tile[]{
                 //one of each kind of tile here
             };
+
             _paletteEnemies = new Enemy[]{
                 //one of each kind of tile here
             };
+
             _selected = _paletteTiles[0];
             _cameraPosition = new Vector2(100, 100);
             _canClick = true;
