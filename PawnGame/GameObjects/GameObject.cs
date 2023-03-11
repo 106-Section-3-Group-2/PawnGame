@@ -24,12 +24,14 @@
             _texture = texture;
             _hitbox = hitbox;
         }
+
         /// <summary>
         /// Checks if the game object is coliding with another game object
         /// </summary>
         /// <param name="other"></param>
         /// <returns>True if game objects are intersecting, otherwise false</returns>
         public virtual bool CheckCollision(GameObject other) { return _hitbox.Intersects(other._hitbox); }
+
         /// <summary>
         /// Draws the game object to the screen
         /// </summary>

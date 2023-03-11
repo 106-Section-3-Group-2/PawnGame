@@ -22,6 +22,7 @@ namespace PawnGame
         private bool _canClick;
         private MouseState _mState;
         #endregion
+
         #region constructors
         /// <summary>
         /// load the level editor to create a new x*y level
@@ -31,7 +32,7 @@ namespace PawnGame
         public LevelEditor(int x, int y)
         {
             _level = new Level(new Tile[x, y], new List<Enemy>(), new Vector2());
-            initialize();
+            Initialize();
         }
         /// <summary>
         /// load the level editor with a file path. If the file is not read, creates a new 8*8 level instead and throws an exception with a relevant message.
@@ -49,24 +50,28 @@ namespace PawnGame
                 _level = new Level(new Tile[8, 8], new List<Enemy>(), new Vector2());
                 throw e;
             }
-            initialize();
+            Initialize();
         }
         #endregion
+
         /// <summary>
         /// runs initialization code
         /// </summary>
-        private void initialize()
+        private void Initialize()
         {
             _paletteTiles = new Tile[]{
                 //one of each kind of tile here
             };
+
             _paletteEnemies = new Enemy[]{
                 //one of each kind of tile here
             };
+
             _selected = _paletteTiles[0];
             _cameraPosition = new Vector2(100, 100);
             _canClick = true;
         }
+
         /// <summary>
         /// update the level editor
         /// </summary>
@@ -74,10 +79,12 @@ namespace PawnGame
         {
             //manage clicking
             _mState = Mouse.GetState();
+
             if (!_canClick && _mState.LeftButton == ButtonState.Released)
             {
                 _canClick = true;
             }
+
             //check for clicks on tile palette
             for (int i = 0; i < _paletteTiles.Length; i++)
             {
@@ -86,6 +93,7 @@ namespace PawnGame
                     _selected = _paletteTiles[i];
                 }
             }
+
             //check for clicks on enemy palette
             for (int i = 0; i < _paletteEnemies.Length; i++)
             {
@@ -94,6 +102,7 @@ namespace PawnGame
                     _selected = _paletteEnemies[i];
                 }
             }
+
             //check for clicks on tiles in the level
             for (int i = 0; i < _level.Tiles.GetLength(0); i++)
             {
@@ -113,6 +122,7 @@ namespace PawnGame
                 }
             }
         }
+
         /// <summary>
         /// draw the level editor
         /// </summary>
@@ -134,6 +144,7 @@ namespace PawnGame
             //no buttons yet
             #endregion
         }
+
         /// <summary>
         /// return whether the mouse is over a GameObject
         /// </summary>
@@ -142,6 +153,7 @@ namespace PawnGame
         {
             return (_mState.X > g.X && _mState.Y > g.Y && _mState.X < g.X + g.Width && _mState.Y < g.Y + g.Height);
         }
+
         /// <summary>
         /// return whether a GameObject has been clicked
         /// </summary>
