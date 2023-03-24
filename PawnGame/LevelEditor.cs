@@ -14,14 +14,19 @@ namespace PawnGame
     {
         #region fields
         private string _filePath;
-        private Tile[] _paletteTiles;
-        private Enemy[] _paletteEnemies;
-        private GameObject _selected;
+        private List<Button> _palette;
+        private int _selected;
         private Level _level;
         private Vector2 _cameraPosition;
         private bool _canClick;
         private MouseState _mState;
         #endregion
+
+        #region spacing variables
+        private Vector2 _paletteTopLeft;
+        private int _paletteSpacing;
+        #endregion
+
         #region constructors
         /// <summary>
         /// load the level editor to create a new x*y level
@@ -31,7 +36,7 @@ namespace PawnGame
         public LevelEditor(int x, int y)
         {
             _level = new Level(new Tile[x, y], new List<Enemy>(), new Vector2());
-            initialize();
+            Initialize();
         }
         /// <summary>
         /// load the level editor with a file path. If the file is not read, creates a new 8*8 level instead and throws an exception with a relevant message.
@@ -49,24 +54,23 @@ namespace PawnGame
                 _level = new Level(new Tile[8, 8], new List<Enemy>(), new Vector2());
                 throw e;
             }
-            initialize();
+            Initialize();
         }
         #endregion
+
         /// <summary>
         /// runs initialization code
         /// </summary>
-        private void initialize()
+        private void Initialize()
         {
-            _paletteTiles = new Tile[]{
-                //one of each kind of tile here
-            };
-            _paletteEnemies = new Enemy[]{
-                //one of each kind of tile here
-            };
-            _selected = _paletteTiles[0];
+            _palette = new List<Button>();
+            //one of each kind of tile/enemy here
+            _palette.Add(new Button(Game1.Textures["logo"], _paletteTopLeft, Color.Green));
+            _selected = 0;
             _cameraPosition = new Vector2(100, 100);
             _canClick = true;
         }
+
         /// <summary>
         /// update the level editor
         /// </summary>
@@ -74,26 +78,21 @@ namespace PawnGame
         {
             //manage clicking
             _mState = Mouse.GetState();
+
             if (!_canClick && _mState.LeftButton == ButtonState.Released)
             {
                 _canClick = true;
             }
-            //check for clicks on tile palette
-            for (int i = 0; i < _paletteTiles.Length; i++)
+
+            //check for clicks on palette
+            for (int i = 0; i < _palette.Count; i++)
             {
-                if (CheckClicked(_paletteTiles[i]))
+                if (_palette[i].Clicked())
                 {
-                    _selected = _paletteTiles[i];
+                    _selected = i;
                 }
             }
-            //check for clicks on enemy palette
-            for (int i = 0; i < _paletteEnemies.Length; i++)
-            {
-                if (CheckClicked(_paletteEnemies[i]))
-                {
-                    _selected = _paletteEnemies[i];
-                }
-            }
+
             //check for clicks on tiles in the level
             for (int i = 0; i < _level.Tiles.GetLength(0); i++)
             {
@@ -113,6 +112,7 @@ namespace PawnGame
                 }
             }
         }
+
         /// <summary>
         /// draw the level editor
         /// </summary>
@@ -122,34 +122,27 @@ namespace PawnGame
             #region graphical elements
             _level.Draw(sb, _cameraPosition);
             //draw tile palette
-            for (int i = 0; i < _paletteTiles.Length; i++)
+            for (int i = 0; i < _palette.Count; i++)
             {
-            }
-            //draw enemy palette
-            for (int i = 0; i < _paletteEnemies.Length; i++)
-            {
+                _palette[i].Draw(sb);
             }
             #endregion
             #region buttons
             //no buttons yet
             #endregion
         }
+
         /// <summary>
         /// return whether the mouse is over a GameObject
         /// </summary>
         /// <param name="g"></param>
         private bool CheckMouseOn(GameObject g)
         {
-            return (_mState.X > g.X && _mState.Y > g.Y && _mState.X < g.X + g.Width && _mState.Y < g.Y + g.Height);
-        }
-        /// <summary>
-        /// return whether a GameObject has been clicked
-        /// </summary>
-        /// <param name="g"></param>
-        /// <returns></returns>
-        private bool CheckClicked(GameObject g)
-        {
-            return (CheckMouseOn(g) && _mState.LeftButton == ButtonState.Pressed && _canClick);
+            if(g == null)
+            {
+                return false;
+            }
+            return _mState.X > g.X && _mState.Y > g.Y && _mState.X < g.X + g.Width && _mState.Y < g.Y + g.Height;
         }
     }
 }

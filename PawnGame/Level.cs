@@ -45,6 +45,7 @@ namespace PawnGame
         /// </summary>
         public Vector2 SpawnPoint { get; set; }
         #endregion
+
         /// <summary>
         /// create a level that holds an array of tiles, an array of enemies, and a spawnpoint.
         /// </summary>
@@ -57,6 +58,7 @@ namespace PawnGame
             Enemies = enemies;
             SpawnPoint = spawnPoint;
         }
+
         /// <summary>
         /// update the level
         /// </summary>
@@ -64,6 +66,7 @@ namespace PawnGame
         public void Update(GameTime gameTime)
         {
         }
+
         /// <summary>
         /// draw the level
         /// </summary>
@@ -72,9 +75,13 @@ namespace PawnGame
         {
             foreach (Tile tile in Tiles)
             {
-                tile.Draw(sb);
+                if(tile != null)
+                {
+                    tile.Draw(sb);
+                }
             }
         }
+
         /// <summary>
         /// writes the level to a filePath
         /// </summary>
@@ -91,6 +98,7 @@ namespace PawnGame
                 throw new Exception("Could not write the file.");
             }
         }
+
         /// <summary>
         /// returns a level loaded from the filePath. Throws an exception if there was an error writing to the file.
         /// </summary>
