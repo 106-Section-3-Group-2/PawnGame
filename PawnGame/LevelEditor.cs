@@ -138,6 +138,10 @@ namespace PawnGame
         /// <param name="g"></param>
         private bool CheckMouseOn(GameObject g)
         {
+            if(g == null)
+            {
+                return false;
+            }
             return _mState.X > g.X && _mState.Y > g.Y && _mState.X < g.X + g.Width && _mState.Y < g.Y + g.Height;
         }
     }
