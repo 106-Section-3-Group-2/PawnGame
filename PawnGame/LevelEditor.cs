@@ -20,6 +20,7 @@ namespace PawnGame
         private Vector2 _cameraPosition;
         private bool _canClick;
         private MouseState _mState;
+        private Game1 _game;
         #endregion
 
         #region spacing variables
@@ -33,16 +34,17 @@ namespace PawnGame
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public LevelEditor(int x, int y)
+        public LevelEditor(int x, int y, Game1 game)
         {
             _level = new Level(new Tile[x, y], new List<Enemy>(), new Vector2());
+            _game = game;
             Initialize();
         }
         /// <summary>
         /// load the level editor with a file path. If the file is not read, creates a new 8*8 level instead and throws an exception with a relevant message.
         /// </summary>
         /// <param name="filePath"></param>
-        public LevelEditor(string filePath)
+        public LevelEditor(string filePath, Game1 game)
         {
             try
             {
@@ -54,6 +56,7 @@ namespace PawnGame
                 _level = new Level(new Tile[8, 8], new List<Enemy>(), new Vector2());
                 throw e;
             }
+            _game = game;
             Initialize();
         }
         #endregion
@@ -65,10 +68,23 @@ namespace PawnGame
         {
             _palette = new List<Button>();
             //one of each kind of tile/enemy here
+            
+            //set up palette
             _palette.Add(new Button(Game1.Textures["logo"], _paletteTopLeft, Color.Green));
             _selected = 0;
             _cameraPosition = new Vector2(100, 100);
             _canClick = true;
+
+            //populate tile array
+            int sideLength = (int)_game.WindowHeight / _level.Tiles.GetLength(1);
+            int margin = ((int)_game.WindowWidth / 2) - _level.Tiles.GetLength(0) * sideLength / 2;
+            for(int x = 0; x < _level.Tiles.GetLength(0); x++)
+            {
+                for(int y = 0; y < _level.Tiles.GetLength(1); y++)
+                {
+                    _level.Tiles[x, y] = new Tile(Game1.Textures["logo"], new Rectangle(margin + x * sideLength, y * sideLength, sideLength, sideLength), false);
+                }
+            }
         }
 
         /// <summary>
@@ -106,7 +122,7 @@ namespace PawnGame
                         }
                         if (_mState.RightButton == ButtonState.Pressed)
                         {
-                            //_level.Tiles[i, j] = new Tile()
+                            _level.Tiles[i, j] = new Tile(Game1.Textures["logo"], new Rectangle(_level.Tiles[i, j].X, _level.Tiles[i, j].Y, _level.Tiles[i, j].Width, _level.Tiles[i, j].Height), false);
                         }
                     }
                 }

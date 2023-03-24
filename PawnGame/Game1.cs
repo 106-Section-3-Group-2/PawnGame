@@ -102,7 +102,7 @@ namespace PawnGame
             _logo = LoadTexture("logo");
 
             //initialize level editor (needs textures loaded)
-            _levelEditor = new LevelEditor(8, 8);
+            _levelEditor = new LevelEditor(8, 8, this);
         }
         protected override void Update(GameTime gameTime)
         {
@@ -269,8 +269,6 @@ namespace PawnGame
                 case GameState.LevelEditor:
                     // Draw level editor interface
                     _levelEditor.Draw(_spriteBatch);
-                    _spriteBatch.DrawString(_font, "Level Editor",
-                        new Vector2(WindowWidth / 2 - _font.MeasureString("LevelEditor").X / 2, WindowHeight / 2), Color.White);
                     #endregion
                     break;
 
