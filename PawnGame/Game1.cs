@@ -33,7 +33,10 @@ namespace PawnGame
         private int _prevWidth;
         private int _prevHeight;
 
+        private LevelEditor _levelEditor;
+
         // Textures
+        public static Dictionary<string, Texture2D> Textures;
         private Texture2D _logo;
 
         /// <summary>
@@ -84,7 +87,7 @@ namespace PawnGame
         protected override void Initialize()
         {
             _prevKbState = Keyboard.GetState();
-
+            Textures = new Dictionary<string, Texture2D>();
             base.Initialize();
         }
 
@@ -95,7 +98,11 @@ namespace PawnGame
             //Debug font
             _font = this.Content.Load<SpriteFont>("Arial");
 
-            _logo = this.Content.Load<Texture2D>("logo");
+            //load textures
+            _logo = LoadTexture("logo");
+
+            //initialize level editor (needs textures loaded)
+            _levelEditor = new LevelEditor(8, 8);
         }
         protected override void Update(GameTime gameTime)
         {
@@ -191,6 +198,7 @@ namespace PawnGame
                 #region LevelEditor State
                 case GameState.LevelEditor:
                     // Update logic for level editor
+                    _levelEditor.Update();
                     #endregion
                     break;
 
@@ -260,6 +268,7 @@ namespace PawnGame
                 #region LevelEditor State
                 case GameState.LevelEditor:
                     // Draw level editor interface
+                    _levelEditor.Draw(_spriteBatch);
                     _spriteBatch.DrawString(_font, "Level Editor",
                         new Vector2(WindowWidth / 2 - _font.MeasureString("LevelEditor").X / 2, WindowHeight / 2), Color.White);
                     #endregion
@@ -302,6 +311,16 @@ namespace PawnGame
 
             _graphics.IsFullScreen = !_graphics.IsFullScreen;
             _graphics.ApplyChanges();
+        }
+        /// <summary>
+        /// load a texture and store it in the dictionary with a key that corresponds to its filename
+        /// </summary>
+        /// <param name="fileName"></param>
+        private Texture2D LoadTexture(string fileName)
+        {
+            Texture2D output = this.Content.Load<Texture2D>(fileName);
+            Textures.Add(fileName, output);
+            return output;
         }
     }
 }

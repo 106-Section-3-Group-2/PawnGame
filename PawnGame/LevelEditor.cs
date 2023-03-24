@@ -14,13 +14,17 @@ namespace PawnGame
     {
         #region fields
         private string _filePath;
-        private Tile[] _paletteTiles;
-        private Enemy[] _paletteEnemies;
-        private GameObject _selected;
+        private List<Button> _palette;
+        private int _selected;
         private Level _level;
         private Vector2 _cameraPosition;
         private bool _canClick;
         private MouseState _mState;
+        #endregion
+
+        #region spacing variables
+        private Vector2 _paletteTopLeft;
+        private int _paletteSpacing;
         #endregion
 
         #region constructors
@@ -59,15 +63,10 @@ namespace PawnGame
         /// </summary>
         private void Initialize()
         {
-            _paletteTiles = new Tile[]{
-                //one of each kind of tile here
-            };
-
-            _paletteEnemies = new Enemy[]{
-                //one of each kind of tile here
-            };
-
-            _selected = _paletteTiles[0];
+            _palette = new List<Button>();
+            //one of each kind of tile/enemy here
+            _palette.Add(new Button(Game1.Textures["logo"], _paletteTopLeft, Color.Green));
+            _selected = 0;
             _cameraPosition = new Vector2(100, 100);
             _canClick = true;
         }
@@ -85,21 +84,12 @@ namespace PawnGame
                 _canClick = true;
             }
 
-            //check for clicks on tile palette
-            for (int i = 0; i < _paletteTiles.Length; i++)
+            //check for clicks on palette
+            for (int i = 0; i < _palette.Count; i++)
             {
-                if (CheckClicked(_paletteTiles[i]))
+                if (_palette[i].Clicked())
                 {
-                    _selected = _paletteTiles[i];
-                }
-            }
-
-            //check for clicks on enemy palette
-            for (int i = 0; i < _paletteEnemies.Length; i++)
-            {
-                if (CheckClicked(_paletteEnemies[i]))
-                {
-                    _selected = _paletteEnemies[i];
+                    _selected = i;
                 }
             }
 
@@ -132,12 +122,9 @@ namespace PawnGame
             #region graphical elements
             _level.Draw(sb, _cameraPosition);
             //draw tile palette
-            for (int i = 0; i < _paletteTiles.Length; i++)
+            for (int i = 0; i < _palette.Count; i++)
             {
-            }
-            //draw enemy palette
-            for (int i = 0; i < _paletteEnemies.Length; i++)
-            {
+                _palette[i].Draw(sb);
             }
             #endregion
             #region buttons
@@ -151,17 +138,7 @@ namespace PawnGame
         /// <param name="g"></param>
         private bool CheckMouseOn(GameObject g)
         {
-            return (_mState.X > g.X && _mState.Y > g.Y && _mState.X < g.X + g.Width && _mState.Y < g.Y + g.Height);
-        }
-
-        /// <summary>
-        /// return whether a GameObject has been clicked
-        /// </summary>
-        /// <param name="g"></param>
-        /// <returns></returns>
-        private bool CheckClicked(GameObject g)
-        {
-            return (CheckMouseOn(g) && _mState.LeftButton == ButtonState.Pressed && _canClick);
+            return _mState.X > g.X && _mState.Y > g.Y && _mState.X < g.X + g.Width && _mState.Y < g.Y + g.Height;
         }
     }
 }

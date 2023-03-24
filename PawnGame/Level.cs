@@ -75,7 +75,10 @@ namespace PawnGame
         {
             foreach (Tile tile in Tiles)
             {
-                tile.Draw(sb);
+                if(tile != null)
+                {
+                    tile.Draw(sb);
+                }
             }
         }
 
