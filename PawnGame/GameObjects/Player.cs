@@ -31,7 +31,7 @@ namespace PawnGame.GameObjects
         {
             get
             {
-                return _posY;
+                return _posX;
             }
         }
 
