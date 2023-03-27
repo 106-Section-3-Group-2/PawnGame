@@ -15,6 +15,7 @@ namespace PawnGame
         #region fields
         private string _filePath;
         private List<Button> _palette;
+        private List<Button> _options;
         private int _selected;
         private Level _level;
         private Vector2 _cameraPosition;
@@ -25,7 +26,7 @@ namespace PawnGame
 
         #region spacing variables
         private Vector2 _paletteTopLeft;
-        private int _paletteSpacing;
+        private int _ButtonSpacing;
         #endregion
 
         #region constructors
@@ -66,14 +67,34 @@ namespace PawnGame
         /// </summary>
         private void Initialize()
         {
+            //set up buttons and variables
+            #region spacing variables
+            _paletteTopLeft = new Vector2(10, 10);
+            _ButtonSpacing = 10;
+            #endregion
+            _options = new List<Button>();
             _palette = new List<Button>();
-            //one of each kind of tile/enemy here
-            
-            //set up palette
             _palette.Add(new Button(Game1.Textures["logo"], _paletteTopLeft, Color.Green));
+            _palette.Add(new Button(Game1.Textures["logo"], _paletteTopLeft, Color.Green));
+            _options.Add(new Button(Game1.Textures["logo"], new Vector2(_game.WindowWidth - _paletteTopLeft.X, _paletteTopLeft.Y), Color.Green));
+            _options.Add(new Button(Game1.Textures["logo"], new Vector2(_game.WindowWidth - _paletteTopLeft.X, _paletteTopLeft.Y), Color.Green));
             _selected = 0;
             _cameraPosition = new Vector2(100, 100);
             _canClick = true;
+
+            //adjust spacing of palette
+            for(int i = 1; i < _palette.Count; i++)
+            {
+                Point loc = _palette[i].ButtonBox.Location;
+                loc.Y += _palette[i - 1].ButtonBox.Height;
+                //doesnt work _palette[i].ButtonBox.Location = loc;
+            }
+
+            //adjust spacing of options
+            for (int i = 1; i < _options.Count; i++)
+            {
+
+            }
 
             //populate tile array
             int sideLength = (int)_game.WindowHeight / _level.Tiles.GetLength(1);
@@ -118,11 +139,21 @@ namespace PawnGame
                     {
                         if (_mState.LeftButton == ButtonState.Pressed)
                         {
-
+                            //set the tile corresponding to palette
+                            switch (_selected)
+                            {
+                                case 0:
+                                    _level.Tiles[i, j] = new Tile(Game1.Textures["logo"], new Rectangle(_level.Tiles[i, j].X, _level.Tiles[i, j].Y, _level.Tiles[i, j].Width, _level.Tiles[i, j].Height), false);
+                                    break;
+                                case 1:
+                                    _level.Tiles[i, j] = new Tile(Game1.Textures["logo"], new Rectangle(_level.Tiles[i, j].X, _level.Tiles[i, j].Y, _level.Tiles[i, j].Width, _level.Tiles[i, j].Height), true);
+                                    break;
+                            }
                         }
                         if (_mState.RightButton == ButtonState.Pressed)
                         {
-                            _level.Tiles[i, j] = new Tile(Game1.Textures["logo"], new Rectangle(_level.Tiles[i, j].X, _level.Tiles[i, j].Y, _level.Tiles[i, j].Width, _level.Tiles[i, j].Height), false);
+                            //should spawn an empty texture tile
+                            _level.Tiles[i, j] = new Tile(Game1.Textures["logo"], new Rectangle(_level.Tiles[i, j].X, _level.Tiles[i, j].Y, _level.Tiles[i, j].Width, _level.Tiles[i, j].Height), true);
                         }
                     }
                 }
@@ -135,17 +166,17 @@ namespace PawnGame
         /// <param name="sb"></param>
         public void Draw(SpriteBatch sb)
         {
-            #region graphical elements
             _level.Draw(sb, _cameraPosition);
             //draw tile palette
             for (int i = 0; i < _palette.Count; i++)
             {
                 _palette[i].Draw(sb);
             }
-            #endregion
-            #region buttons
-            //no buttons yet
-            #endregion
+            //draw options
+            for (int i = 0; i < _options.Count; i++)
+            {
+                _options[i].Draw(sb);
+            }
         }
 
         /// <summary>
