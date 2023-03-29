@@ -32,7 +32,7 @@
 /processorParam:TextureFormat=Color
 /build:logo.png
 
-#begin pawn-placeholder.jpg
+#begin pawn-texture.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -42,5 +42,5 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:pawn-placeholder.jpg;Pawn-placeholder.jpg
+/build:pawn-texture.png
 
