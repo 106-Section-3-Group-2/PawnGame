@@ -99,7 +99,7 @@ namespace PawnGame
             //load textures
             _logo = LoadTexture("logo");
 
-            _playerTexture = LoadTexture("pawn-texture");
+            _playerTexture = LoadTexture("black-pawn-texture");
             _player = new Player(_playerTexture, new Rectangle((int)WindowWidth / 2, (int)WindowHeight / 2,
                 _playerTexture.Width/6, _playerTexture.Height/6));
 
