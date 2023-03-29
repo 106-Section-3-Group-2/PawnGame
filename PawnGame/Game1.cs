@@ -82,6 +82,7 @@ namespace PawnGame
 
         protected override void Initialize()
         {
+            Manager.ToString();
             _prevKbState = Keyboard.GetState();
             Textures = new Dictionary<string, Texture2D>();
             base.Initialize();
