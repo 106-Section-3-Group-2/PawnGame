@@ -5,7 +5,7 @@ namespace PawnGame
     /// <summary>
     /// Rectangle that uses float values instead of int values.
     /// </summary>
-    internal struct Vectangle
+    public struct Vectangle
     {
         #region Fields
         private float _x;
