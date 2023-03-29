@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using PawnGame;
 using PawnGame.GameObjects;
 using PawnGame.GameObjects.Enemies;
+using System.Windows.Forms;
+
 namespace PawnGame
 {
     internal class LevelEditor
@@ -76,8 +78,9 @@ namespace PawnGame
             _palette = new List<Button>();
             _palette.Add(new Button(Game1.Textures["logo"], _paletteTopLeft, Color.Green));
             _palette.Add(new Button(Game1.Textures["logo"], _paletteTopLeft + new Vector2(0, Game1.Textures["logo"].Height + _ButtonSpacing), Color.Green));
-            _options.Add(new Button(Game1.Textures["logo"], new Vector2(_game.WindowWidth - _paletteTopLeft.X, _paletteTopLeft.Y), Color.Green));
-            _options.Add(new Button(Game1.Textures["logo"], new Vector2(_game.WindowWidth - _paletteTopLeft.X, _paletteTopLeft.Y + Game1.Textures["logo"].Height + _ButtonSpacing), Color.Green));
+            float optionsX = _game.WindowWidth - _paletteTopLeft.X - Game1.Textures["logo"].Width;
+            _options.Add(new Button(Game1.Textures["logo"], new Vector2(optionsX, _paletteTopLeft.Y), Color.Green));
+            _options.Add(new Button(Game1.Textures["logo"], new Vector2(optionsX, _paletteTopLeft.Y + (Game1.Textures["logo"].Height + _ButtonSpacing) /* times n*/), Color.Green));
             _selected = 0;
             _cameraPosition = new Vector2(100, 100);
             _canClick = true;
@@ -102,7 +105,7 @@ namespace PawnGame
             //manage clicking
             _mState = Mouse.GetState();
 
-            if (!_canClick && _mState.LeftButton == ButtonState.Released)
+            if (!_canClick && _mState.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Released)
             {
                 _canClick = true;
             }
@@ -116,6 +119,39 @@ namespace PawnGame
                 }
             }
 
+            //check for clicks on options
+            for (int i = 0; i < _options.Count; i++)
+            {
+                if (_options[i].Clicked())
+                {
+                    switch (i)
+                    {
+                        //save
+                        case 0:
+                            {
+                                OpenFileDialog openFileDialog = new OpenFileDialog();
+                                openFileDialog.Filter = "Json files (*.json)|*.json|Text files (*.txt)|*.txt";
+                                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                                {
+                                    _level = Level.Read(openFileDialog.FileName);
+                                }
+                            }
+                            break;
+                        //load
+                        case 1:
+                            {
+                                OpenFileDialog openFileDialog = new OpenFileDialog();
+                                openFileDialog.Filter = "Json files (*.json)|*.json|Text files (*.txt)|*.txt";
+                                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                                {
+                                    Level.Write(_level, openFileDialog.FileName);
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+
             //check for clicks on tiles in the level
             for (int i = 0; i < _level.Tiles.GetLength(0); i++)
             {
@@ -123,7 +159,7 @@ namespace PawnGame
                 {
                     if (CheckMouseOn(_level.Tiles[i, j]))
                     {
-                        if (_mState.LeftButton == ButtonState.Pressed)
+                        if (_mState.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
                         {
                             //set the tile corresponding to palette
                             switch (_selected)
@@ -132,11 +168,11 @@ namespace PawnGame
                                     _level.Tiles[i, j] = new Tile(Game1.Textures["logo"], new Vectangle(_level.Tiles[i, j].X, _level.Tiles[i, j].Y, _level.Tiles[i, j].Width, _level.Tiles[i, j].Height), false);
                                     break;
                                 case 1:
-                                    _level.Tiles[i, j] = new Tile(Game1.Textures["logo"], new Vectangle(_level.Tiles[i, j].X, _level.Tiles[i, j].Y, _level.Tiles[i, j].Width, _level.Tiles[i, j].Height), true);
+                                    _level.Tiles[i, j] = new Tile(Game1.Textures["logo"], new Rectangle(_level.Tiles[i, j].X, _level.Tiles[i, j].Y, _level.Tiles[i, j].Width, _level.Tiles[i, j].Height), true);
                                     break;
                             }
                         }
-                        if (_mState.RightButton == ButtonState.Pressed)
+                        if (_mState.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
                         {
                             //should spawn an empty texture tile
                             _level.Tiles[i, j] = new Tile(Game1.Textures["logo"], new Vectangle(_level.Tiles[i, j].X, _level.Tiles[i, j].Y, _level.Tiles[i, j].Width, _level.Tiles[i, j].Height), true);
