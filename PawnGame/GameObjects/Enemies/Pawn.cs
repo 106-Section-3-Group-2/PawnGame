@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static PawnGame.GameObjects.Enemies.EnemyManager;
 
 namespace PawnGame.GameObjects.Enemies
 {
@@ -10,6 +11,7 @@ namespace PawnGame.GameObjects.Enemies
     {
         public Pawn(Texture2D texture, Rectangle hitbox) : base(texture, hitbox)
         {
+            _speed = 4;
         }
 
         public override void Update()
@@ -25,7 +27,11 @@ namespace PawnGame.GameObjects.Enemies
 
         protected override void Move()
         {
-            throw new NotImplementedException();
+            Vector2 moveVector = Manager.PlayerPosition-new Vector2(_hitbox.X,_hitbox.Y);
+           
+            moveVector.Normalize();
+            moveVector *= _speed;
+            _hitbox.Location = (_hitbox.Location.ToVector2() + moveVector).ToPoint();
         }
 
         protected override void OnDeath()

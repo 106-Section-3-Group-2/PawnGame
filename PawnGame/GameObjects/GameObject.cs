@@ -4,14 +4,14 @@
     {
         #region Fields
         protected Texture2D _texture;
-        protected Rectangle _hitbox;
+        protected Vectangle _hitbox;
         #endregion
 
-        #region Properties (might not use)
-        public int Width { get { return _hitbox.Width; } }
-        public int Height { get { return _hitbox.Height; } }
-        public int X { get { return _hitbox.X; } }
-        public int Y { get { return _hitbox.Y; } }
+        #region Properties
+        public float Width { get { return _hitbox.Width; } }
+        public float Height { get { return _hitbox.Height; } }
+        public float X { get { return _hitbox.X; } }
+        public float Y { get { return _hitbox.Y; } }
         #endregion
 
         /// <summary>
@@ -19,7 +19,7 @@
         /// </summary>
         /// <param name="texture"></param>
         /// <param name="hitbox"></param>
-        protected GameObject(Texture2D texture, Rectangle hitbox)
+        protected GameObject(Texture2D texture, Vectangle hitbox)
         {
             _texture = texture;
             _hitbox = hitbox;
@@ -38,7 +38,7 @@
         /// <param name="sb"></param>
         public virtual void Draw(SpriteBatch sb)
         {
-            sb.Draw(_texture, _hitbox, Color.White);
+            sb.Draw(_texture, _hitbox, Color.Black);
         }
     }
 }
