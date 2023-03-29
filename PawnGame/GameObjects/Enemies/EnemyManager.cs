@@ -38,6 +38,12 @@ namespace PawnGame.GameObjects.Enemies
         {
             _enemies = null;
         }
+
+        public void Add(Enemy enemy)
+        {
+            _enemies.Add(enemy);
+        }
+
         /// <summary>
         /// Sets the enemy list to the entered lists
         /// </summary>
