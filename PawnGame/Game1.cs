@@ -63,14 +63,6 @@ namespace PawnGame
         // Menu buttons
         private List<Button> _menuButtons = new List<Button>();
 
-        /* Not sure whether it would be better to store buttons are seperate
-         variables, or under one list
-         Right now, it's under a list, but I'll change it if necessary
-         - Troy
-         private Button _newGameBtn;
-         private Button _loadGameBtn;
-         private Button _lvlEditorBtn;*/
-
         // This font is temporary
         // Will use for creating menu skeleton
         // for implementation of clicking from menu to game
@@ -110,6 +102,7 @@ namespace PawnGame
             //initialize level editor (needs textures loaded)
             _levelEditor = new LevelEditor(8, 8, this);
         }
+
         protected override void Update(GameTime gameTime)
         {
             _currKbState = Keyboard.GetState();
@@ -326,7 +319,16 @@ namespace PawnGame
         private Texture2D LoadTexture(string fileName)
         {
             Texture2D output = this.Content.Load<Texture2D>(fileName);
-            Textures.Add(fileName, output);
+
+            if (!Textures.ContainsKey(fileName))
+            {
+                Textures.Add(fileName, output);
+            }
+            else
+            {
+                Textures[fileName] = output;
+            }
+        
             return output;
         }
     }
