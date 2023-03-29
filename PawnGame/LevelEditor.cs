@@ -168,7 +168,7 @@ namespace PawnGame
                                     _level.Tiles[i, j] = new Tile(Game1.Textures["logo"], new Vectangle(_level.Tiles[i, j].X, _level.Tiles[i, j].Y, _level.Tiles[i, j].Width, _level.Tiles[i, j].Height), false);
                                     break;
                                 case 1:
-                                    _level.Tiles[i, j] = new Tile(Game1.Textures["logo"], new Rectangle(_level.Tiles[i, j].X, _level.Tiles[i, j].Y, _level.Tiles[i, j].Width, _level.Tiles[i, j].Height), true);
+                                    _level.Tiles[i, j] = new Tile(Game1.Textures["logo"], new Vectangle(_level.Tiles[i, j].X, _level.Tiles[i, j].Y, _level.Tiles[i, j].Width, _level.Tiles[i, j].Height), true);
                                     break;
                             }
                         }
