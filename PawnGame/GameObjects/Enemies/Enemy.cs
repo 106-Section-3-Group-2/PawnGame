@@ -9,6 +9,7 @@
         {
             _isAlerted = false;
         }
-        public abstract void Update();
+        public abstract void Update(Player player);
+        protected abstract void Move(Player player);
     }
 }

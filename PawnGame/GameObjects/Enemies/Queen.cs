@@ -8,7 +8,7 @@ namespace PawnGame.GameObjects.Enemies
         {
         }
 
-        public override void Update()
+        public override void Update(Player player)
         {
             throw new NotImplementedException();
         }
@@ -18,7 +18,7 @@ namespace PawnGame.GameObjects.Enemies
             throw new NotImplementedException();
         }
 
-        protected override void Move()
+        protected override void Move(Player player)
         {
             throw new NotImplementedException();
         }

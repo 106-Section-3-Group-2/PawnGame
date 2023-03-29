@@ -40,6 +40,8 @@ namespace PawnGame
         // Textures
         public static Dictionary<string, Texture2D> Textures;
         private Texture2D _logo;
+        private Texture2D _iconSave;
+        private Texture2D _iconLoad;
 
         private Texture2D _playerTexture;
 
@@ -86,6 +88,7 @@ namespace PawnGame
             _prevKbState = Keyboard.GetState();
             Textures = new Dictionary<string, Texture2D>();
             base.Initialize();
+            Manager.Add(new Pawn(_playerTexture, new Rectangle(0, 0, 20, 20)));
         }
 
         protected override void LoadContent()
@@ -97,6 +100,8 @@ namespace PawnGame
 
             //load textures
             _logo = LoadTexture("logo");
+            _iconSave = LoadTexture("IconSave");
+            _iconLoad = LoadTexture("IconLoad");
 
             _playerTexture = LoadTexture("black-pawn-texture");
             _player = new Player(_playerTexture, new Rectangle((int)WindowWidth / 2, (int)WindowHeight / 2,
@@ -185,7 +190,6 @@ namespace PawnGame
 
                     // Play the game here
                     _player.Update(_currKbState, _prevKbState);
-                    Manager.Add(new Pawn(_playerTexture,new Rectangle(0,0,20,20)));
                     Manager.Update(_player);
                     #endregion
                     break;
@@ -256,7 +260,7 @@ namespace PawnGame
                 case GameState.Game:
                     // Draw.. the game?
                     _player.Draw(_spriteBatch);
-                    
+                    Manager.Draw(_spriteBatch);
 
                     _spriteBatch.DrawString(_font, "HIPUR (the game)",
                         new Vector2(WindowWidth / 2 - _font.MeasureString("HIPUR (the game)").X / 2, WindowHeight / 2), Color.White);
