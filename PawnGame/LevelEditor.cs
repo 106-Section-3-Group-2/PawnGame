@@ -85,9 +85,11 @@ namespace PawnGame
             //adjust spacing of palette
             for(int i = 1; i < _palette.Count; i++)
             {
-                Point loc = _palette[i].ButtonBox.Location;
-                loc.Y += _palette[i - 1].ButtonBox.Height;
-                //doesnt work _palette[i].ButtonBox.Location = loc;
+                Button curr = _palette[i];
+
+                Rectangle currBox = _palette[i].ButtonBox;
+                currBox.Y += _palette[i - 1].ButtonBox.Height;
+                curr.ButtonBox = currBox;
             }
 
             //adjust spacing of options
