@@ -39,6 +39,8 @@ namespace PawnGame
         public static Dictionary<string, Texture2D> Textures;
         private Texture2D _logo;
 
+        private Texture2D _playerTexture;
+
         /// <summary>
         /// Gets the width of the window
         /// </summary>
@@ -60,14 +62,6 @@ namespace PawnGame
 
         // Menu buttons
         private List<Button> _menuButtons = new List<Button>();
-
-        /* Not sure whether it would be better to store buttons are seperate
-         variables, or under one list
-         Right now, it's under a list, but I'll change it if necessary
-         - Troy
-         private Button _newGameBtn;
-         private Button _loadGameBtn;
-         private Button _lvlEditorBtn;*/
 
         // This font is temporary
         // Will use for creating menu skeleton
@@ -101,9 +95,14 @@ namespace PawnGame
             //load textures
             _logo = LoadTexture("logo");
 
+            _playerTexture = LoadTexture("Pawn-placeholder");
+            _player = new Player(_playerTexture, new Rectangle((int)WindowWidth / 2, (int)WindowHeight / 2,
+                _playerTexture.Width/6, _playerTexture.Height/6));
+
             //initialize level editor (needs textures loaded)
             _levelEditor = new LevelEditor(8, 8, this);
         }
+
         protected override void Update(GameTime gameTime)
         {
             _currKbState = Keyboard.GetState();
@@ -185,13 +184,13 @@ namespace PawnGame
                     _player.Update(_currKbState, _prevKbState);
 
                     // Make an enemy manager class that handles collisions
-                    for (int i = 0; i < _currLevel.Enemies.Count; i++)
+                    /*for (int i = 0; i < _currLevel.Enemies.Count; i++)
                     {
                         if (_currLevel.Enemies[i].CheckCollision(_player))
                         {
                             //_currLevel.Enemies[i].
                         }
-                    }
+                    }*/
                     #endregion
                     break;
 
@@ -260,6 +259,9 @@ namespace PawnGame
                 #region Game State
                 case GameState.Game:
                     // Draw.. the game?
+                    _player.Draw(_spriteBatch);
+                    
+
                     _spriteBatch.DrawString(_font, "HIPUR (the game)",
                         new Vector2(WindowWidth / 2 - _font.MeasureString("HIPUR (the game)").X / 2, WindowHeight / 2), Color.White);
                     #endregion
@@ -317,7 +319,16 @@ namespace PawnGame
         private Texture2D LoadTexture(string fileName)
         {
             Texture2D output = this.Content.Load<Texture2D>(fileName);
-            Textures.Add(fileName, output);
+
+            if (!Textures.ContainsKey(fileName))
+            {
+                Textures.Add(fileName, output);
+            }
+            else
+            {
+                Textures[fileName] = output;
+            }
+        
             return output;
         }
     }

@@ -31,7 +31,7 @@ namespace PawnGame.GameObjects
         {
             get
             {
-                return _posY;
+                return _posX;
             }
         }
 
@@ -49,6 +49,8 @@ namespace PawnGame.GameObjects
             _speed = 3;
             _heldAbility = Ability.None;
             _activeAbility = Ability.None;
+            _posX = hitbox.X;
+            _posY = hitbox.Y;
         }
         public void Update(KeyboardState currentState, KeyboardState previousState)
         {
@@ -191,7 +193,12 @@ namespace PawnGame.GameObjects
             {
                 output.X -= 1;
             }
-            output.Normalize();
+
+            if (output != Vector2.Zero)
+            {
+                output.Normalize();
+            }
+            
             return output;
         }
         private void UseAbility(Vector2 direction)
