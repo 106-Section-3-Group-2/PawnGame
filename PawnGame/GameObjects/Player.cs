@@ -45,7 +45,7 @@ namespace PawnGame.GameObjects
             {
             }
         }
-        protected override void Move()
+        protected void Move()
         {
             switch (_playerState)
             {

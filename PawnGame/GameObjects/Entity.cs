@@ -26,10 +26,7 @@
 
         //*** public void Update() should be implemented in player and enemy
 
-        /// <summary>
-        /// Should move the entity based on velocity
-        /// </summary>
-        protected abstract void Move();
+
         /// <summary>
         /// Should cause the entity to attack
         /// </summary>

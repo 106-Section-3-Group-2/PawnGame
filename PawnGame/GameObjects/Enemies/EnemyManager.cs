@@ -14,15 +14,6 @@ namespace PawnGame.GameObjects.Enemies
         
         #endregion
         private List<Enemy> _enemies;
-        private Vector2 _playerPosition;
-
-        public Vector2 PlayerPosition
-        {
-            get
-            {
-                return _playerPosition;
-            }
-        }
 
         private EnemyManager()
         {
@@ -47,14 +38,13 @@ namespace PawnGame.GameObjects.Enemies
         /// </summary>
         public void Update(Player player)
         {
-            _playerPosition = new Vector2(player.X,player.Y);
             for (int i = 0; i < _enemies.Count; i++)
             {
                 if (!_enemies[i].IsAlive)
                 {
                     continue;
                 }
-                _enemies[i].Update();
+                _enemies[i].Update(player);
             }
         }
         /// <summary>

@@ -12,6 +12,7 @@
         public float Height { get { return _hitbox.Height; } }
         public float X { get { return _hitbox.X; } }
         public float Y { get { return _hitbox.Y; } }
+        public Vectangle Hitbox { get { return Hitbox; } set { _hitbox.X = value.X; _hitbox.Y = value.Y; } }
         #endregion
 
         /// <summary>
@@ -38,7 +39,7 @@
         /// <param name="sb"></param>
         public virtual void Draw(SpriteBatch sb)
         {
-            sb.Draw(_texture, _hitbox, Color.Black);
+            sb.Draw(_texture, _hitbox, Color.White);
         }
     }
 }
