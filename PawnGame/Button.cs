@@ -40,6 +40,11 @@ namespace PawnGame
         /// </summary>
         public Rectangle ButtonBox { get; set; }
 
+        /// <summary>
+        /// Determines if a button is enabled or not
+        /// </summary>
+        public bool Enabled { get; set; }
+
         #region Constructors
         /// <summary>
         /// Creates a new text button that changes color when hovered over
@@ -59,6 +64,7 @@ namespace PawnGame
             _btnImage = null!;
             _btnHoverImage = null;
             btnType = ButtonType.Text;
+            Enabled = true;
         }
 
         /// <summary>
@@ -81,6 +87,7 @@ namespace PawnGame
             _font = null!;
             _btnHoverImage = null;
             btnType = ButtonType.ColorImage;
+            Enabled = true;
         }
 
         /// <summary>
@@ -103,6 +110,7 @@ namespace PawnGame
             _font = null!;
             _hoverColor = Color.White;
             btnType = ButtonType.HoverImage;
+            Enabled = true;
         }
 
         /// <summary>
@@ -122,6 +130,7 @@ namespace PawnGame
             _font = null!;
             _btnHoverImage = null;
             btnType = ButtonType.ColorImage;
+            Enabled = true;
         }
 
         /// <summary>
@@ -141,6 +150,7 @@ namespace PawnGame
             _font = null!;
             _hoverColor = Color.White;
             btnType = ButtonType.HoverImage;
+            Enabled = true;
         }
         #endregion
 
@@ -161,7 +171,15 @@ namespace PawnGame
         /// <returns>Whether the button has been clicked</returns>
         public bool Clicked()
         {
-            return MouseOver() && (Mouse.GetState().LeftButton == ButtonState.Pressed);
+            if (Enabled)
+            {
+                return MouseOver() && (Mouse.GetState().LeftButton == ButtonState.Pressed);
+            }
+            else
+            {
+                return false;
+            }
+            
         }
 
         /// <summary>
@@ -174,45 +192,69 @@ namespace PawnGame
 
             // Depending on the button type, draws the text or image with the specified color
             // to the screen
-            switch (btnType)
+            if (Enabled)
             {
-                // Text buttons are strings
-                case ButtonType.Text:
-                    if (mouseOver)
-                    {
-                        sb.DrawString(_font, _text, new Vector2(ButtonBox.X, ButtonBox.Y), _hoverColor);
-                    }
-                    else
-                    {
-                        sb.DrawString(_font, _text, new Vector2(ButtonBox.X, ButtonBox.Y), Color.White);
-                    }
-                    break;
+                switch (btnType)
+                {
+                    // Text buttons are strings
+                    case ButtonType.Text:
+                        if (mouseOver)
+                        {
+                            sb.DrawString(_font, _text, new Vector2(ButtonBox.X, ButtonBox.Y), _hoverColor);
+                        }
+                        else
+                        {
+                            sb.DrawString(_font, _text, new Vector2(ButtonBox.X, ButtonBox.Y), Color.White);
+                        }
+                        break;
 
-                // Color image buttons change color when hovered
-                case ButtonType.ColorImage:
-                    if (mouseOver)
-                    {
-                        sb.Draw(_btnImage, ButtonBox, _hoverColor);
-                    }
-                    else
-                    {
-                        sb.Draw(_btnImage, ButtonBox, Color.White);
-                    }
-                    break;
+                    // Color image buttons change color when hovered
+                    case ButtonType.ColorImage:
+                        if (mouseOver)
+                        {
+                            sb.Draw(_btnImage, ButtonBox, _hoverColor);
+                        }
+                        else
+                        {
+                            sb.Draw(_btnImage, ButtonBox, Color.White);
+                        }
+                        break;
 
-                // Hover Image buttons change texture when hovered
-                case ButtonType.HoverImage:
-                    if (mouseOver)
-                    {
-                        sb.Draw(_btnHoverImage, ButtonBox, Color.White);
-                    }
-                    else
-                    {
-                        sb.Draw(_btnImage, ButtonBox, Color.White);
-                    }
+                    // Hover Image buttons change texture when hovered
+                    case ButtonType.HoverImage:
+                        if (mouseOver)
+                        {
+                            sb.Draw(_btnHoverImage, ButtonBox, Color.White);
+                        }
+                        else
+                        {
+                            sb.Draw(_btnImage, ButtonBox, Color.White);
+                        }
 
-                    break;
+                        break;
+                }
             }
+            else
+            {
+                switch(btnType)
+                {
+                    case ButtonType.Text:
+                        sb.DrawString(_font, _text, new Vector2(ButtonBox.X, ButtonBox.Y), Color.DarkGray);
+
+                        break;
+
+                    case ButtonType.ColorImage:
+                        sb.Draw(_btnImage, ButtonBox, Color.DarkGray);
+
+                        break;
+
+                    case ButtonType.HoverImage:
+                        sb.Draw(_btnImage, ButtonBox, Color.DarkGray);
+
+                        break;
+                }
+            }
+            
 
         }
     }

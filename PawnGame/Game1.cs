@@ -15,9 +15,9 @@ namespace PawnGame
     {
         Menu,
         Game,
-        DebugMenu,
+        LevelEditor,
         Victory,
-        LevelEditor
+        DebugMenu
     }
     
     public class Game1 : Game
@@ -66,7 +66,7 @@ namespace PawnGame
 
         // Menu buttons
         private List<Button> _menuButtons = new List<Button>();
-        private List<Button> _debugButtons = new list<Button>();
+        private List<Button> _debugButtons = new List<Button>();
 
         // This font is temporary
         // Will use for creating menu skeleton
@@ -183,76 +183,41 @@ namespace PawnGame
                         _gameState = _prevGameState;
                     }
 
+                    _debugButtons.Clear();
                     // Decide which buttons to draw to the screen
                     // Note: Need to change the position of the buttons
                     #region Debug Button Adding
-                    switch (_prevGameState)
+
+                    _debugButtons.Add(new(_font, "Menu",
+                        new Vector2(WindowWidth / 4 - _font.MeasureString("Menu").X / 2, WindowHeight / 2),
+                        Color.LightGray));
+                    
+
+                    _debugButtons.Add(new(_font, "Game",
+                        new Vector2(WindowWidth / 2 - _font.MeasureString("Game").X / 2, WindowHeight /2),
+                        Color.LightGray));
+
+                    _debugButtons.Add(new(_font, "Level Editor",
+                            new Vector2(WindowWidth - WindowWidth / 4 - _font.MeasureString("Level Editor").X / 2, WindowHeight /2),
+                            Color.LightGray));
+
+                    _debugButtons.Add(new(_font, "Victory",
+                        new Vector2(WindowWidth / 2 - _font.MeasureString("Victory").X / 2, WindowHeight /2 + 100),
+                        Color.LightGray));
+
+
+                    for (int i = 0; i < _debugButtons.Count; i++)
                     {
-                        case GameState.Menu:
-                            _debugButtons.Add(new(_font, "Game",
-                            new Vector2(WindowWidth / 2 - _font.MeasureString("Game").X / 2, WindowHeight - 75),
-                            Color.LightGray));
-
-                            _debugButtons.Add(new(_font, "Level Editor",
-                                    new Vector2(WindowWidth / 2 - _font.MeasureString("Level Editor").X / 2, WindowHeight - 50),
-                                    Color.LightGray));
-
-                            _debugButtons.Add(new(_font, "Victory",
-                            new Vector2(WindowWidth / 2 - _font.MeasureString("Victory").X / 2, WindowHeight - 75),
-                            Color.LightGray));
+                        if (i == (int)_prevGameState)
+                        {
+                            Button curr = _debugButtons[i];
+                            curr.Enabled = false;
+                            _debugButtons[i] = curr;
 
                             break;
-
-                        case GameState.Game:
-                            _debugButtons.Add(new(_font, "Menu",
-                            new Vector2(WindowWidth / 2 - _font.MeasureString("Menu").X / 2, WindowHeight - 75),
-                            Color.LightGray));
-
-                            _debugButtons.Add(new(_font, "Level Editor",
-                                    new Vector2(WindowWidth / 2 - _font.MeasureString("Level Editor").X / 2, WindowHeight - 50),
-                                    Color.LightGray));
-
-                            _debugButtons.Add(new(_font, "Victory",
-                            new Vector2(WindowWidth / 2 - _font.MeasureString("Victory").X / 2, WindowHeight - 75),
-                            Color.LightGray));
-
-                            break;
-
-                        case GameState.LevelEditor:
-                            _debugButtons.Add(new(_font, "Game",
-                            new Vector2(WindowWidth / 2 - _font.MeasureString("Game").X / 2, WindowHeight - 75),
-                            Color.LightGray));
-
-                            _debugButtons.Add(new(_font, "Menu",
-                                    new Vector2(WindowWidth / 2 - _font.MeasureString("Menu").X / 2, WindowHeight - 50),
-                                    Color.LightGray));
-
-                            _debugButtons.Add(new(_font, "Victory",
-                            new Vector2(WindowWidth / 2 - _font.MeasureString("Victory").X / 2, WindowHeight - 75),
-                            Color.LightGray));
-
-                            break;
-
-                        case GameState.Victory:
-                            _debugButtons.Add(new(_font, "Game",
-                            new Vector2(WindowWidth / 2 - _font.MeasureString("Game").X / 2, WindowHeight - 75),
-                            Color.LightGray));
-
-                            _debugButtons.Add(new(_font, "Level Editor",
-                                    new Vector2(WindowWidth / 2 - _font.MeasureString("Level Editor").X / 2, WindowHeight - 50),
-                                    Color.LightGray));
-
-                            _debugButtons.Add(new(_font, "Menu",
-                            new Vector2(WindowWidth / 2 - _font.MeasureString("Victory").X / 2, WindowHeight - 75),
-                            Color.LightGray));
-
-                            break;
-
+                        }
                     }
 
-                    _debugButtons.Add(new(_font, "Back",
-                            new Vector2(WindowWidth / 2 - _font.MeasureString("Back").X / 2, WindowHeight - 75),
-                            Color.LightGray));
                     #endregion
 
                     #endregion
@@ -281,8 +246,8 @@ namespace PawnGame
                     break;
             }
 
-            // Regardless of state, you can get to the debug menu
-            if (_currKbState.IsKeyDown(Keys.F) && _prevKbState.IsKeyUp(Keys.F))
+            // Regardless of state, you can get to the debug menus
+            if (_currKbState.IsKeyDown(Keys.F) && _prevKbState.IsKeyUp(Keys.F) && _gameState != GameState.DebugMenu)
             {
                 _prevGameState = _gameState;
                 _gameState = GameState.DebugMenu;
@@ -326,6 +291,11 @@ namespace PawnGame
                     // Replace these tests later obviously
                     _spriteBatch.DrawString(_font, "Debug Menu",
                         new Vector2(WindowWidth / 2 - _font.MeasureString("Debug Menu").X / 2, 100), Color.White);
+
+                    foreach(Button b in _debugButtons)
+                    {
+                        b.Draw(_spriteBatch);
+                    }
 
                     
                     #endregion
