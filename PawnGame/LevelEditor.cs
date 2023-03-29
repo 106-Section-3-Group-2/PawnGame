@@ -165,19 +165,17 @@ namespace PawnGame
                             switch (_selected)
                             {
                                 case 0:
-                                    //create a space
-                                    _level.Tiles[i, j] = new Tile(Game1.Textures["logo"], new Rectangle(_level.Tiles[i, j].X, _level.Tiles[i, j].Y, _level.Tiles[i, j].Width, _level.Tiles[i, j].Height), false);
+                                    _level.Tiles[i, j] = new Tile(Game1.Textures["logo"], new Vectangle(_level.Tiles[i, j].X, _level.Tiles[i, j].Y, _level.Tiles[i, j].Width, _level.Tiles[i, j].Height), false);
                                     break;
                                 case 1:
-                                    //create a wall
-                                    _level.Tiles[i, j] = new Tile(Game1.Textures["logo"], new Rectangle(_level.Tiles[i, j].X, _level.Tiles[i, j].Y, _level.Tiles[i, j].Width, _level.Tiles[i, j].Height), true);
+                                    _level.Tiles[i, j] = new Tile(Game1.Textures["logo"], new Vectangle(_level.Tiles[i, j].X, _level.Tiles[i, j].Y, _level.Tiles[i, j].Width, _level.Tiles[i, j].Height), true);
                                     break;
                             }
                         }
                         if (_mState.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
                         {
-                            //create a wall, but empty sprite
-                            _level.Tiles[i, j] = new Tile(Game1.Textures["logo"], new Rectangle(_level.Tiles[i, j].X, _level.Tiles[i, j].Y, _level.Tiles[i, j].Width, _level.Tiles[i, j].Height), true);
+                            //should spawn an empty texture tile
+                            _level.Tiles[i, j] = new Tile(Game1.Textures["logo"], new Vectangle(_level.Tiles[i, j].X, _level.Tiles[i, j].Y, _level.Tiles[i, j].Width, _level.Tiles[i, j].Height), true);
                         }
                     }
                 }

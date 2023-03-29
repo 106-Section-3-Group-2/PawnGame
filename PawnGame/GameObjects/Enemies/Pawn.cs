@@ -31,7 +31,7 @@ namespace PawnGame.GameObjects.Enemies
            
             moveVector.Normalize();
             moveVector *= _speed;
-            _hitbox.Location = (_hitbox.Location.ToVector2() + moveVector).ToPoint();
+            _hitbox.Location = _hitbox.Location + moveVector;
         }
 
         protected override void OnDeath()

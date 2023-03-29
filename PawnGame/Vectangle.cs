@@ -71,6 +71,19 @@ namespace PawnGame
                 _height = value;
             }
         }
+
+        public Vector2 Location
+        {
+            get
+            {
+                return new Vector2(X, Y);
+            }
+            set
+            {
+                this.X = value.X;
+                this.Y = value.Y;
+            }
+        }
         #endregion
 
         #region Single body statements
