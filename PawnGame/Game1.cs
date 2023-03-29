@@ -181,11 +181,12 @@ namespace PawnGame
                     if (_currKbState.IsKeyDown(Keys.Escape) && _prevKbState.IsKeyUp(Keys.Escape))
                     {
                         _gameState = _prevGameState;
+                        _prevGameState = GameState.DebugMenu;
                     }
 
                     _debugButtons.Clear();
-                    // Decide which buttons to draw to the screen
-                    // Note: Need to change the position of the buttons
+
+                    // Decide which button to disable
                     #region Debug Button Adding
 
                     _debugButtons.Add(new(_font, "Menu",
@@ -205,7 +206,8 @@ namespace PawnGame
                         new Vector2(WindowWidth / 2 - _font.MeasureString("Victory").X / 2, WindowHeight /2 + 100),
                         Color.LightGray));
 
-
+                    // Looping through to disable the previous screen's button
+                    // as it doesn't make sense for the user to click it
                     for (int i = 0; i < _debugButtons.Count; i++)
                     {
                         if (i == (int)_prevGameState)
@@ -217,8 +219,17 @@ namespace PawnGame
                             break;
                         }
                     }
-
                     #endregion
+
+                    // Transitions to the corresponding screen
+                    for (int i = 0; i < _debugButtons.Count; i++)
+                    {
+                        if (_debugButtons[i].Clicked())
+                        {
+                            _gameState = (GameState)i;
+                            _prevGameState = GameState.DebugMenu;
+                        }
+                    }
 
                     #endregion
                     break;
