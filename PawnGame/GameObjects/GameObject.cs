@@ -38,7 +38,7 @@
         /// <param name="sb"></param>
         public virtual void Draw(SpriteBatch sb)
         {
-            sb.Draw(_texture, _hitbox, Color.White);
+            sb.Draw(_texture, _hitbox, Color.Black);
         }
     }
 }

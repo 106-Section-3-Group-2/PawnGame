@@ -96,7 +96,7 @@ namespace PawnGame
             //load textures
             _logo = LoadTexture("logo");
 
-            _playerTexture = LoadTexture("Pawn-placeholder");
+            _playerTexture = LoadTexture("pawn-texture");
             _player = new Player(_playerTexture, new Rectangle((int)WindowWidth / 2, (int)WindowHeight / 2,
                 _playerTexture.Width/6, _playerTexture.Height/6));
 
@@ -214,7 +214,7 @@ namespace PawnGame
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.Gray);
 
             _spriteBatch.Begin();
             
