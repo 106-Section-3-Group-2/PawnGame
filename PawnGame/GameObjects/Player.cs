@@ -24,24 +24,7 @@ namespace PawnGame.GameObjects
         private Weapon _currentWeapon;
         private int _speed;
         private PlayerState _playerState;
-        private int _abilityTimer;
-        private float _posX;
-        private float _posY;
-        public float X
-        {
-            get
-            {
-                return _posX;
-            }
-        }
-
-        public float Y
-        {
-            get
-            {
-                return _posY;
-            }
-        }
+        private int _abilityTimer;        
 
         public Player(Texture2D texture, Rectangle hitbox) : base(texture, hitbox)
         {
@@ -49,8 +32,6 @@ namespace PawnGame.GameObjects
             _speed = 5;
             _heldAbility = Ability.None;
             _activeAbility = Ability.None;
-            _posX = hitbox.X;
-            _posY = hitbox.Y;
         }
         public void Update(KeyboardState currentState, KeyboardState previousState)
         {
@@ -69,10 +50,9 @@ namespace PawnGame.GameObjects
             switch (_playerState)
             {
                 case PlayerState.Moving:
-                    _posX += _velocity.X;
-                    _posY += _velocity.Y;
+                    _hitbox.X += _velocity.X;
+                    _hitbox.Y += _velocity.Y;
 
-                    _hitbox.Location = new Point((int)_posX, (int)_posY);
                     break;
 
                 case PlayerState.Abilitying:
@@ -98,7 +78,6 @@ namespace PawnGame.GameObjects
 
                             case Ability.None:
                                 throw new System.Exception("Error! Entered Abilitying state without an active ability");
-                                break;
                         }
                         _abilityTimer--;
                     }
