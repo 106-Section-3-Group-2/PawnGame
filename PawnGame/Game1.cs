@@ -40,6 +40,8 @@ namespace PawnGame
         // Textures
         public static Dictionary<string, Texture2D> Textures;
         private Texture2D _logo;
+        private Texture2D _iconSave;
+        private Texture2D _iconLoad;
 
         private Texture2D _playerTexture;
 
@@ -98,6 +100,8 @@ namespace PawnGame
 
             //load textures
             _logo = LoadTexture("logo");
+            _iconSave = LoadTexture("IconSave");
+            _iconLoad = LoadTexture("IconLoad");
 
             _playerTexture = LoadTexture("black-pawn-texture");
             _player = new Player(_playerTexture, new Rectangle((int)WindowWidth / 2, (int)WindowHeight / 2,
@@ -185,8 +189,8 @@ namespace PawnGame
                 case GameState.Game:
 
                     // Play the game here
-                    _player.Update(_currKbState, _prevKbState);
                     Manager.Update(_player);
+                    _player.Update(_currKbState, _prevKbState);
                     #endregion
                     break;
 

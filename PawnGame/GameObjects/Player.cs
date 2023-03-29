@@ -50,12 +50,21 @@ namespace PawnGame.GameObjects
             switch (_playerState)
             {
                 case PlayerState.Moving:
+                    if (!_isAlive)
+                    {
+                        _playerState = PlayerState.NoControl;
+                    }
+
                     _hitbox.X += _velocity.X;
                     _hitbox.Y += _velocity.Y;
 
                     break;
 
                 case PlayerState.Abilitying:
+                    if (!_isAlive)
+                    {
+                        _playerState = PlayerState.NoControl;
+                    }
 
                     if (_abilityTimer > 0)
                     {
@@ -143,6 +152,15 @@ namespace PawnGame.GameObjects
                     break;
             }
         }
+        public override void Draw(SpriteBatch sb)
+        {
+            if (_isAlive)
+            {
+                sb.Draw(_texture, _hitbox, Color.White);
+            }
+            
+        }
+
         /// <summary>
         /// Returns a 
         /// </summary>
