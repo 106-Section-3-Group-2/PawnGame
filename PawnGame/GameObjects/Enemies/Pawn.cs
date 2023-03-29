@@ -14,9 +14,9 @@ namespace PawnGame.GameObjects.Enemies
             _speed = 4;
         }
 
-        public override void Update()
+        public override void Update(Player player)
         {
-            Move();
+            Move(player);
             if (!_isAlive) OnDeath();
         }
 
@@ -25,12 +25,14 @@ namespace PawnGame.GameObjects.Enemies
             throw new NotImplementedException();
         }
 
-        protected override void Move()
+        protected override void Move(Player player)
         {
-            Vector2 moveVector = Manager.PlayerPosition-new Vector2(_hitbox.X,_hitbox.Y);
-           
-            moveVector.Normalize();
-            moveVector *= _speed;
+            Vector2 moveVector = new Vector2(player.X,player.Y) -new Vector2(_hitbox.X,_hitbox.Y);
+            if(moveVector.Length()> _speed)
+            {
+                moveVector.Normalize();
+                moveVector *= _speed;
+            }
             _hitbox.Location = _hitbox.Location + moveVector;
         }
 
