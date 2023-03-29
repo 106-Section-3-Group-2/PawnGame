@@ -66,12 +66,12 @@ namespace PawnGame
         /// <param name="image">The initial image of the button</param>
         /// <param name="position">The location to draw the button</param>
         /// <param name="hoverColor">The color the button changes to when hovered over</param>
-        public Button(Texture2D image, Vector2 position, Color hoverColor)
+        public Button(Texture2D image, Vector2 position, int width, int height, Color hoverColor)
         {
             _btnImage = image;
             _hoverColor = hoverColor;
             ButtonBox = new Rectangle((int)position.X, (int)position.Y,
-                image.Width, image.Height);
+                width, height);
 
             _text = null!;
             _font = null!;
@@ -85,12 +85,12 @@ namespace PawnGame
         /// <param name="image">The initial texture of the butotn</param>
         /// <param name="position">The location to draw the button</param>
         /// <param name="hoverImage">The texture the button changes to when hovered over</param>
-        public Button(Texture2D image, Vector2 position, Texture2D hoverImage)
+        public Button(Texture2D image, Vector2 position, int width, int height, Texture2D hoverImage)
         {
             _btnImage = image;
             _btnHoverImage = hoverImage;
             ButtonBox = new Rectangle((int)position.X, (int)position.Y,
-                image.Width, image.Height);
+                width, height);
 
             _text = null!;
             _font = null!;
