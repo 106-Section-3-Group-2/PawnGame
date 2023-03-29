@@ -191,7 +191,12 @@ namespace PawnGame.GameObjects
             {
                 output.X -= 1;
             }
-            output.Normalize();
+
+            if (output != Vector2.Zero)
+            {
+                output.Normalize();
+            }
+            
             return output;
         }
         private void UseAbility(Vector2 direction)

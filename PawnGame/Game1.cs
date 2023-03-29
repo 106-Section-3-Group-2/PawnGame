@@ -266,8 +266,6 @@ namespace PawnGame
                 #region Game State
                 case GameState.Game:
                     // Draw.. the game?
-                    _player.X = 0;
-                    _player.Y = 0;
                     _player.Draw(_spriteBatch);
                     
 
