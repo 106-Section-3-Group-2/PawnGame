@@ -11,6 +11,10 @@
             {
                 return _isAlive;
             }
+            set
+            {
+                _isAlive = value;
+            }
         }
 
         /// <summary>

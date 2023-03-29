@@ -189,8 +189,8 @@ namespace PawnGame
                 case GameState.Game:
 
                     // Play the game here
-                    _player.Update(_currKbState, _prevKbState);
                     Manager.Update(_player);
+                    _player.Update(_currKbState, _prevKbState);
                     #endregion
                     break;
 
