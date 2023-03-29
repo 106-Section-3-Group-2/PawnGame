@@ -9,19 +9,9 @@ namespace PawnGame.GameObjects.Enemies
     internal class EnemyManager
     {
         #region Singleton stuff
-        private static EnemyManager _manager;
-        public static EnemyManager Manager
-        {
-            get
-            {
-                return _manager;
-            }
-            set
-            {
-                if (_manager != null) return;
-                _manager = new();
-            }
-        }
+        private static EnemyManager _manager = new();
+        public static EnemyManager Manager => _manager;
+        
         #endregion
         private List<Enemy> _enemies;
         private Vector2 _playerPosition;
@@ -36,8 +26,14 @@ namespace PawnGame.GameObjects.Enemies
 
         private EnemyManager()
         {
-            _enemies = null;
+            _enemies = new List<Enemy>();
         }
+
+        public void Add(Enemy enemy)
+        {
+            _enemies.Add(enemy);
+        }
+
         /// <summary>
         /// Sets the enemy list to the entered lists
         /// </summary>

@@ -3,6 +3,7 @@ global using Microsoft.Xna.Framework.Graphics;
 global using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using PawnGame.GameObjects;
+using PawnGame.GameObjects.Enemies;
 using static PawnGame.GameObjects.Enemies.EnemyManager;
 using ShapeUtils;
 namespace PawnGame
@@ -81,6 +82,7 @@ namespace PawnGame
 
         protected override void Initialize()
         {
+            Manager.ToString();
             _prevKbState = Keyboard.GetState();
             Textures = new Dictionary<string, Texture2D>();
             base.Initialize();
@@ -183,6 +185,7 @@ namespace PawnGame
 
                     // Play the game here
                     _player.Update(_currKbState, _prevKbState);
+                    Manager.Add(new Pawn(_playerTexture,new Rectangle(0,0,20,20)));
                     Manager.Update(_player);
                     #endregion
                     break;
