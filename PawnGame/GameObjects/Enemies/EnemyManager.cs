@@ -24,6 +24,7 @@ namespace PawnGame.GameObjects.Enemies
         }
         #endregion
         private List<Enemy> _enemies;
+        private Vector2 playerPosition;
 
         private EnemyManager()
         {
@@ -40,8 +41,9 @@ namespace PawnGame.GameObjects.Enemies
         /// <summary>
         /// Loops through all living enemies and updates them
         /// </summary>
-        public void Update()
+        public void Update(Player player)
         {
+            playerPosition = new Vector2(player.X,player.Y);
             for (int i = 0; i < _enemies.Count; i++)
             {
                 if (!_enemies[i].IsAlive)

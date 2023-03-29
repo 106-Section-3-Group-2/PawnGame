@@ -46,7 +46,7 @@ namespace PawnGame.GameObjects
         public Player(Texture2D texture, Rectangle hitbox) : base(texture, hitbox)
         {
             _abilityTimer = 0;
-            _speed = 3;
+            _speed = 5;
             _heldAbility = Ability.None;
             _activeAbility = Ability.None;
             _posX = hitbox.X;
@@ -56,7 +56,7 @@ namespace PawnGame.GameObjects
         {
             ReadInputs(currentState, previousState);
             Move();
-
+            
         }
         protected override void Attack()
         {
@@ -232,9 +232,8 @@ namespace PawnGame.GameObjects
                 _heldAbility = Ability.None;
             }
 
-
         }
-        private void GetAbility(Ability ability)
+        public void GetAbility(Ability ability)
         {
             if (_heldAbility == Ability.None)
             {

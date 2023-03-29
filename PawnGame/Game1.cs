@@ -3,7 +3,8 @@ global using Microsoft.Xna.Framework.Graphics;
 global using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using PawnGame.GameObjects;
-
+using static PawnGame.GameObjects.Enemies.EnemyManager;
+using ShapeUtils;
 namespace PawnGame
 {
     /// <summary>
@@ -17,7 +18,7 @@ namespace PawnGame
         Victory,
         LevelEditor
     }
-
+    
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
@@ -182,15 +183,7 @@ namespace PawnGame
 
                     // Play the game here
                     _player.Update(_currKbState, _prevKbState);
-
-                    // Make an enemy manager class that handles collisions
-                    /*for (int i = 0; i < _currLevel.Enemies.Count; i++)
-                    {
-                        if (_currLevel.Enemies[i].CheckCollision(_player))
-                        {
-                            //_currLevel.Enemies[i].
-                        }
-                    }*/
+                    Manager.Update(_player);
                     #endregion
                     break;
 
@@ -224,7 +217,7 @@ namespace PawnGame
             GraphicsDevice.Clear(Color.Black);
 
             _spriteBatch.Begin();
-
+            
             switch (_gameState)
             {
                 #region Menu State

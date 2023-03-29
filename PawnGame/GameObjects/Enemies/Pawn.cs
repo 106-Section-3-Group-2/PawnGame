@@ -10,6 +10,7 @@ namespace PawnGame.GameObjects.Enemies
     {
         public Pawn(Texture2D texture, Rectangle hitbox) : base(texture, hitbox)
         {
+            _speed = 4;
         }
 
         public override void Update()
@@ -25,7 +26,7 @@ namespace PawnGame.GameObjects.Enemies
 
         protected override void Move()
         {
-            throw new NotImplementedException();
+            Vector2 moveVector = 
         }
 
         protected override void OnDeath()
