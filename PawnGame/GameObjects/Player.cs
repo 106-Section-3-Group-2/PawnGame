@@ -49,6 +49,8 @@ namespace PawnGame.GameObjects
             _speed = 3;
             _heldAbility = Ability.None;
             _activeAbility = Ability.None;
+            _posX = hitbox.X;
+            _posY = hitbox.Y;
         }
         public void Update(KeyboardState currentState, KeyboardState previousState)
         {

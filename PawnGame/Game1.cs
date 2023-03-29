@@ -105,7 +105,7 @@ namespace PawnGame
 
             _playerTexture = LoadTexture("Pawn-placeholder");
             _player = new Player(_playerTexture, new Rectangle((int)WindowWidth / 2, (int)WindowHeight / 2,
-                _playerTexture.Width, _playerTexture.Height));
+                _playerTexture.Width/6, _playerTexture.Height/6));
 
             //initialize level editor (needs textures loaded)
             _levelEditor = new LevelEditor(8, 8, this);
