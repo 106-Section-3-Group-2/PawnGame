@@ -40,6 +40,7 @@ namespace PawnGame
         /// </summary>
         public Rectangle ButtonBox { get; set; }
 
+        #region Constructors
         /// <summary>
         /// Creates a new text button that changes color when hovered over
         /// </summary>
@@ -62,9 +63,12 @@ namespace PawnGame
 
         /// <summary>
         /// Creates a button with a texture that changes color when hovered over
+        /// with a specified size
         /// </summary>
         /// <param name="image">The initial image of the button</param>
         /// <param name="position">The location to draw the button</param>
+        /// <param name="width">The width of the button</param>
+        /// <param name="height">The height of the button</param>
         /// <param name="hoverColor">The color the button changes to when hovered over</param>
         public Button(Texture2D image, Vector2 position, int width, int height, Color hoverColor)
         {
@@ -81,9 +85,12 @@ namespace PawnGame
 
         /// <summary>
         /// Creates a button with a texture that changes texture when hovered over
+        /// with a specified size
         /// </summary>
         /// <param name="image">The initial texture of the butotn</param>
         /// <param name="position">The location to draw the button</param>
+        /// <param name="width">The width of the button</param>
+        /// <param name="height">The height of the button</param>
         /// <param name="hoverImage">The texture the button changes to when hovered over</param>
         public Button(Texture2D image, Vector2 position, int width, int height, Texture2D hoverImage)
         {
@@ -97,6 +104,45 @@ namespace PawnGame
             _hoverColor = Color.White;
             btnType = ButtonType.HoverImage;
         }
+
+        /// <summary>
+        /// Creates a button with a texture that changes color when hovered over
+        /// </summary>
+        /// <param name="image">The initial image of the button</param>
+        /// <param name="position">The location to draw the button</param>
+        /// <param name="hoverColor">The color the button changes to when hovered over</param>
+        public Button(Texture2D image, Vector2 position, Color hoverColor)
+        {
+            _btnImage = image;
+            _hoverColor = hoverColor;
+            ButtonBox = new Rectangle((int)position.X, (int)position.Y,
+                image.Width, image.Height);
+
+            _text = null!;
+            _font = null!;
+            _btnHoverImage = null;
+            btnType = ButtonType.ColorImage;
+        }
+
+        /// <summary>
+        /// Creates a button with a texture that changes texture when hovered over
+        /// </summary>
+        /// <param name="image">The initial image of the button</param>
+        /// <param name="position">The location to draw the button</param>
+        /// <param name="hoverImage">The texture the button changes to when hovered over</param>
+        public Button(Texture2D image, Vector2 position, Texture2D hoverImage)
+        {
+            _btnImage = image;
+            _btnHoverImage = hoverImage;
+            ButtonBox = new Rectangle((int)position.X, (int)position.Y,
+                image.Width, image.Height);
+
+            _text = null!;
+            _font = null!;
+            _hoverColor = Color.White;
+            btnType = ButtonType.HoverImage;
+        }
+        #endregion
 
         /// <summary>
         /// Determines if the mouse is hovered over the button
