@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace PawnGame.GameObjects.Enemies
 {
@@ -13,6 +11,7 @@ namespace PawnGame.GameObjects.Enemies
         public static EnemyManager Manager => _manager;
         
         #endregion
+
         private List<Enemy> _enemies;
 
         private EnemyManager()
