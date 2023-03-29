@@ -17,6 +17,7 @@ namespace PawnGame.GameObjects.Enemies
         public override void Update(Player player)
         {
             Move(player);
+            CheckPlayerCollision(player);
             if (!_isAlive) OnDeath();
         }
 
@@ -35,7 +36,13 @@ namespace PawnGame.GameObjects.Enemies
             }
             _hitbox.Location = _hitbox.Location + moveVector;
         }
-
+        protected void CheckPlayerCollision(Player player)
+        {
+            if (CheckCollision(player))
+            {
+                player.IsAlive = false;
+            }
+        }
         protected override void OnDeath()
         {
             throw new NotImplementedException();
