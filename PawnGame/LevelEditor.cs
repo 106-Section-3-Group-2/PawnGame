@@ -144,7 +144,7 @@ namespace PawnGame
                                 openFileDialog.Filter = "Json files (*.json)|*.json|Text files (*.txt)|*.txt";
                                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                                 {
-                                    _level = Level.Read(openFileDialog.FileName);
+                                    Level.Write(_level, openFileDialog.FileName);
                                 }
                             }
                             break;
