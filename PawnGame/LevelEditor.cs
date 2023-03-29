@@ -78,9 +78,9 @@ namespace PawnGame
             _palette = new List<Button>();
             _palette.Add(new Button(Game1.Textures["logo"], _paletteTopLeft, Color.Green));
             _palette.Add(new Button(Game1.Textures["logo"], _paletteTopLeft + new Vector2(0, Game1.Textures["logo"].Height + _ButtonSpacing), Color.Green));
-            float optionsX = _game.WindowWidth - _paletteTopLeft.X - Game1.Textures["logo"].Width;
-            _options.Add(new Button(Game1.Textures["logo"], new Vector2(optionsX, _paletteTopLeft.Y), Color.Green));
-            _options.Add(new Button(Game1.Textures["logo"], new Vector2(optionsX, _paletteTopLeft.Y + (Game1.Textures["logo"].Height + _ButtonSpacing) /* times n*/), Color.Green));
+            float optionsX = _game.WindowWidth - _paletteTopLeft.X - Game1.Textures["IconLoad"].Width;
+            _options.Add(new Button(Game1.Textures["IconLoad"], new Vector2(optionsX, _paletteTopLeft.Y), Color.Green));
+            _options.Add(new Button(Game1.Textures["IconSave"], new Vector2(optionsX, _paletteTopLeft.Y + (Game1.Textures["IconLoad"].Height + _ButtonSpacing) /* times n*/), Color.Green));
             _selected = 0;
             _cameraPosition = new Vector2(100, 100);
             _canClick = true;
