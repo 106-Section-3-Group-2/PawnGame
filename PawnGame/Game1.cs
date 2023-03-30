@@ -46,6 +46,7 @@ namespace PawnGame
         private Texture2D _pawnWhite;
         private Texture2D _tileBlack;
         private Texture2D _tileWhite;
+        private Texture2D _error;
 
         /// <summary>
         /// Gets the width of the window
@@ -109,6 +110,7 @@ namespace PawnGame
             _pawnWhite = LoadTexture("PawnWhite");
             _tileBlack = LoadTexture("TileBlack");
             _tileWhite = LoadTexture("TileWhite");
+            _error = LoadTexture("Error"); 
 
             _player = new Player(_pawnBlack, new Rectangle((int)WindowWidth / 2, (int)WindowHeight / 2,
                 _pawnBlack.Width/6, _pawnBlack.Height/6));

@@ -160,7 +160,14 @@ namespace PawnGame
                             openFileDialog.Filter = "Json files (*.json)|*.json|Text files (*.txt)|*.txt";
                             if (openFileDialog.ShowDialog() == DialogResult.OK)
                             {
-                                _level = Level.Read(openFileDialog.FileName);
+                                try
+                                {
+                                    _level = Level.Read(openFileDialog.FileName);
+                                }
+                                catch
+                                {
+                                    _options.Add(new Button(Game1.Textures["Error"], new Vector2(_options[0].ButtonBox.X - Game1.Textures["Error"].Width, _options[0].ButtonBox.Y), Color.Blue));
+                                }
                             }
                             break;
                         //load
@@ -172,6 +179,9 @@ namespace PawnGame
                                 Level.Write(_level, saveFileDialog.FileName);
                             }
                             break;
+                        //load error, should always be last case
+                        case 2:
+                            _options.RemoveAt(i);
                             break;
                     }
                 }
