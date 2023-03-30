@@ -51,6 +51,7 @@ namespace PawnGame
         private Texture2D _tileBlack;
         private Texture2D _tileWhite;
         private Texture2D _weaponSword;
+        private Texture2D _error;
 
         public static Texture2D _debugTexture;
 
@@ -121,6 +122,7 @@ namespace PawnGame
             _tileWhite = LoadTexture("TileWhite");
             _weaponSword = LoadTexture("Sword");
             _debugTexture = _tileWhite;
+            _error = LoadTexture("Error"); 
 
             _weapon = new Weapon(_weaponSword, new Rectangle(WindowWidth / 2, WindowHeight / 2, _weaponSword.Width * 3, _weaponSword.Height * 3));
             _player = new Player(_pawnBlack, new Rectangle(WindowWidth / 2, WindowHeight / 2,
