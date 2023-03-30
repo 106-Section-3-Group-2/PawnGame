@@ -18,6 +18,7 @@ namespace PawnGame.GameObjects.Enemies
         {
             Move(player);
             CheckPlayerCollision(player);
+            CheckWeaponCollision(player);
             if (!_isAlive) OnDeath();
         }
 
@@ -43,9 +44,20 @@ namespace PawnGame.GameObjects.Enemies
                 player.IsAlive = false;
             }
         }
+        protected void CheckWeaponCollision(Player player)
+        {
+            if (CheckCollision(player.Weapon)&&player.Weapon.IsActive == true)
+            {
+                IsAlive = false;
+            }
+        }
+
         protected override void OnDeath()
         {
-            throw new NotImplementedException();
+        }
+        protected override void TakeDamage(int amount)
+        {
+            _isAlive = false;
         }
     }
 }
