@@ -19,6 +19,7 @@ namespace PawnGame.GameObjects
             Rook,
             Queen,
         }
+
         private Ability _heldAbility;
         private Ability _activeAbility;
         private Weapon _currentWeapon;
@@ -26,12 +27,14 @@ namespace PawnGame.GameObjects
         private PlayerState _playerState;
         private int _abilityTimer;        
 
-        public Player(Texture2D texture, Rectangle hitbox) : base(texture, hitbox)
+        public Player(Texture2D texture, Rectangle hitbox, Weapon weapon) : base(texture, hitbox)
         {
             _abilityTimer = 0;
             _speed = 5;
             _heldAbility = Ability.None;
             _activeAbility = Ability.None;
+            _currentWeapon = weapon;
+            
         }
         public void Update(KeyboardState currentState, KeyboardState previousState)
         {
@@ -54,6 +57,7 @@ namespace PawnGame.GameObjects
                     {
                         _playerState = PlayerState.NoControl;
                     }
+
 
                     _hitbox.X += _velocity.X;
                     _hitbox.Y += _velocity.Y;
