@@ -2,6 +2,7 @@
 global using Microsoft.Xna.Framework.Graphics;
 global using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using System;
 using PawnGame.GameObjects;
 using PawnGame.GameObjects.Enemies;
 using static PawnGame.GameObjects.Enemies.EnemyManager;
@@ -46,11 +47,15 @@ namespace PawnGame
         private Texture2D _pawnWhite;
         private Texture2D _tileBlack;
         private Texture2D _tileWhite;
+        private Texture2D _weaponSword;
+
+        private int testTimer = 300;
+        private Random random;
 
         /// <summary>
         /// Gets the width of the window
         /// </summary>
-        public float WindowWidth
+        public int WindowWidth
         {
             get { return Window.ClientBounds.Width; }
         }
@@ -58,13 +63,14 @@ namespace PawnGame
         /// <summary>
         /// Gets the height of the window
         /// </summary>
-        public float WindowHeight
+        public int WindowHeight
         {
             get { return Window.ClientBounds.Height; }
         }
 
         //Entities
         private Player _player;
+        private Weapon _weapon;
 
         // Menu buttons
         private List<Button> _menuButtons = new List<Button>();
@@ -87,11 +93,10 @@ namespace PawnGame
 
         protected override void Initialize()
         {
-            Manager.ToString();
+            random = new Random();
             _prevKbState = Keyboard.GetState();
             Textures = new Dictionary<string, Texture2D>();
             base.Initialize();
-            Manager.Add(new Pawn(_pawnBlack, new Rectangle(0, 0, 20, 20)));
         }
 
         protected override void LoadContent()
@@ -109,9 +114,11 @@ namespace PawnGame
             _pawnWhite = LoadTexture("PawnWhite");
             _tileBlack = LoadTexture("TileBlack");
             _tileWhite = LoadTexture("TileWhite");
+            _weaponSword = LoadTexture("Sword");
 
-            _player = new Player(_pawnBlack, new Rectangle((int)WindowWidth / 2, (int)WindowHeight / 2,
-                _pawnBlack.Width/6, _pawnBlack.Height/6));
+            _weapon = new Weapon(_weaponSword);
+            _player = new Player(_pawnBlack, new Rectangle(WindowWidth / 2, WindowHeight / 2,
+                _pawnBlack.Width/6, _pawnBlack.Height/6),_weapon);
 
             //initialize level editor (needs textures loaded)
             _levelEditor = new LevelEditor(8, 8, this);
@@ -243,6 +250,15 @@ namespace PawnGame
                 case GameState.Game:
 
                     // Play the game here
+                    //TODO: Ask chris how GameTime works
+                    testTimer--;
+                    if (testTimer <= 0)
+                    {
+                        //Adds a random pawn, for the demo
+                        //Manager.Add(new Pawn(_pawnWhite, new Rectangle(random.Next(0, 2) * WindowWidth, random.Next(0, 2) * WindowHeight, _pawnWhite.Width/6, _pawnWhite.Height/6)));
+                        testTimer = 300;
+                    }
+
                     Manager.Update(_player);
                     _player.Update(_currKbState, _prevKbState);
                     #endregion
@@ -322,6 +338,7 @@ namespace PawnGame
                     // Draw.. the game?
                     _player.Draw(_spriteBatch);
                     Manager.Draw(_spriteBatch);
+                    _weapon.Draw(_spriteBatch,_player,Mouse.GetState());
 
                     _spriteBatch.DrawString(_font, "HIPUR (the game)",
                         new Vector2(WindowWidth / 2 - _font.MeasureString("HIPUR (the game)").X / 2, WindowHeight / 2), Color.White);
