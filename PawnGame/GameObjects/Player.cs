@@ -155,7 +155,7 @@ namespace PawnGame.GameObjects
         {
             if (_isAlive)
             {
-                sb.Draw(_texture, _hitbox, Color.White);
+                sb.Draw(Texture, _hitbox, Color.White);
             }
             
         }

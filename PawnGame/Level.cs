@@ -123,7 +123,8 @@ namespace PawnGame
         {
             try
             {
-                new StreamWriter(filePath, false).Write(JsonConvert.SerializeObject(level));
+                using StreamWriter writer = new(filePath);
+                writer.Write(JsonConvert.SerializeObject(level));
             }
             catch(Exception e)
             {
@@ -139,17 +140,8 @@ namespace PawnGame
         /// <returns></returns>
         public static Level Read(string filePath)
         {
-            try
-            {
-                using StreamReader reader = new(filePath);
-                return JsonConvert.DeserializeObject<Level>(reader.ReadLine());
-
-            }
-            catch(Exception e)
-            {
-                Debug.WriteLine(e.ToString());
-                throw new FileLoadException("The file could not be found, or was corrupted.");
-            }
+            using StreamReader reader = new(filePath);
+            return JsonConvert.DeserializeObject<Level>(reader.ReadLine());
         }
     }
 }
