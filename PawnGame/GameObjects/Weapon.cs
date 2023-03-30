@@ -110,11 +110,11 @@ namespace PawnGame.GameObjects
             //For debug, this draws the weapon red if the attack is active
             if (_isActive)
             {
-                sb.Draw(_texture, _hitbox, null, Color.Red, MathF.Atan2((mouse.Y - player.Hitbox.Y), (mouse.X - player.Hitbox.X)) + MathF.PI / 2, new Vector2(16, 32), SpriteEffects.None, 0);
+                sb.Draw(Texture, _hitbox, null, Color.Red, MathF.Atan2((mouse.Y - player.Hitbox.Y), (mouse.X - player.Hitbox.X)) + MathF.PI / 2, new Vector2(16, 32), SpriteEffects.None, 0);
             }
             else
             {
-                sb.Draw(_texture, _hitbox, null, Color.White, MathF.Atan2((mouse.Y - player.Hitbox.Y), (mouse.X - player.Hitbox.X)) + MathF.PI / 2, new Vector2(16, 32), SpriteEffects.None, 0);
+                sb.Draw(Texture, _hitbox, null, Color.White, MathF.Atan2((mouse.Y - player.Hitbox.Y), (mouse.X - player.Hitbox.X)) + MathF.PI / 2, new Vector2(16, 32), SpriteEffects.None, 0);
             }
         }
     }
