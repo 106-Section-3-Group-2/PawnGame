@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Text.Json;
 using System.IO;
 using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace PawnGame
 {
@@ -123,7 +123,7 @@ namespace PawnGame
         {
             try
             {
-                new StreamWriter(filePath, false).Write(JsonSerializer.Serialize(level));
+                new StreamWriter(filePath, false).Write(JsonConvert.SerializeObject(level));
             }
             catch(Exception e)
             {
@@ -141,10 +141,13 @@ namespace PawnGame
         {
             try
             {
-                return JsonSerializer.Deserialize<Level>(filePath);
+                using StreamReader reader = new(filePath);
+                return JsonConvert.DeserializeObject<Level>(reader.ReadLine());
+
             }
-            catch
+            catch(Exception e)
             {
+                Debug.WriteLine(e.ToString());
                 throw new FileLoadException("The file could not be found, or was corrupted.");
             }
         }

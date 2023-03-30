@@ -12,7 +12,7 @@
         public float Height { get { return _hitbox.Height; } }
         public float X { get { return _hitbox.X; } }
         public float Y { get { return _hitbox.Y; } }
-        public Vectangle Hitbox { get { return Hitbox; } set { _hitbox.X = value.X; _hitbox.Y = value.Y; } }
+        public Vectangle Hitbox { get { return _hitbox; } set { _hitbox.X = value.X; _hitbox.Y = value.Y; } }
         #endregion
 
         /// <summary>
