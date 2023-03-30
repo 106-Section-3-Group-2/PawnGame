@@ -42,8 +42,10 @@ namespace PawnGame
         private Texture2D _logo;
         private Texture2D _iconSave;
         private Texture2D _iconLoad;
-
-        private Texture2D _playerTexture;
+        private Texture2D _pawnBlack;
+        private Texture2D _pawnWhite;
+        private Texture2D _tileBlack;
+        private Texture2D _tileWhite;
 
         /// <summary>
         /// Gets the width of the window
@@ -89,7 +91,7 @@ namespace PawnGame
             _prevKbState = Keyboard.GetState();
             Textures = new Dictionary<string, Texture2D>();
             base.Initialize();
-            Manager.Add(new Pawn(_playerTexture, new Rectangle(0, 0, 20, 20)));
+            Manager.Add(new Pawn(_pawnBlack, new Rectangle(0, 0, 20, 20)));
         }
 
         protected override void LoadContent()
@@ -103,10 +105,13 @@ namespace PawnGame
             _logo = LoadTexture("logo");
             _iconSave = LoadTexture("IconSave");
             _iconLoad = LoadTexture("IconLoad");
+            _pawnBlack = LoadTexture("PawnBlack");
+            _pawnWhite = LoadTexture("PawnWhite");
+            _tileBlack = LoadTexture("TileBlack");
+            _tileWhite = LoadTexture("TileWhite");
 
-            _playerTexture = LoadTexture("black-pawn-texture");
-            _player = new Player(_playerTexture, new Rectangle((int)WindowWidth / 2, (int)WindowHeight / 2,
-                _playerTexture.Width/6, _playerTexture.Height/6));
+            _player = new Player(_pawnBlack, new Rectangle((int)WindowWidth / 2, (int)WindowHeight / 2,
+                _pawnBlack.Width/6, _pawnBlack.Height/6));
 
             //initialize level editor (needs textures loaded)
             _levelEditor = new LevelEditor(8, 8, this);
