@@ -156,25 +156,22 @@ namespace PawnGame
                     {
                         //save
                         case 0:
+                            OpenFileDialog openFileDialog = new OpenFileDialog();
+                            openFileDialog.Filter = "Json files (*.json)|*.json|Text files (*.txt)|*.txt";
+                            if (openFileDialog.ShowDialog() == DialogResult.OK)
                             {
-                                OpenFileDialog openFileDialog = new OpenFileDialog();
-                                openFileDialog.Filter = "Json files (*.json)|*.json|Text files (*.txt)|*.txt";
-                                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                                {
-                                    _level = Level.Read(openFileDialog.FileName);
-                                }
+                                _level = Level.Read(openFileDialog.FileName);
                             }
                             break;
                         //load
                         case 1:
+                            SaveFileDialog saveFileDialog = new SaveFileDialog();
+                            saveFileDialog.Filter = "Json files (*.json)|*.json|Text files (*.txt)|*.txt";
+                            if (saveFileDialog.ShowDialog() == DialogResult.OK)
                             {
-                                OpenFileDialog openFileDialog = new OpenFileDialog();
-                                openFileDialog.Filter = "Json files (*.json)|*.json|Text files (*.txt)|*.txt";
-                                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                                {
-                                    Level.Write(_level, openFileDialog.FileName);
-                                }
+                                Level.Write(_level, saveFileDialog.FileName);
                             }
+                            break;
                             break;
                     }
                 }

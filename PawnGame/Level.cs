@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json;
 using System.IO;
+using System.Diagnostics;
+
 namespace PawnGame
 {
     /// <summary>
@@ -93,8 +95,9 @@ namespace PawnGame
             {
                 new StreamWriter(filePath, false).Write(JsonSerializer.Serialize(level));
             }
-            catch
+            catch(Exception e)
             {
+                Debug.WriteLine(e.ToString());
                 throw new Exception("Could not write the file.");
             }
         }
