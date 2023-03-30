@@ -8,7 +8,6 @@ namespace PawnGame.GameObjects
             Moving,
             Abilitying,
             NoControl,
-            Attacking,
         }
         public enum Ability
         {
@@ -27,6 +26,11 @@ namespace PawnGame.GameObjects
         private PlayerState _playerState;
         private int _abilityTimer;        
 
+        public Weapon Weapon
+        {
+            get { return _currentWeapon; }
+        }
+
         public Player(Texture2D texture, Rectangle hitbox, Weapon weapon) : base(texture, hitbox)
         {
             _abilityTimer = 0;
@@ -36,9 +40,9 @@ namespace PawnGame.GameObjects
             _currentWeapon = weapon;
             
         }
-        public void Update(KeyboardState currentState, KeyboardState previousState)
+        public void Update(KeyboardState currentKBState, KeyboardState previousKBState, MouseState currentMouseState, MouseState prevMouseState)
         {
-            ReadInputs(currentState, previousState);
+            ReadInputs(currentKBState, previousKBState,currentMouseState,prevMouseState);
             Move();
             
         }
@@ -46,6 +50,7 @@ namespace PawnGame.GameObjects
         {
             if (_activeAbility == Ability.None)
             {
+                _currentWeapon.Attack();
             }
         }
         protected void Move()
@@ -107,10 +112,10 @@ namespace PawnGame.GameObjects
 
         }
 
-        private void ReadInputs(KeyboardState currentState, KeyboardState previousState)
+        private void ReadInputs(KeyboardState currentKBState, KeyboardState previousKBState,MouseState currentMouseState, MouseState prevMouseState)
         {
             //Returns a normalized 2D vector of player's input direction
-            Vector2 direction = GetDirection(currentState);
+            Vector2 direction = GetDirection(currentKBState);
 
             switch (_playerState)
             {
@@ -118,24 +123,14 @@ namespace PawnGame.GameObjects
                                          //Check WASD, Space, and mouse
                     _velocity = _speed * direction;
                     //Space
-                    if (currentState.IsKeyDown(Keys.Space))
+                    if (currentKBState.IsKeyDown(Keys.Space))
                     {
                         UseAbility(direction);
                     }
                     //Mouse
-                    if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+                    if (currentMouseState.LeftButton == ButtonState.Pressed)
                     {
                         Attack();
-                    }
-                    break;
-
-                case PlayerState.Attacking: //If the player is able to move, but is not taking other special actions
-                                            //Check WASD, Space, and mouse
-                    _velocity = _speed * direction;
-                    //Space
-                    if (currentState.IsKeyDown(Keys.Space))
-                    {
-                        UseAbility(direction);
                     }
                     break;
 
@@ -143,7 +138,7 @@ namespace PawnGame.GameObjects
                                              //WASD do not change velocity, but still change direction for abilities
                                              //Check WASD and Space
                                              //Space
-                    if (currentState.IsKeyDown(Keys.Space))
+                    if (currentKBState.IsKeyDown(Keys.Space))
                     {
                         UseAbility(direction);
                     }
@@ -168,29 +163,29 @@ namespace PawnGame.GameObjects
         /// <summary>
         /// Returns a 
         /// </summary>
-        /// <param name="currentState"></param>
+        /// <param name="currentKBState"></param>
         /// <returns></returns>
-        private Vector2 GetDirection(KeyboardState currentState)
+        private Vector2 GetDirection(KeyboardState currentKBState)
         {
 
             Vector2 output = Vector2.Zero;
             //Up
-            if (currentState.IsKeyDown(Keys.W))
+            if (currentKBState.IsKeyDown(Keys.W))
             {
                 output.Y -= 1;
             }
             //Down
-            if (currentState.IsKeyDown(Keys.S))
+            if (currentKBState.IsKeyDown(Keys.S))
             {
                 output.Y += 1;
             }
             //Right
-            if (currentState.IsKeyDown(Keys.D))
+            if (currentKBState.IsKeyDown(Keys.D))
             {
                 output.X += 1;
             }
             //Left
-            if (currentState.IsKeyDown(Keys.A))
+            if (currentKBState.IsKeyDown(Keys.A))
             {
                 output.X -= 1;
             }

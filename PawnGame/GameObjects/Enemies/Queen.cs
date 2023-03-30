@@ -27,5 +27,9 @@ namespace PawnGame.GameObjects.Enemies
         {
             throw new NotImplementedException();
         }
+        protected override void TakeDamage(int amount)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

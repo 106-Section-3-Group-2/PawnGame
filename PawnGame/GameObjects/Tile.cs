@@ -22,7 +22,7 @@ namespace PawnGame.GameObjects
         /// <param name="texture"></param>
         /// <param name="hitbox"></param>
         /// <param name="solid"></param>
-        public Tile(Texture2D texture, Rectangle hitbox, bool solid) : base(texture, hitbox)
+        public Tile(Texture2D texture, Vectangle hitbox, bool solid) : base(texture, hitbox)
         {
             Solid = solid;
         }

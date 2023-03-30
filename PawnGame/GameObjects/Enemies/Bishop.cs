@@ -25,5 +25,9 @@
         {
             throw new System.NotImplementedException();
         }
+        protected override void TakeDamage(int amount)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

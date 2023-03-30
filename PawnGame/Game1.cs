@@ -32,6 +32,9 @@ namespace PawnGame
 
         private KeyboardState _currKbState;
         private KeyboardState _prevKbState;
+        private MouseState _currMouseState;
+        private MouseState _prevMouseState;
+
 
         private int _prevWidth;
         private int _prevHeight;
@@ -50,6 +53,8 @@ namespace PawnGame
         private Texture2D _tileWhite;
         private Texture2D _weaponSword;
         private Texture2D _error;
+
+        public static Texture2D _debugTexture;
 
         private int testTimer = 300;
         private Random random;
@@ -118,11 +123,13 @@ namespace PawnGame
             _tileBlack = LoadTexture("TileBlack");
             _tileWhite = LoadTexture("TileWhite");
             _weaponSword = LoadTexture("Sword");
+            _debugTexture = _tileWhite;
             _error = LoadTexture("Error"); 
 
-            _weapon = new Weapon(_weaponSword);
+            _weapon = new Weapon(_weaponSword, new Rectangle(WindowWidth / 2, WindowHeight / 2, _weaponSword.Width * 3, _weaponSword.Height * 3));
             _player = new Player(_pawnBlack, new Rectangle(WindowWidth / 2, WindowHeight / 2,
                 _pawnBlack.Width/6, _pawnBlack.Height/6),_weapon);
+
 
             //initialize level editor (needs textures loaded)
             _levelEditor = new LevelEditor(8, 8, this);
@@ -131,6 +138,7 @@ namespace PawnGame
         protected override void Update(GameTime gameTime)
         {
             _currKbState = Keyboard.GetState();
+            _currMouseState = Mouse.GetState();
 
             // Toggling fullscreen
             // Kinda wanna make it a button in an options menu somewhere instead
@@ -259,12 +267,13 @@ namespace PawnGame
                     if (testTimer <= 0)
                     {
                         //Adds a random pawn, for the demo
-                        //Manager.Add(new Pawn(_pawnWhite, new Rectangle(random.Next(0, 2) * WindowWidth, random.Next(0, 2) * WindowHeight, _pawnWhite.Width/6, _pawnWhite.Height/6)));
+                        Manager.Add(new Pawn(_pawnWhite, new Rectangle(random.Next(0, 2) * WindowWidth, random.Next(0, 2) * WindowHeight, _pawnWhite.Width/6, _pawnWhite.Height/6)));
                         testTimer = 300;
                     }
 
                     Manager.Update(_player);
-                    _player.Update(_currKbState, _prevKbState);
+                    _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState);
+                    _weapon.Update(_player);
                     #endregion
                     break;
 
@@ -289,13 +298,14 @@ namespace PawnGame
                 _gameState = GameState.DebugMenu;
             }
 
+            _prevMouseState = _currMouseState;
             _prevKbState = _currKbState;
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Gray);
+            GraphicsDevice.Clear(Color.DarkOliveGreen);
 
             _spriteBatch.Begin();
             
