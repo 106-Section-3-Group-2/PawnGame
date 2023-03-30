@@ -215,11 +215,11 @@ namespace PawnGame
                                     //create a solid wall
                                     if ((x + y) % 2 == 0)
                                     {
-                                        _level.Tiles[x, y] = new Tile(Game1.Textures["logo"], new Vectangle(_level.Tiles[x, y].X, _level.Tiles[x, y].Y, _level.Tiles[x, y].Width, _level.Tiles[x, y].Height), true);
+                                        _level.Tiles[x, y] = new Tile(Game1.Textures["Error"], new Vectangle(_level.Tiles[x, y].X, _level.Tiles[x, y].Y, _level.Tiles[x, y].Width, _level.Tiles[x, y].Height), true);
                                     }
                                     else
                                     {
-                                        _level.Tiles[x, y] = new Tile(Game1.Textures["logo"], new Vectangle(_level.Tiles[x, y].X, _level.Tiles[x, y].Y, _level.Tiles[x, y].Width, _level.Tiles[x, y].Height), true);
+                                        _level.Tiles[x, y] = new Tile(Game1.Textures["Error"], new Vectangle(_level.Tiles[x, y].X, _level.Tiles[x, y].Y, _level.Tiles[x, y].Width, _level.Tiles[x, y].Height), true);
                                     }
                                     break;
                             }
