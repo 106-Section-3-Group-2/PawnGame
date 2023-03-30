@@ -50,7 +50,7 @@ namespace PawnGame.GameObjects
 
         public void Attack()
         {
-            Matrix.CreateRotationZ
+            Matrix.CreateRotationZ;
             if (_attackTimer == 0)
             {
                 _isActive = true;
