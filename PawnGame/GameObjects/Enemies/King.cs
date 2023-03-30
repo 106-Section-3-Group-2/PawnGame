@@ -1,6 +1,6 @@
 ﻿namespace PawnGame.GameObjects.Enemies
 {
-    internal class King : Enemy
+    public class King : Enemy
     {
         public King(Texture2D texture, Rectangle hitbox) : base(texture, hitbox)
         {

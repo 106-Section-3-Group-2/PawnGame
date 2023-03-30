@@ -271,7 +271,7 @@ namespace PawnGame
 
                     Manager.Update(_player);
                     _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState);
-                    _weapon.Update(_player);
+                    _weapon.Update(_player,_currMouseState);
                     #endregion
                     break;
 

@@ -1,6 +1,6 @@
 ﻿namespace PawnGame.GameObjects.Enemies
 {
-    internal abstract class Enemy : Entity
+    public abstract class Enemy : Entity
     {
         protected bool _isAlerted;
         protected int _speed;

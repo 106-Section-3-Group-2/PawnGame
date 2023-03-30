@@ -1,6 +1,6 @@
 ﻿namespace PawnGame.GameObjects.Enemies
 {
-    internal class Rook : Enemy
+    public class Rook : Enemy
     {
         public Rook(Texture2D texture, Rectangle hitbox) : base(texture, hitbox)
         {

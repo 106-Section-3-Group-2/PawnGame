@@ -1,6 +1,6 @@
 ﻿namespace PawnGame.GameObjects.Enemies
 {
-    internal class Knight : Enemy
+    public class Knight : Enemy
     {
         public Knight(Texture2D texture, Rectangle hitbox) : base(texture, hitbox)
         {

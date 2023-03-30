@@ -1,7 +1,7 @@
 ﻿using PawnGame.GameObjects.Enemies;
 namespace PawnGame.GameObjects
 {
-    internal class Player : Entity
+    public class Player : Entity
     {
         private enum PlayerState
         {
@@ -46,7 +46,7 @@ namespace PawnGame.GameObjects
             Move();
             
         }
-        protected override void Attack()
+        protected void Attack()
         {
             if (_activeAbility == Ability.None)
             {

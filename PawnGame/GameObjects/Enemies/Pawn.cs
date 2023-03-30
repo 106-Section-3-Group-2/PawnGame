@@ -7,7 +7,7 @@ using static PawnGame.GameObjects.Enemies.EnemyManager;
 
 namespace PawnGame.GameObjects.Enemies
 {
-    internal class Pawn : Enemy
+    public class Pawn : Enemy
     {
         public Pawn(Texture2D texture, Rectangle hitbox) : base(texture, hitbox)
         {
@@ -18,7 +18,7 @@ namespace PawnGame.GameObjects.Enemies
         {
             Move(player);
             CheckPlayerCollision(player);
-            CheckWeaponCollision(player);
+            CheckWeaponCollision(player.Weapon);
             if (!_isAlive) OnDeath();
         }
 
@@ -44,9 +44,9 @@ namespace PawnGame.GameObjects.Enemies
                 player.IsAlive = false;
             }
         }
-        protected void CheckWeaponCollision(Player player)
+        protected void CheckWeaponCollision(Weapon weapon)
         {
-            if (CheckCollision(player.Weapon)&&player.Weapon.IsActive == true)
+            if (CheckCollision(weapon) && weapon.IsActive == true)
             {
                 IsAlive = false;
             }

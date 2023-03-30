@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace PawnGame.GameObjects.Enemies
 {
-    internal class EnemyManager
+    public class EnemyManager
     {
         #region Singleton stuff
         private static EnemyManager _manager = new();

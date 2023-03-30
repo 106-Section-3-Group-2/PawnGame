@@ -9,7 +9,7 @@ namespace PawnGame.GameObjects
     /// <summary>
     /// represents the space of a single square in the game. Can be solid, which prevents entities and players from passing through it.
     /// </summary>
-    internal class Tile : GameObject
+    public class Tile : GameObject
     {
         /// <summary>
         /// represents whether the Tile is solid and can trigger collision resolutions

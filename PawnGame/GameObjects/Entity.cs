@@ -1,6 +1,6 @@
 ﻿namespace PawnGame.GameObjects
 {
-    internal abstract class Entity : GameObject
+    public abstract class Entity : GameObject
     {
         protected bool _isAlive;
         protected Vector2 _velocity;
@@ -34,7 +34,10 @@
         /// <summary>
         /// Should cause the entity to attack
         /// </summary>
-        protected abstract void Attack();
+        protected virtual void Attack()
+        {
+
+        }
         /// <summary>
         /// Should occur when the entity dies
         /// </summary>

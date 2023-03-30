@@ -32,7 +32,7 @@
         /// <param name="other"></param>
         /// <returns>True if game objects are intersecting, otherwise false</returns>
         public virtual bool CheckCollision(GameObject other) { return _hitbox.Intersects(other._hitbox); }
-
+        public virtual bool CheckCollision(Weapon weapon) { return weapon.IsColliding(Hitbox); }
         /// <summary>
         /// Draws the game object to the screen
         /// </summary>
