@@ -40,6 +40,7 @@ namespace PawnGame
 
         // Textures
         public static Dictionary<string, Texture2D> Textures;
+        public static Dictionary<Texture2D, string> TexturesReverse;
         private Texture2D _logo;
         private Texture2D _iconSave;
         private Texture2D _iconLoad;
@@ -97,6 +98,7 @@ namespace PawnGame
             random = new Random();
             _prevKbState = Keyboard.GetState();
             Textures = new Dictionary<string, Texture2D>();
+            TexturesReverse = new Dictionary<Texture2D, string>();
             base.Initialize();
         }
 
@@ -403,10 +405,12 @@ namespace PawnGame
             if (!Textures.ContainsKey(fileName))
             {
                 Textures.Add(fileName, output);
+                TexturesReverse.Add(output, fileName);
             }
             else
             {
                 Textures[fileName] = output;
+                TexturesReverse[output] = fileName;
             }
         
             return output;

@@ -3,8 +3,19 @@
     public abstract class GameObject
     {
         #region Fields
-        protected Texture2D _texture;
+        protected Texture2D Texture
+        {
+            get
+            {
+                return Game1.Textures[_imageKey];
+            }
+            set
+            {
+                _imageKey = Game1.TexturesReverse[value];
+            }
+        }
         protected Vectangle _hitbox;
+        protected string _imageKey;
         #endregion
 
         #region Properties
@@ -16,14 +27,26 @@
         #endregion
 
         /// <summary>
-        /// Gives values to the texture and hitbox
+        /// Create a GameObject with a Texture2D and a hitbox
         /// </summary>
         /// <param name="texture"></param>
         /// <param name="hitbox"></param>
         protected GameObject(Texture2D texture, Vectangle hitbox)
         {
-            _texture = texture;
+            Texture = texture;
             _hitbox = hitbox;
+            _imageKey = Game1.TexturesReverse[texture];
+        }
+
+        /// <summary>
+        /// Create a GameObject with an image key and a hitbox
+        /// </summary>
+        /// <param name="imageKey"></param>
+        /// <param name="hitbox"></param>
+        protected GameObject(string imageKey, Vectangle hitbox)
+        {
+            _hitbox = hitbox;
+            _imageKey = imageKey;
         }
 
         /// <summary>
@@ -39,7 +62,7 @@
         /// <param name="sb"></param>
         public virtual void Draw(SpriteBatch sb)
         {
-            sb.Draw(_texture, _hitbox, Color.White);
+            sb.Draw(Texture, _hitbox, Color.White);
         }
     }
 }

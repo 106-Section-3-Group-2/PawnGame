@@ -85,7 +85,7 @@ namespace PawnGame
                 Game1.Textures["TileWhite"].Height / paletteDownscale,
                 Color.Green));
             _palette.Add(new Button(
-                Game1.Textures["TileBlack"],
+                Game1.Textures["Error"],
                 _paletteTopLeft + new Vector2(0,
                 (_palette[0].ButtonBox.Height + _ButtonSpacing)/* times n*/),
                 Game1.Textures["TileWhite"].Width / paletteDownscale,
