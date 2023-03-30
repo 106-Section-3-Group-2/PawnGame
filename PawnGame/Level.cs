@@ -41,11 +41,41 @@ namespace PawnGame
         /// <summary>
         /// the spawn locations of enemies
         /// </summary>
-        public List<Enemy> Enemies { get; set; }
+        public List<Enemy> EnemySpawns { get; set; }
         /// <summary>
         /// the spawn location of the player
         /// </summary>
         public Vector2 SpawnPoint { get; set; }
+        /// <summary>
+        /// the width of the entire level
+        /// </summary>
+        public float Width
+        {
+            get
+            {
+                return this[0, 0].Width * Tiles.GetLength(0);
+            }
+        }
+        /// <summary>
+        /// the height of the entire level
+        /// </summary>
+        public float Height
+        {
+            get
+            {
+                return this[0, 0].Height * Tiles.GetLength(1);
+            }
+        }
+        /// <summary>
+        /// the top-left corner of the level
+        /// </summary>
+        public Vector2 Location
+        {
+            get
+            {
+                return new Vector2(this[0, 0].X, this[0, 0].Y);
+            }
+        }
         #endregion
 
         /// <summary>
@@ -57,7 +87,7 @@ namespace PawnGame
         public Level(Tile[,] tiles, List<Enemy> enemies, Vector2 spawnPoint)
         {
             Tiles = tiles;
-            Enemies = enemies;
+            EnemySpawns = enemies;
             SpawnPoint = spawnPoint;
         }
 
