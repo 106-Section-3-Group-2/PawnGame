@@ -76,12 +76,33 @@ namespace PawnGame
             #endregion
             _options = new List<Button>();
             _palette = new List<Button>();
-            _palette.Add(new Button(Game1.Textures["logo"], _paletteTopLeft, Color.Green));
-            _palette.Add(new Button(Game1.Textures["logo"], _paletteTopLeft + new Vector2(0, Game1.Textures["logo"].Height + _ButtonSpacing), Color.Green));
+
+            int paletteDownscale = 4;
+            _palette.Add(new Button(
+                Game1.Textures["TileWhite"],
+                _paletteTopLeft,
+                Game1.Textures["TileWhite"].Width / paletteDownscale,
+                Game1.Textures["TileWhite"].Height / paletteDownscale,
+                Color.Green));
+            _palette.Add(new Button(
+                Game1.Textures["TileBlack"],
+                _paletteTopLeft + new Vector2(0,
+                (_palette[0].ButtonBox.Height + _ButtonSpacing)/* times n*/),
+                Game1.Textures["TileWhite"].Width / paletteDownscale,
+                Game1.Textures["TileWhite"].Height / paletteDownscale,
+                Color.Green));
+
+            //create options
             float optionsX = _game.WindowWidth - _paletteTopLeft.X - Game1.Textures["IconLoad"].Width;
-            _options.Add(new Button(Game1.Textures["IconLoad"], new Vector2(optionsX, _paletteTopLeft.Y), Color.Green));
-            _options.Add(new Button(Game1.Textures["IconSave"], new Vector2(optionsX, _paletteTopLeft.Y + (Game1.Textures["IconLoad"].Height + _ButtonSpacing) /* times n*/), Color.Green));
-            _selected = 0;
+            _options.Add(new Button(
+                Game1.Textures["IconLoad"],
+                new Vector2(optionsX, _paletteTopLeft.Y),
+                Color.Green));
+            _options.Add(new Button(
+                Game1.Textures["IconSave"],
+                new Vector2(optionsX, _paletteTopLeft.Y + (Game1.Textures["IconLoad"].Height + _ButtonSpacing) /* times n*/),
+                Color.Green));
+            _selected = -1;
             _cameraPosition = new Vector2(100, 100);
             _canClick = true;
 
@@ -92,7 +113,14 @@ namespace PawnGame
             {
                 for(int y = 0; y < _level.Tiles.GetLength(1); y++)
                 {
-                    _level.Tiles[x, y] = new Tile(Game1.Textures["logo"], new Rectangle(margin + x * sideLength, y * sideLength, sideLength, sideLength), false);
+                    if((x + y) % 2 == 0)
+                    {
+                        _level.Tiles[x, y] = new Tile(Game1.Textures["TileWhite"], new Rectangle(margin + x * sideLength, y * sideLength, sideLength, sideLength), false);
+                    }
+                    else
+                    {
+                        _level.Tiles[x, y] = new Tile(Game1.Textures["TileBlack"], new Rectangle(margin + x * sideLength, y * sideLength, sideLength, sideLength), false);
+                    }
                 }
             }
         }
@@ -153,29 +181,46 @@ namespace PawnGame
             }
 
             //check for clicks on tiles in the level
-            for (int i = 0; i < _level.Tiles.GetLength(0); i++)
+            for (int x = 0; x < _level.Tiles.GetLength(0); x++)
             {
-                for (int j = 0; j < _level.Tiles.GetLength(1); j++)
+                for (int y = 0; y < _level.Tiles.GetLength(1); y++)
                 {
-                    if (CheckMouseOn(_level.Tiles[i, j]))
+                    if (CheckMouseOn(_level.Tiles[x, y]))
                     {
                         if (_mState.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
                         {
                             //set the tile corresponding to palette
                             switch (_selected)
                             {
+                                case -1:
+                                    break;
                                 case 0:
-                                    _level.Tiles[i, j] = new Tile(Game1.Textures["logo"], new Vectangle(_level.Tiles[i, j].X, _level.Tiles[i, j].Y, _level.Tiles[i, j].Width, _level.Tiles[i, j].Height), false);
+                                    if ((x + y) % 2 == 0)
+                                    {
+                                        _level.Tiles[x, y] = new Tile(Game1.Textures["TileWhite"], new Vectangle(_level.Tiles[x, y].X, _level.Tiles[x, y].Y, _level.Tiles[x, y].Width, _level.Tiles[x, y].Height), false);
+                                    }
+                                    else
+                                    {
+                                        _level.Tiles[x, y] = new Tile(Game1.Textures["TileBlack"], new Vectangle(_level.Tiles[x, y].X, _level.Tiles[x, y].Y, _level.Tiles[x, y].Width, _level.Tiles[x, y].Height), false);
+                                    }
                                     break;
                                 case 1:
-                                    _level.Tiles[i, j] = new Tile(Game1.Textures["logo"], new Vectangle(_level.Tiles[i, j].X, _level.Tiles[i, j].Y, _level.Tiles[i, j].Width, _level.Tiles[i, j].Height), true);
+                                    //create a solid wall
+                                    if ((x + y) % 2 == 0)
+                                    {
+                                        _level.Tiles[x, y] = new Tile(Game1.Textures["logo"], new Vectangle(_level.Tiles[x, y].X, _level.Tiles[x, y].Y, _level.Tiles[x, y].Width, _level.Tiles[x, y].Height), true);
+                                    }
+                                    else
+                                    {
+                                        _level.Tiles[x, y] = new Tile(Game1.Textures["logo"], new Vectangle(_level.Tiles[x, y].X, _level.Tiles[x, y].Y, _level.Tiles[x, y].Width, _level.Tiles[x, y].Height), true);
+                                    }
                                     break;
                             }
                         }
                         if (_mState.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
                         {
                             //should spawn an empty texture tile
-                            _level.Tiles[i, j] = new Tile(Game1.Textures["logo"], new Vectangle(_level.Tiles[i, j].X, _level.Tiles[i, j].Y, _level.Tiles[i, j].Width, _level.Tiles[i, j].Height), true);
+                            _level.Tiles[x, y] = new Tile(Game1.Textures["logo"], new Vectangle(_level.Tiles[x, y].X, _level.Tiles[x, y].Y, _level.Tiles[x, y].Width, _level.Tiles[x, y].Height), true);
                         }
                     }
                 }
