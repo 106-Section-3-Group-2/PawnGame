@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-namespace PawnGame
+﻿namespace PawnGame
 {
     /// <summary>
     /// Represents a text box that is able to be clicked
