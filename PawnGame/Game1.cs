@@ -6,6 +6,7 @@ using System;
 using PawnGame.GameObjects;
 using PawnGame.GameObjects.Enemies;
 using static PawnGame.GameObjects.Enemies.EnemyManager;
+using static PawnGame.VirtualMouse;
 using ShapeUtils;
 namespace PawnGame
 {
@@ -178,6 +179,7 @@ namespace PawnGame
                                 // Start a new game
                                 // (whatever that means)
                                 _gameState = GameState.Game;
+                                IsMouseVisible = false;
                             }
                             else if (i == 1)
                             {
@@ -269,7 +271,7 @@ namespace PawnGame
                         Manager.Add(new Pawn(_pawnWhite, new Rectangle(random.Next(0, 2) * WindowWidth, random.Next(0, 2) * WindowHeight, _pawnWhite.Width/6, _pawnWhite.Height/6)));
                         testTimer = 300;
                     }
-
+                    
                     Manager.Update(_player);
                     _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState);
                     _weapon.Update(_player,_currMouseState);
