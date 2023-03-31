@@ -352,8 +352,6 @@ namespace PawnGame
                     Manager.Draw(_spriteBatch);
                     _weapon.Draw(_spriteBatch,_player,Mouse.GetState());
 
-                    _spriteBatch.DrawString(_font, "HIPUR (the game)",
-                        new Vector2(WindowWidth / 2 - _font.MeasureString("HIPUR (the game)").X / 2, WindowHeight / 2), Color.White);
                     #endregion
                     break;
 
