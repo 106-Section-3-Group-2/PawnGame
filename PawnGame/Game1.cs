@@ -110,7 +110,6 @@ namespace PawnGame
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-
             //Debug font
             _font = this.Content.Load<SpriteFont>("Arial");
 
@@ -308,7 +307,6 @@ namespace PawnGame
             GraphicsDevice.Clear(Color.DarkOliveGreen);
 
             _spriteBatch.Begin();
-            
             switch (_gameState)
             {
                 #region Menu State

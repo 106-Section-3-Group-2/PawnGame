@@ -51,32 +51,33 @@ namespace PawnGame.GameObjects
                 _attackTimer--;
             }
 
-            //Create vectors for collision
-            if (IsActive)
-            {
 
-                Vector2 vector1 = new Vector2(currMouseState.X - player.X, currMouseState.Y - player.Y);
+                _collisionVectors.Clear();
+                Vector2 vector1 = new Vector2(currMouseState.X-X, currMouseState.Y-Y);
                 vector1.Normalize();
-                vector1 *= 145;
-                Vector2 vector2 = vector1*0.6f;
-                Vector2 vector3 = vector1*0.3f;
-
+                vector1 *= 100;
+                Vector2 vector2 = vector1/5*4;
+                Vector2 vector3 = vector1/5*3;
+                Vector2 vector4 = vector1/5*2;
+                Vector2 vector5 = vector1/5;
                 _collisionVectors.Add(vector1);
                 _collisionVectors.Add(vector2);
                 _collisionVectors.Add(vector3);
-                ///TODO: Ask chris how to do triangle collision :(
-                /*
-                Vector2 vector1 = new Vector2(currMouseState.X - player.X, currMouseState.Y - player.Y);
-                vector1.Normalize();
-                vector1*=20;
-                //20 is a length property for the weapon
-
-                Vector2 vector2 = Vector2.Transform(vector1, Matrix.CreateRotationZ(MathF.PI * 0.125f));
-                Vector2 vector3 = Vector2.Transform(vector1, Matrix.CreateRotationZ(MathF.PI * -0.125f));
-                _collisionVectors.Add(vector2);
+                _collisionVectors.Add(vector4);
                 _collisionVectors.Add(vector3);
-                */
-            }
+            ///TODO: Ask chris how to do triangle collision :(
+            /*
+            Vector2 vector1 = new Vector2(currMouseState.X - player.X, currMouseState.Y - player.Y);
+            vector1.Normalize();
+            vector1*=20;
+            //20 is a length property for the weapon
+
+            Vector2 vector2 = Vector2.Transform(vector1, Matrix.CreateRotationZ(MathF.PI * 0.125f));
+            Vector2 vector3 = Vector2.Transform(vector1, Matrix.CreateRotationZ(MathF.PI * -0.125f));
+            _collisionVectors.Add(vector2);
+            _collisionVectors.Add(vector3);
+            */
+
         }
         public bool IsColliding(Vectangle vectangle)
         {
@@ -106,15 +107,17 @@ namespace PawnGame.GameObjects
         public void Draw(SpriteBatch sb, Player player, MouseState mouse)
         {
             Vector2 mousePos = new Vector2(mouse.X, mouse.Y);
-
             //For debug, this draws the weapon red if the attack is active
             if (_isActive)
             {
-                sb.Draw(Texture, _hitbox, null, Color.Red, MathF.Atan2((mouse.Y - player.Hitbox.Y), (mouse.X - player.Hitbox.X)) + MathF.PI / 2, new Vector2(16, 32), SpriteEffects.None, 0);
+                sb.Draw(Texture, _hitbox, null, Color.Red, MathF.Atan2((mouse.Y - Y), (mouse.X - X)) + MathF.PI / 2f, new Vector2(16, 32), SpriteEffects.None, 0);
+                
             }
             else
             {
-                sb.Draw(Texture, _hitbox, null, Color.White, MathF.Atan2((mouse.Y - player.Hitbox.Y), (mouse.X - player.Hitbox.X)) + MathF.PI / 2, new Vector2(16, 32), SpriteEffects.None, 0);
+                
+
+                sb.Draw(Texture, _hitbox, null, Color.White, MathF.Atan2((mouse.Y - Y), (mouse.X - X)) + MathF.PI /2f , new Vector2(16, 32), SpriteEffects.None, 0);
             }
         }
     }
