@@ -2,7 +2,7 @@
 {
     public class Knight : Enemy
     {
-        public Knight(Texture2D texture, Rectangle hitbox) : base(texture, hitbox)
+        public Knight(Game1.AssetNames textureKey, Rectangle hitbox) : base(textureKey, hitbox)
         {
         }
 

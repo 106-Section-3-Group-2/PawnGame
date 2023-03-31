@@ -31,7 +31,7 @@ namespace PawnGame.GameObjects
             get { return _currentWeapon; }
         }
 
-        public Player(Texture2D texture, Rectangle hitbox, Weapon weapon) : base(texture, hitbox)
+        public Player(Game1.AssetNames textureKey, Rectangle hitbox, Weapon weapon) : base(textureKey, hitbox)
         {
             _abilityTimer = 0;
             _speed = 5;

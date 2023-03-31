@@ -2,7 +2,7 @@
 {
     public class Bishop : Enemy
     {
-        public Bishop(Texture2D texture, Rectangle hitbox) : base(texture, hitbox)
+        public Bishop(Game1.AssetNames textureKey, Rectangle hitbox) : base(textureKey, hitbox)
         {
         }
 

@@ -1,52 +1,55 @@
-﻿namespace PawnGame.GameObjects
+﻿using static PawnGame.Game1;
+
+namespace PawnGame.GameObjects
 {
     public abstract class GameObject
     {
         #region Fields
-        protected Texture2D Texture
-        {
-            get
-            {
-                return Game1.Textures[_imageKey];
-            }
-            set
-            {
-                _imageKey = Game1.TexturesReverse[value];
-            }
-        }
         protected Vectangle _hitbox;
-        protected string _imageKey;
+        protected AssetNames _textureKey;
         #endregion
 
         #region Properties
-        public float Width { get { return _hitbox.Width; } }
-        public float Height { get { return _hitbox.Height; } }
-        public float X { get { return _hitbox.X; } }
-        public float Y { get { return _hitbox.Y; } }
-        public virtual Vectangle Hitbox { get { return _hitbox; } set { _hitbox.X = value.X; _hitbox.Y = value.Y; } }
-        #endregion
+        /// <summary>
+        /// Texture used for drawing the game object
+        /// </summary>
+        protected Texture2D Texture => Assets[_textureKey];
 
         /// <summary>
-        /// Create a GameObject with a Texture2D and a hitbox
+        /// X position of the game object's hitbox
         /// </summary>
-        /// <param name="texture"></param>
-        /// <param name="hitbox"></param>
-        protected GameObject(Texture2D texture, Vectangle hitbox)
-        {
-            Texture = texture;
-            _hitbox = hitbox;
-            _imageKey = Game1.TexturesReverse[texture];
-        }
+        public float X { get { return _hitbox.X; } }
+
+        /// <summary>
+        /// Y position of the game object's hitbox
+        /// </summary>
+        public float Y { get { return _hitbox.Y; } }
+
+        /// <summary>
+        /// Width of the game object's hitbox
+        /// </summary>
+        public float Width { get { return _hitbox.Width; } }
+
+        /// <summary>
+        /// Height of the game object's hitbox
+        /// </summary>
+        public float Height { get { return _hitbox.Height; } }
+
+        /// <summary>
+        /// Hitbox of the game object
+        /// </summary>
+        public virtual Vectangle Hitbox { get { return _hitbox; } set { _hitbox.X = value.X; _hitbox.Y = value.Y; } }
+        #endregion
 
         /// <summary>
         /// Create a GameObject with an image key and a hitbox
         /// </summary>
         /// <param name="imageKey"></param>
         /// <param name="hitbox"></param>
-        protected GameObject(string imageKey, Vectangle hitbox)
+        protected GameObject(AssetNames textureKey, Vectangle hitbox)
         {
             _hitbox = hitbox;
-            _imageKey = imageKey;
+            _textureKey = textureKey;
         }
 
         /// <summary>

@@ -2,7 +2,7 @@
 {
     public class Rook : Enemy
     {
-        public Rook(Texture2D texture, Rectangle hitbox) : base(texture, hitbox)
+        public Rook(Game1.AssetNames textureKey, Rectangle hitbox) : base(textureKey, hitbox)
         {
         }
 

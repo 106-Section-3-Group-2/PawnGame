@@ -22,7 +22,7 @@
         /// </summary>
         /// <param name="texture"></param>
         /// <param name="hitbox"></param>
-        protected Entity(Texture2D texture, Rectangle hitbox) : base(texture, hitbox)
+        protected Entity(Game1.AssetNames textureKey, Rectangle hitbox) : base(textureKey, hitbox)
         {
             _isAlive = true;
             _velocity = Vector2.Zero;

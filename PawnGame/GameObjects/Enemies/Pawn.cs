@@ -9,7 +9,7 @@ namespace PawnGame.GameObjects.Enemies
 {
     public class Pawn : Enemy
     {
-        public Pawn(Texture2D texture, Rectangle hitbox) : base(texture, hitbox)
+        public Pawn(Game1.AssetNames textureKey, Rectangle hitbox) : base(textureKey, hitbox)
         {
             _speed = 4;
         }

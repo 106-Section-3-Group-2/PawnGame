@@ -6,55 +6,73 @@ using System;
 using PawnGame.GameObjects;
 using PawnGame.GameObjects.Enemies;
 using static PawnGame.GameObjects.Enemies.EnemyManager;
-using ShapeUtils;
+
 namespace PawnGame
 {
-    /// <summary>
-    /// Represents the current screen that the game is on
-    /// </summary>
-    public enum GameState
-    {
-        Menu,
-        Game,
-        LevelEditor,
-        Victory,
-        DebugMenu
-    }
-    
     public class Game1 : Game
     {
+        /// <summary>
+        /// Represents the current screen that the game is on
+        /// </summary>
+        public enum GameState
+        {
+            Menu,
+            Game,
+            LevelEditor,
+            Victory,
+            DebugMenu
+        }
+
+        /// <summary>
+        /// Name of assets
+        /// </summary>
+        public enum AssetNames
+        {
+            //General stuff
+            GameLogo,
+            IconSave,
+            IconLoad,
+
+            //Tiles
+            TileBlack,
+            TileWhite,
+
+            //Pieces
+            PawnBlack,
+            PawnWhite,
+
+            //Wepons
+            WeaponSword,
+
+            //Debug
+            DebugError,
+        }
+
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        #region GameStates and level
         private GameState _gameState;
         private GameState _prevGameState;
         private Level _currLevel;
+        #endregion
 
+        #region Keyboard and mouse states
         private KeyboardState _currKbState;
         private KeyboardState _prevKbState;
         private MouseState _currMouseState;
         private MouseState _prevMouseState;
-
+        #endregion
 
         private int _prevWidth;
         private int _prevHeight;
 
         private LevelEditor _levelEditor;
 
-        // Textures
-        public static Dictionary<string, Texture2D> Textures;
-        public static Dictionary<Texture2D, string> TexturesReverse;
-        private Texture2D _logo;
-        private Texture2D _iconSave;
-        private Texture2D _iconLoad;
-        private Texture2D _pawnBlack;
-        private Texture2D _pawnWhite;
-        private Texture2D _tileBlack;
-        private Texture2D _tileWhite;
-        private Texture2D _weaponSword;
-        private Texture2D _error;
-
-        public static Texture2D _debugTexture;
+        /// <summary>
+        /// Dictionary containing all assets used for the game
+        /// </summary>
+        public static Dictionary<AssetNames, Texture2D> Assets;
 
         private int testTimer = 300;
         private Random random;
@@ -102,8 +120,7 @@ namespace PawnGame
         {
             random = new Random();
             _prevKbState = Keyboard.GetState();
-            Textures = new Dictionary<string, Texture2D>();
-            TexturesReverse = new Dictionary<Texture2D, string>();
+            Assets = new Dictionary<AssetNames, Texture2D>();
             base.Initialize();
         }
 
@@ -111,23 +128,21 @@ namespace PawnGame
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             //Debug font
-            _font = this.Content.Load<SpriteFont>("Arial");
+            _font = Content.Load<SpriteFont>("Arial");
 
             //load textures
-            _logo = LoadTexture("logo");
-            _iconSave = LoadTexture("IconSave");
-            _iconLoad = LoadTexture("IconLoad");
-            _pawnBlack = LoadTexture("PawnBlack");
-            _pawnWhite = LoadTexture("PawnWhite");
-            _tileBlack = LoadTexture("TileBlack");
-            _tileWhite = LoadTexture("TileWhite");
-            _weaponSword = LoadTexture("Sword");
-            _debugTexture = _tileWhite;
-            _error = LoadTexture("Error"); 
+            Assets.Add(AssetNames.GameLogo, Content.Load<Texture2D>("logo"));
+            Assets.Add(AssetNames.IconSave, Content.Load<Texture2D>("IconSave"));
+            Assets.Add(AssetNames.IconLoad, Content.Load<Texture2D>("IconLoad"));
+            Assets.Add(AssetNames.PawnBlack, Content.Load<Texture2D>("PawnBlack"));
+            Assets.Add(AssetNames.PawnWhite, Content.Load<Texture2D>("PawnWhite"));
+            Assets.Add(AssetNames.TileBlack, Content.Load<Texture2D>("TileBlack"));
+            Assets.Add(AssetNames.TileWhite, Content.Load<Texture2D>("TileWhite"));
+            Assets.Add(AssetNames.WeaponSword, Content.Load<Texture2D>("Sword"));
+            Assets.Add(AssetNames.DebugError, Content.Load<Texture2D>("Error"));
 
-            _weapon = new Weapon(_weaponSword, new Rectangle(WindowWidth / 2, WindowHeight / 2, _weaponSword.Width / 2, _weaponSword.Height / 2));
-            _player = new Player(_pawnBlack, new Rectangle(WindowWidth / 2, WindowHeight / 2,
-                _pawnBlack.Width/6, _pawnBlack.Height/6),_weapon);
+            _weapon = new Weapon(AssetNames.WeaponSword, new Rectangle(WindowWidth / 2, WindowHeight / 2, Assets[AssetNames.WeaponSword].Width / 2, Assets[AssetNames.WeaponSword].Height / 2));
+            _player = new Player(AssetNames.PawnBlack, new Rectangle(WindowWidth / 2, WindowHeight / 2, Assets[AssetNames.PawnBlack].Width/6, Assets[AssetNames.PawnBlack].Height/6), _weapon);
 
 
             //initialize level editor (needs textures loaded)
@@ -266,7 +281,7 @@ namespace PawnGame
                     if (testTimer <= 0)
                     {
                         //Adds a random pawn, for the demo
-                        Manager.Add(new Pawn(_pawnWhite, new Rectangle(random.Next(0, 2) * WindowWidth, random.Next(0, 2) * WindowHeight, _pawnWhite.Width/6, _pawnWhite.Height/6)));
+                        Manager.Add(new Pawn(AssetNames.PawnWhite, new Rectangle(random.Next(0, 2) * WindowWidth, random.Next(0, 2) * WindowHeight, Assets[AssetNames.PawnWhite].Width/6, Assets[AssetNames.PawnWhite].Height/6)));
                         testTimer = 300;
                     }
 
@@ -316,10 +331,10 @@ namespace PawnGame
 
                     // Drawing the logo to the screen
                     // Note: Doesn't scale properly on fullscreen
-                    _spriteBatch.Draw(_logo,
-                        new Rectangle((int)WindowWidth / 4 - _logo.Width / 4,
-                        (int)WindowHeight / 4 - _logo.Height / 2,
-                        _logo.Width * 2, _logo.Height * 2), Color.White);
+                    _spriteBatch.Draw(Assets[AssetNames.GameLogo],
+                        new Rectangle(WindowWidth / 4 - Assets[AssetNames.GameLogo].Width / 4,
+                        WindowHeight / 4 - Assets[AssetNames.GameLogo].Height / 2,
+                        Assets[AssetNames.GameLogo].Width * 2, Assets[AssetNames.GameLogo].Height * 2), Color.White);
 
                     foreach (Button b in _menuButtons)
                     {
@@ -399,27 +414,6 @@ namespace PawnGame
 
             _graphics.IsFullScreen = !_graphics.IsFullScreen;
             _graphics.ApplyChanges();
-        }
-        /// <summary>
-        /// load a texture and store it in the dictionary with a key that corresponds to its filename
-        /// </summary>
-        /// <param name="fileName"></param>
-        private Texture2D LoadTexture(string fileName)
-        {
-            Texture2D output = this.Content.Load<Texture2D>(fileName);
-
-            if (!Textures.ContainsKey(fileName))
-            {
-                Textures.Add(fileName, output);
-                TexturesReverse.Add(output, fileName);
-            }
-            else
-            {
-                Textures[fileName] = output;
-                TexturesReverse[output] = fileName;
-            }
-        
-            return output;
         }
     }
 }

@@ -4,7 +4,7 @@ namespace PawnGame.GameObjects.Enemies
 {
     public class Queen : Enemy
     {
-        public Queen(Texture2D texture, Rectangle hitbox) : base(texture, hitbox)
+        public Queen(Game1.AssetNames textureKey, Rectangle hitbox) : base(textureKey, hitbox)
         {
         }
 

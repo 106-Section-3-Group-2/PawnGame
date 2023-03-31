@@ -5,7 +5,7 @@
         protected bool _isAlerted;
         protected int _speed;
 
-        public Enemy(Texture2D texture, Rectangle hitbox) : base(texture, hitbox)
+        public Enemy(Game1.AssetNames textureKey, Rectangle hitbox) : base(textureKey, hitbox)
         {
             _isAlerted = false;
         }

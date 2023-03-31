@@ -33,7 +33,7 @@ namespace PawnGame.GameObjects
 
         //TODO: Add functionality for other weapons (probably a currentWeapon enum), chanages attack timer, active timer
 
-        public Weapon(Texture2D texture, Vectangle vectangle) : base(texture,vectangle)
+        public Weapon(Game1.AssetNames textureKey, Vectangle vectangle) : base(textureKey, vectangle)
         {
             _isActive = false;
             _timeToAttack = 45;
