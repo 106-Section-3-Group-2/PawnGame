@@ -125,7 +125,7 @@ namespace PawnGame
             _debugTexture = _tileWhite;
             _error = LoadTexture("Error"); 
 
-            _weapon = new Weapon(_weaponSword, new Rectangle(WindowWidth / 2, WindowHeight / 2, _weaponSword.Width * 3, _weaponSword.Height * 3));
+            _weapon = new Weapon(_weaponSword, new Rectangle(WindowWidth / 2, WindowHeight / 2, _weaponSword.Width / 2, _weaponSword.Height / 2));
             _player = new Player(_pawnBlack, new Rectangle(WindowWidth / 2, WindowHeight / 2,
                 _pawnBlack.Width/6, _pawnBlack.Height/6),_weapon);
 
