@@ -103,7 +103,20 @@ namespace PawnGame.GameObjects
                 _isActive = false;
             }
         }
+        public void Draw(SpriteBatch sb, Player player, float Rotation)
+        {
+            if (_isActive)
+            {
+                sb.Draw(Texture, _hitbox, null, Color.Red, Rotation, new Vector2(Texture.Width / 2, Texture.Height), SpriteEffects.None, 0);
 
+            }
+            else
+            {
+
+
+                sb.Draw(Texture, _hitbox, null, Color.White, Rotation, new Vector2(Texture.Width / 2, Texture.Height), SpriteEffects.None, 0);
+            }
+        }
         public void Draw(SpriteBatch sb, Player player, MouseState mouse)
         {
             Vector2 mousePos = new Vector2(mouse.X, mouse.Y);
