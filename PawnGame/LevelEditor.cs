@@ -156,7 +156,7 @@ namespace PawnGame
                 {
                     switch (i)
                     {
-                        //save
+                        //load
                         case 0:
                             OpenFileDialog openFileDialog = new OpenFileDialog();
                             openFileDialog.Filter = "Json files (*.json)|*.json|Text files (*.txt)|*.txt";
@@ -172,7 +172,7 @@ namespace PawnGame
                                 }
                             }
                             break;
-                        //load
+                        //save
                         case 1:
                             SaveFileDialog saveFileDialog = new SaveFileDialog();
                             saveFileDialog.Filter = "Json files (*.json)|*.json|Text files (*.txt)|*.txt";
