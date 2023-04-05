@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace PawnGame
 {
@@ -8,9 +9,13 @@ namespace PawnGame
     public struct Vectangle
     {
         #region Fields
+        [JsonProperty]
         private float _x;
+        [JsonProperty]
         private float _y;
+        [JsonProperty]
         private float _width;
+        [JsonProperty]
         private float _height;
         #endregion
 
@@ -18,6 +23,7 @@ namespace PawnGame
         /// <summary>
         /// X location of the rectangle.
         /// </summary>
+        [JsonIgnore]
         public float X
         {
             get
@@ -32,6 +38,7 @@ namespace PawnGame
         /// <summary>
         /// Y location of the rectangle
         /// </summary>
+        [JsonIgnore]
         public float Y
         {
             get
@@ -46,6 +53,7 @@ namespace PawnGame
         /// <summary>
         /// Width of the rectangle
         /// </summary>
+        [JsonIgnore]
         public float Width
         {
             get
@@ -60,6 +68,7 @@ namespace PawnGame
         /// <summary>
         /// Height of the rectangle
         /// </summary>
+        [JsonIgnore]
         public float Height
         {
             get
@@ -71,42 +80,47 @@ namespace PawnGame
                 _height = value;
             }
         }
-
-        public Vector2 Location
-        {
-            get
-            {
-                return new Vector2(X, Y);
-            }
-            set
-            {
-                this.X = value.X;
-                this.Y = value.Y;
-            }
-        }
-        #endregion
-
-        #region Single body statements
         /// <summary>
         /// Position of the left wall of the rectangle
         /// </summary>
+        [JsonIgnore]
         public float Left => _x;
         /// <summary>
         /// Position of the right wall of the rectangle
         /// </summary>
+        [JsonIgnore]
         public float Right => _x + _width;
         /// <summary>
         /// Position of the top wall of the rectangle
         /// </summary>
+        [JsonIgnore]
         public float Top => _y;
         /// <summary>
         /// Bottom wall of the rectangle
         /// </summary>
+        [JsonIgnore]
         public float Bottom => _y + _height;
         /// <summary>
         /// Center of the rectangle
         /// </summary>
+        [JsonIgnore]
         public Vector2 Center => new(_x + _width / 2, _y + _height / 2);
+        /// <summary>
+        /// Location of the vectangle as a vector
+        /// </summary>
+        [JsonIgnore]
+        public Vector2 Location
+        {
+            get
+            {
+                return new Vector2(_x, _y);
+            }
+            set
+            {
+                X = value.X;
+                Y = value.Y;
+            }
+        }
         #endregion
 
         /// <summary>

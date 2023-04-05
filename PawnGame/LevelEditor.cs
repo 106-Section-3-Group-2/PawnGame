@@ -162,14 +162,15 @@ namespace PawnGame
                             openFileDialog.Filter = "Json files (*.json)|*.json|Text files (*.txt)|*.txt";
                             if (openFileDialog.ShowDialog() == DialogResult.OK)
                             {
-                                try
-                                {
+                                //try
+                                //{
                                     _level = Level.Read(openFileDialog.FileName);
-                                }
-                                catch
+                                //}
+                                /*catch
                                 {
+                                    We should put a popup on screen to let the user know what is happening
                                     _options.Add(new Button(Assets[AssetNames.DebugError], new Vector2(_options[0].ButtonBox.X - Assets[AssetNames.DebugError].Width, _options[0].ButtonBox.Y), Color.Blue));
-                                }
+                                }*/
                             }
                             break;
                         //save

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
 
 namespace PawnGame.GameObjects
 {
@@ -12,9 +8,25 @@ namespace PawnGame.GameObjects
     public class Tile : GameObject
     {
         /// <summary>
+        /// If the tile is colidable or not
+        /// </summary>
+        [JsonProperty]
+        private bool _isSolid;
+        /// <summary>
         /// represents whether the Tile is solid and can trigger collision resolutions
         /// </summary>
-        public bool Solid { get; set; }
+        [JsonIgnore]
+        public bool IsSolid 
+        {
+            get
+            {
+                return _isSolid;
+            }
+            set
+            {
+                _isSolid = value;
+            } 
+        }
 
         /// <summary>
         /// create a new tile, specifying whether it is solid
@@ -24,7 +36,7 @@ namespace PawnGame.GameObjects
         /// <param name="solid"></param>
         public Tile(Game1.AssetNames textureKey, Vectangle hitbox, bool solid) : base(textureKey, hitbox)
         {
-            Solid = solid;
+            _isSolid = solid;
         }
     }
 }
