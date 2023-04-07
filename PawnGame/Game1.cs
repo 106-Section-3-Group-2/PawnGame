@@ -13,6 +13,7 @@ namespace PawnGame
 {
     public class Game1 : Game
     {
+        #region enums
         /// <summary>
         /// Represents the current screen that the game is on
         /// </summary>
@@ -49,7 +50,9 @@ namespace PawnGame
             //Debug
             DebugError,
         }
+        #endregion
 
+        #region fields
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
@@ -72,13 +75,27 @@ namespace PawnGame
 
         private LevelEditor _levelEditor;
 
+        private int testTimer = 300;
+        private Random random;
+
+        //Entities
+        private Player _player;
+        private Weapon _weapon;
+
+        // Menu buttons
+        private List<Button> _menuButtons = new List<Button>();
+        private List<Button> _debugButtons = new List<Button>();
+
+        // This font is temporary
+        // Will use for creating menu skeleton
+        // for implementation of clicking from menu to game
+        private SpriteFont _font;
+        #endregion
+
         /// <summary>
         /// Dictionary containing all assets used for the game
         /// </summary>
         public static Dictionary<AssetNames, Texture2D> Assets;
-
-        private int testTimer = 300;
-        private Random random;
 
         /// <summary>
         /// Gets the width of the window
@@ -95,19 +112,6 @@ namespace PawnGame
         {
             get { return Window.ClientBounds.Height; }
         }
-
-        //Entities
-        private Player _player;
-        private Weapon _weapon;
-
-        // Menu buttons
-        private List<Button> _menuButtons = new List<Button>();
-        private List<Button> _debugButtons = new List<Button>();
-
-        // This font is temporary
-        // Will use for creating menu skeleton
-        // for implementation of clicking from menu to game
-        private SpriteFont _font;
 
         public Game1()
         {
