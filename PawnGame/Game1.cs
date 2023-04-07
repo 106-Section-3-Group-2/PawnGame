@@ -304,6 +304,8 @@ namespace PawnGame
                     VMouse.Update(_currMouseState);
                     Manager.Update(_player);
                     _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState);
+
+                    // Put this in player update, and make check collision public
                     CheckCollisions(_player);
                     _weapon.Update(_player,_currMouseState);
                     #endregion
@@ -436,6 +438,10 @@ namespace PawnGame
             _graphics.ApplyChanges();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="entity"></param>
         private void CheckCollisions(Entity entity)
         {
 
@@ -449,12 +455,12 @@ namespace PawnGame
                 entity.Y = _currLevel.Location.Y;
             }
 
-            if (entity.X > _currLevel.Location.X + _currLevel.Width)
+            if (entity.X + entity.Width > _currLevel.Location.X + _currLevel.Width)
             {
                 entity.X = _currLevel.Location.X + _currLevel.Width - entity.Width;
             }
 
-            if (entity.Y > _currLevel.Location.Y + _currLevel.Height)
+            if (entity.Y + entity.Height > _currLevel.Location.Y + _currLevel.Height)
             {
                 entity.Y = _currLevel.Location.Y + _currLevel.Height - entity.Height;
             }
