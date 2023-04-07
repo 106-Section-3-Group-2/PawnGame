@@ -100,7 +100,7 @@ namespace PawnGame
         /// draw the level
         /// </summary>
         /// <param name="sb"></param>
-        public void Draw(SpriteBatch sb, Vector2 location)
+        public void Draw(SpriteBatch sb)
         {
             foreach (Tile tile in Tiles)
             {

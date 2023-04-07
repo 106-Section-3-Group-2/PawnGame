@@ -380,6 +380,7 @@ namespace PawnGame
                 #region Game State
                 case GameState.Game:
                     // Draw.. the game?
+                    _currLevel.Draw(_spriteBatch);
                     _player.Draw(_spriteBatch);
                     Manager.Draw(_spriteBatch);
                     //_weapon.Draw(_spriteBatch,_player,Mouse.GetState());
