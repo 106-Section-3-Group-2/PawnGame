@@ -3,6 +3,7 @@ global using Microsoft.Xna.Framework.Graphics;
 global using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System;
+using System.IO;
 using PawnGame.GameObjects;
 using PawnGame.GameObjects.Enemies;
 using static PawnGame.GameObjects.Enemies.EnemyManager;
@@ -12,6 +13,7 @@ namespace PawnGame
 {
     public class Game1 : Game
     {
+        #region enums
         /// <summary>
         /// Represents the current screen that the game is on
         /// </summary>
@@ -48,13 +50,16 @@ namespace PawnGame
             //Debug
             DebugError,
         }
+        #endregion
 
+        #region fields
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
         #region GameStates and level
         private GameState _gameState;
         private GameState _prevGameState;
+        private Level[] _levels;
         private Level _currLevel;
         #endregion
 
@@ -70,13 +75,27 @@ namespace PawnGame
 
         private LevelEditor _levelEditor;
 
+        private int testTimer = 300;
+        private Random random;
+
+        //Entities
+        private Player _player;
+        private Weapon _weapon;
+
+        // Menu buttons
+        private List<Button> _menuButtons = new List<Button>();
+        private List<Button> _debugButtons = new List<Button>();
+
+        // This font is temporary
+        // Will use for creating menu skeleton
+        // for implementation of clicking from menu to game
+        private SpriteFont _font;
+        #endregion
+
         /// <summary>
         /// Dictionary containing all assets used for the game
         /// </summary>
         public static Dictionary<AssetNames, Texture2D> Assets;
-
-        private int testTimer = 300;
-        private Random random;
 
         /// <summary>
         /// Gets the width of the window
@@ -93,19 +112,6 @@ namespace PawnGame
         {
             get { return Window.ClientBounds.Height; }
         }
-
-        //Entities
-        private Player _player;
-        private Weapon _weapon;
-
-        // Menu buttons
-        private List<Button> _menuButtons = new List<Button>();
-        private List<Button> _debugButtons = new List<Button>();
-
-        // This font is temporary
-        // Will use for creating menu skeleton
-        // for implementation of clicking from menu to game
-        private SpriteFont _font;
 
         public Game1()
         {
@@ -147,6 +153,15 @@ namespace PawnGame
 
             //initialize level editor (needs textures loaded)
             _levelEditor = new LevelEditor(8, 8, this);
+
+            //get all the levels from the levels folder, deserialize and store them
+            string[] fileNames = Directory.GetFiles(Directory.GetCurrentDirectory() + "/Levels");
+            _levels = new Level[fileNames.Length];
+            for(int i = 0; i < _levels.Length; i++)
+            {
+                _levels[i] = Level.Read(fileNames[i]);
+            }
+            _currLevel = _levels[0];
         }
 
         protected override void Update(GameTime gameTime)
@@ -292,6 +307,10 @@ namespace PawnGame
                     Mouse.SetPosition(WindowWidth / 2, WindowHeight / 2);
                     Manager.Update(_player);
                     _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState);
+
+                    // Put this in player update, and make check collision public
+                    CheckCollisions(_player);
+                    _weapon.Update(_player,_currMouseState);
                     _weapon.Update(_player,VMouse);
                     #endregion
                     break;
@@ -368,6 +387,7 @@ namespace PawnGame
                 #region Game State
                 case GameState.Game:
                     // Draw.. the game?
+                    _currLevel.Draw(_spriteBatch);
                     _player.Draw(_spriteBatch);
                     Manager.Draw(_spriteBatch);
                     _weapon.Draw(_spriteBatch, _player, Mouse.GetState());
@@ -422,6 +442,34 @@ namespace PawnGame
 
             _graphics.IsFullScreen = !_graphics.IsFullScreen;
             _graphics.ApplyChanges();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="entity"></param>
+        private void CheckCollisions(Entity entity)
+        {
+
+            if (entity.X < _currLevel.Location.X)
+            {
+                entity.X = _currLevel.Location.X;
+            }
+
+            if (entity.Y < _currLevel.Location.Y)
+            {
+                entity.Y = _currLevel.Location.Y;
+            }
+
+            if (entity.X + entity.Width > _currLevel.Location.X + _currLevel.Width)
+            {
+                entity.X = _currLevel.Location.X + _currLevel.Width - entity.Width;
+            }
+
+            if (entity.Y + entity.Height > _currLevel.Location.Y + _currLevel.Height)
+            {
+                entity.Y = _currLevel.Location.Y + _currLevel.Height - entity.Height;
+            }
         }
     }
 }

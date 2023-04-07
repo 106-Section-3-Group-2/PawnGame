@@ -156,23 +156,24 @@ namespace PawnGame
                 {
                     switch (i)
                     {
-                        //save
+                        //load
                         case 0:
                             OpenFileDialog openFileDialog = new OpenFileDialog();
                             openFileDialog.Filter = "Json files (*.json)|*.json|Text files (*.txt)|*.txt";
                             if (openFileDialog.ShowDialog() == DialogResult.OK)
                             {
-                                try
-                                {
+                                //try
+                                //{
                                     _level = Level.Read(openFileDialog.FileName);
-                                }
-                                catch
+                                //}
+                                /*catch
                                 {
+                                    We should put a popup on screen to let the user know what is happening
                                     _options.Add(new Button(Assets[AssetNames.DebugError], new Vector2(_options[0].ButtonBox.X - Assets[AssetNames.DebugError].Width, _options[0].ButtonBox.Y), Color.Blue));
-                                }
+                                }*/
                             }
                             break;
-                        //load
+                        //save
                         case 1:
                             SaveFileDialog saveFileDialog = new SaveFileDialog();
                             saveFileDialog.Filter = "Json files (*.json)|*.json|Text files (*.txt)|*.txt";
@@ -242,7 +243,7 @@ namespace PawnGame
         /// <param name="sb"></param>
         public void Draw(SpriteBatch sb)
         {
-            _level.Draw(sb, _cameraPosition);
+            _level.Draw(sb);
             //draw tile palette
             for (int i = 0; i < _palette.Count; i++)
             {
