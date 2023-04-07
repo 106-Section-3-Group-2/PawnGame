@@ -243,7 +243,7 @@ namespace PawnGame
         /// <param name="sb"></param>
         public void Draw(SpriteBatch sb)
         {
-            _level.Draw(sb, _cameraPosition);
+            _level.Draw(sb);
             //draw tile palette
             for (int i = 0; i < _palette.Count; i++)
             {
