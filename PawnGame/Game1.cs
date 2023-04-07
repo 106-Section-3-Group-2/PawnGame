@@ -304,6 +304,7 @@ namespace PawnGame
                     VMouse.Update(_currMouseState);
                     Manager.Update(_player);
                     _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState);
+                    CheckCollisions(_player);
                     _weapon.Update(_player,_currMouseState);
                     #endregion
                     break;
@@ -436,11 +437,25 @@ namespace PawnGame
 
         private void CheckCollisions(Entity entity)
         {
-            List<Tile> collsions = new List<Tile>();
 
-            if (entity.Hitbox.Intersects(new Vectangle(_currLevel.Location.X, _currLevel.Location.Y, _currLevel.Width, _currLevel.Height))) 
+            if (entity.X < _currLevel.Location.X)
             {
+                entity.X = _currLevel.Location.X;
+            }
 
+            if (entity.Y < _currLevel.Location.Y)
+            {
+                entity.Y = _currLevel.Location.Y;
+            }
+
+            if (entity.X > _currLevel.Location.X + _currLevel.Width)
+            {
+                entity.X = _currLevel.Location.X + _currLevel.Width - entity.Width;
+            }
+
+            if (entity.Y > _currLevel.Location.Y + _currLevel.Height)
+            {
+                entity.Y = _currLevel.Location.Y + _currLevel.Height - entity.Height;
             }
         }
     }
