@@ -428,5 +428,15 @@ namespace PawnGame
             _graphics.IsFullScreen = !_graphics.IsFullScreen;
             _graphics.ApplyChanges();
         }
+
+        private void CheckCollisions(Entity entity)
+        {
+            List<Tile> collsions = new List<Tile>();
+
+            if (entity.Hitbox.Intersects(new Vectangle(_currLevel.Location.X, _currLevel.Location.Y, _currLevel.Width, _currLevel.Height))) 
+            {
+
+            }
+        }
     }
 }
