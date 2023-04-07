@@ -18,12 +18,20 @@ namespace PawnGame.GameObjects
         /// <summary>
         /// X position of the game object's hitbox
         /// </summary>
-        public float X { get { return _hitbox.X; } }
+        public float X 
+        { 
+            get { return _hitbox.X; }
+            set { _hitbox.X = value; }
+        }
 
         /// <summary>
         /// Y position of the game object's hitbox
         /// </summary>
-        public float Y { get { return _hitbox.Y; } }
+        public float Y 
+        { 
+            get { return _hitbox.Y; }
+            set { _hitbox.X = value; }
+        }
 
         /// <summary>
         /// Width of the game object's hitbox

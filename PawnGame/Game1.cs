@@ -310,7 +310,7 @@ namespace PawnGame
 
                     // Put this in player update, and make check collision public
                     CheckCollisions(_player);
-                    _weapon.Update(_player,_currMouseState);
+
                     _weapon.Update(_player,VMouse);
                     #endregion
                     break;
