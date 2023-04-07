@@ -3,6 +3,7 @@ global using Microsoft.Xna.Framework.Graphics;
 global using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System;
+using System.IO;
 using PawnGame.GameObjects;
 using PawnGame.GameObjects.Enemies;
 using static PawnGame.GameObjects.Enemies.EnemyManager;
@@ -55,6 +56,7 @@ namespace PawnGame
         #region GameStates and level
         private GameState _gameState;
         private GameState _prevGameState;
+        private Level[] _levels;
         private Level _currLevel;
         #endregion
 
@@ -147,6 +149,10 @@ namespace PawnGame
 
             //initialize level editor (needs textures loaded)
             _levelEditor = new LevelEditor(8, 8, this);
+
+            //get all the levels from the levels folder, deserialize and store them
+            string[] fileNames = Directory.GetFiles("/Levels");
+            //_levels =
         }
 
         protected override void Update(GameTime gameTime)
