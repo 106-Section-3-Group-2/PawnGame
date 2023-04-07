@@ -194,6 +194,7 @@ namespace PawnGame
                                 // (whatever that means)
                                 _gameState = GameState.Game;
                                 IsMouseVisible = false;
+                                Mouse.SetPosition(WindowWidth / 2, WindowHeight / 2);
                             }
                             else if (i == 1)
                             {
@@ -285,11 +286,13 @@ namespace PawnGame
                         Manager.Add(new Pawn(AssetNames.PawnWhite, new Rectangle(random.Next(0, 2) * WindowWidth, random.Next(0, 2) * WindowHeight, Assets[AssetNames.PawnWhite].Width/6, Assets[AssetNames.PawnWhite].Height/6)));
                         testTimer = 300;
                     }
-                    Mouse.SetPosition(WindowWidth / 2, WindowHeight/2);
-                    VMouse.Update(_currMouseState);
+                    //Virtual mouse stuff
+                    
+                    VMouse.Update(Mouse.GetState());
+                    Mouse.SetPosition(WindowWidth / 2, WindowHeight / 2);
                     Manager.Update(_player);
                     _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState);
-                    _weapon.Update(_player,_currMouseState);
+                    _weapon.Update(_player,VMouse);
                     #endregion
                     break;
 
@@ -367,9 +370,11 @@ namespace PawnGame
                     // Draw.. the game?
                     _player.Draw(_spriteBatch);
                     Manager.Draw(_spriteBatch);
-                    //_weapon.Draw(_spriteBatch,_player,Mouse.GetState());
-                    _weapon.Draw(_spriteBatch, _player, VMouse.Rotation);
+                    _weapon.Draw(_spriteBatch, _player, Mouse.GetState());
+                    _spriteBatch.Draw(Assets[AssetNames.DebugError], new Rectangle((int)VMouse.X, (int)VMouse.Y, 100, 100),Color.White);
                     _spriteBatch.DrawString(_font, "Rotation: " + VMouse.Rotation, new Vector2(30, 30), Color.Red);
+                    _spriteBatch.DrawString(_font, "X: " + VMouse.X, new Vector2(30, 50), Color.Red);
+                    _spriteBatch.DrawString(_font, "Y: " + VMouse.Y, new Vector2(30, 70), Color.Red);
                     #endregion
                     break;
 

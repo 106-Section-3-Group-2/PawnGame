@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ShapeUtils;
+using ShapeUtils; 
+
 
 namespace PawnGame.GameObjects
 {
@@ -42,7 +43,7 @@ namespace PawnGame.GameObjects
             _collisionVectors = new List<Vector2>();
         }
 
-        public void Update(Player player, MouseState currMouseState)
+        public void Update(Player player, VirtualMouse VMouse)
         {
             _hitbox.Location = player.Hitbox.Location + new Vector2(player.Hitbox.Width/2,player.Hitbox.Height/2);
             if(_attackTimer > 0)
@@ -51,9 +52,8 @@ namespace PawnGame.GameObjects
                 _attackTimer--;
             }
 
-
                 _collisionVectors.Clear();
-                Vector2 vector1 = new Vector2(currMouseState.X-X, currMouseState.Y-Y);
+                Vector2 vector1 = new Vector2(VMouse.X, VMouse.Y);
                 vector1.Normalize();
                 vector1 *= 100;
                 Vector2 vector2 = vector1/5*4;
