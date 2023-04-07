@@ -155,8 +155,13 @@ namespace PawnGame
             _levelEditor = new LevelEditor(8, 8, this);
 
             //get all the levels from the levels folder, deserialize and store them
-            string[] fileNames = Directory.GetFiles("/Levels");
-            //_levels =
+            string[] fileNames = Directory.GetFiles(Directory.GetCurrentDirectory() + "/Levels");
+            _levels = new Level[fileNames.Length];
+            for(int i = 0; i < _levels.Length; i++)
+            {
+                _levels[i] = Level.Read(fileNames[i]);
+            }
+            _currLevel = _levels[0];
         }
 
         protected override void Update(GameTime gameTime)
