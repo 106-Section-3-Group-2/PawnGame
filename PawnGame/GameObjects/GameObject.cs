@@ -1,11 +1,14 @@
-﻿using static PawnGame.Game1;
+﻿using Newtonsoft.Json;
+using static PawnGame.Game1;
 
 namespace PawnGame.GameObjects
 {
     public abstract class GameObject
     {
         #region Fields
+        [JsonProperty]
         protected Vectangle _hitbox;
+        [JsonProperty]
         protected AssetNames _textureKey;
         #endregion
 
@@ -13,11 +16,13 @@ namespace PawnGame.GameObjects
         /// <summary>
         /// Texture used for drawing the game object
         /// </summary>
+        [JsonIgnore]
         protected Texture2D Texture => Assets[_textureKey];
 
         /// <summary>
         /// X position of the game object's hitbox
         /// </summary>
+        [JsonIgnore]
         public float X 
         { 
             get { return _hitbox.X; }
@@ -27,6 +32,7 @@ namespace PawnGame.GameObjects
         /// <summary>
         /// Y position of the game object's hitbox
         /// </summary>
+        [JsonIgnore]
         public float Y 
         { 
             get { return _hitbox.Y; }
@@ -36,16 +42,19 @@ namespace PawnGame.GameObjects
         /// <summary>
         /// Width of the game object's hitbox
         /// </summary>
+        [JsonIgnore]
         public float Width { get { return _hitbox.Width; } }
 
         /// <summary>
         /// Height of the game object's hitbox
         /// </summary>
+        [JsonIgnore]
         public float Height { get { return _hitbox.Height; } }
 
         /// <summary>
         /// Hitbox of the game object
         /// </summary>
+        [JsonIgnore]
         public virtual Vectangle Hitbox { get { return _hitbox; } set { _hitbox.X = value.X; _hitbox.Y = value.Y; } }
         #endregion
 
