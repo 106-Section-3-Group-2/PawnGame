@@ -16,6 +16,7 @@ namespace PawnGame.GameObjects
         /// <summary>
         /// Texture used for drawing the game object
         /// </summary>
+        [JsonIgnore]
         protected Texture2D Texture => Assets[_textureKey];
 
         /// <summary>
@@ -25,7 +26,7 @@ namespace PawnGame.GameObjects
         public float X 
         { 
             get { return _hitbox.X; }
-            set { _hitbox.X = value; } 
+            set { _hitbox.X = value; }
         }
 
         /// <summary>

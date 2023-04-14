@@ -61,6 +61,7 @@ namespace PawnGame
         private GameState _prevGameState;
         private Level[] _levels;
         private Level _currLevel;
+        private int _levelIndex;
         #endregion
 
         #region Keyboard and mouse states
@@ -92,6 +93,7 @@ namespace PawnGame
         private SpriteFont _font;
         #endregion
 
+        #region properties
         /// <summary>
         /// Dictionary containing all assets used for the game
         /// </summary>
@@ -112,6 +114,7 @@ namespace PawnGame
         {
             get { return Window.ClientBounds.Height; }
         }
+        #endregion
 
         public Game1()
         {
@@ -128,6 +131,7 @@ namespace PawnGame
             random = new Random();
             _prevKbState = Keyboard.GetState();
             Assets = new Dictionary<AssetNames, Texture2D>();
+            _levelIndex = 0;
             base.Initialize();
         }
 
@@ -182,6 +186,7 @@ namespace PawnGame
                 #region Menu State
                 case GameState.Menu:
 
+                    IsMouseVisible = true;
                     _menuButtons.Clear();
 
                     // Adding all 3 buttons on the menu screen
@@ -208,7 +213,7 @@ namespace PawnGame
                                 // Start a new game
                                 // (whatever that means)
                                 _gameState = GameState.Game;
-                                IsMouseVisible = false;
+                                
                                 Mouse.SetPosition(WindowWidth / 2, WindowHeight / 2);
                             }
                             else if (i == 1)
@@ -229,6 +234,8 @@ namespace PawnGame
 
                 #region DebugMenu State
                 case GameState.DebugMenu:
+
+                    IsMouseVisible = true;
 
                     // Make a button to each screen
                     // but make the previous one disabled since they were already on it
@@ -292,6 +299,8 @@ namespace PawnGame
                 #region Game State
                 case GameState.Game:
 
+                    IsMouseVisible = false;
+
                     // Play the game here
                     //TODO: Ask chris how GameTime works
                     testTimer--;
@@ -309,14 +318,15 @@ namespace PawnGame
                     _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState);
 
                     // Put this in player update, and make check collision public
-                    CheckCollisions(_player);
-                    _weapon.Update(_player,_currMouseState);
+                    ResolveCollisions(_player);
+
                     _weapon.Update(_player,VMouse);
                     #endregion
                     break;
 
                 #region LevelEditor State
                 case GameState.LevelEditor:
+                    IsMouseVisible = true;
                     // Update logic for level editor
                     _levelEditor.Update();
                     #endregion
@@ -448,28 +458,85 @@ namespace PawnGame
         /// 
         /// </summary>
         /// <param name="entity"></param>
-        private void CheckCollisions(Entity entity)
+        private void ResolveCollisions(Entity entity)
         {
-
-            if (entity.X < _currLevel.Location.X)
+            #region Checking Solid Tiles
+            List<Tile> collisions = new List<Tile>();
+            for (int i = 0; i < _currLevel.Tiles.GetLength(0); i++)
             {
-                entity.X = _currLevel.Location.X;
+                for (int j = 0; j < _currLevel.Tiles.GetLength(1); j++)
+                {
+                    if (_currLevel.Tiles[i, j].IsSolid && _currLevel.Tiles[i, j].Hitbox.Intersects(entity.Hitbox))
+                    {
+                        collisions.Add(_currLevel.Tiles[i, j]);
+                    }
+                }
             }
 
+            // Checking horizontal collisions
+            for (int i = 0; i < collisions.Count; i++)
+            {
+                Vectangle collisionVect = collisions[i].Hitbox.GetOverlap(entity.Hitbox);
+                if (collisionVect.Height >= collisionVect.Width)
+                {
+                    if (_player.X < collisions[i].X)
+                    {
+                        _player.X -= collisionVect.Width;
+                    }
+                    else
+                    {
+                        _player.X += collisionVect.Width;
+                    }
+                }
+            }
+
+            // Checking vertical collisions
+            for (int i = 0; i < collisions.Count; i++)
+            {
+                Rectangle collisionVect = collisions[i].Hitbox.GetOverlap(entity.Hitbox);
+                if (collisionVect.Width > collisionVect.Height)
+                {
+                    if (_player.Y < collisions[i].Y)
+                    {
+                        _player.Y -= collisionVect.Height;
+                    }
+                    else
+                    {
+                        _player.Y += collisionVect.Height;
+                    }
+                }
+            }
+            #endregion
+
+            #region Checking Outside Bounds 
+            // Checking bounds of entire level just in case
+            // there is no wall tile outside the perimeter
+
+            // Left
+            if (entity.X < _currLevel.Location.X)
+            {
+            entity.X = _currLevel.Location.X;
+            }
+
+            // Up (broken)
             if (entity.Y < _currLevel.Location.Y)
             {
                 entity.Y = _currLevel.Location.Y;
             }
 
+            // Right
             if (entity.X + entity.Width > _currLevel.Location.X + _currLevel.Width)
             {
                 entity.X = _currLevel.Location.X + _currLevel.Width - entity.Width;
             }
 
+            // Down (broken)
             if (entity.Y + entity.Height > _currLevel.Location.Y + _currLevel.Height)
             {
                 entity.Y = _currLevel.Location.Y + _currLevel.Height - entity.Height;
             }
+                #endregion
+
         }
     }
 }

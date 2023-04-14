@@ -12,6 +12,13 @@ namespace PawnGame.GameObjects
         /// </summary>
         [JsonProperty]
         private bool _isSolid;
+
+        /// <summary>
+        /// If the tile is an exit
+        /// </summary>
+        [JsonProperty]
+        private bool _isExit;
+
         /// <summary>
         /// represents whether the Tile is solid and can trigger collision resolutions
         /// </summary>
@@ -29,6 +36,22 @@ namespace PawnGame.GameObjects
         }
 
         /// <summary>
+        /// represents whether the tile is an exit and can trigger a level advancement
+        /// </summary>
+        [JsonIgnore]
+        public bool IsExit
+        {
+            get 
+            {
+                return _isExit;
+            }
+            set
+            {
+                _isExit = value;
+            }
+        }
+
+        /// <summary>
         /// create a new tile, specifying whether it is solid
         /// </summary>
         /// <param name="texture"></param>
@@ -37,6 +60,20 @@ namespace PawnGame.GameObjects
         public Tile(Game1.AssetNames textureKey, Vectangle hitbox, bool solid) : base(textureKey, hitbox)
         {
             _isSolid = solid;
+            _isExit = false;
+        }
+
+        /// <summary>
+        /// create a new tile, specifying whether it is solid and whether it is an exit
+        /// </summary>
+        /// <param name="texture"></param>
+        /// <param name="hitbox"></param>
+        /// <param name="solid"></param>
+        [JsonConstructor]
+        public Tile(Game1.AssetNames textureKey, Vectangle hitbox, bool solid, bool exit) : base(textureKey, hitbox)
+        {
+            _isSolid = solid;
+            _isExit = exit;
         }
     }
 }
