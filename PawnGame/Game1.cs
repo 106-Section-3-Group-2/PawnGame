@@ -61,6 +61,7 @@ namespace PawnGame
         private GameState _prevGameState;
         private Level[] _levels;
         private Level _currLevel;
+        private int _levelIndex;
         #endregion
 
         #region Keyboard and mouse states
@@ -92,6 +93,7 @@ namespace PawnGame
         private SpriteFont _font;
         #endregion
 
+        #region properties
         /// <summary>
         /// Dictionary containing all assets used for the game
         /// </summary>
@@ -112,6 +114,7 @@ namespace PawnGame
         {
             get { return Window.ClientBounds.Height; }
         }
+        #endregion
 
         public Game1()
         {
@@ -128,6 +131,7 @@ namespace PawnGame
             random = new Random();
             _prevKbState = Keyboard.GetState();
             Assets = new Dictionary<AssetNames, Texture2D>();
+            _levelIndex = 0;
             base.Initialize();
         }
 
