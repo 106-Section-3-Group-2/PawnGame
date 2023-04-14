@@ -216,6 +216,26 @@ namespace PawnGame
         }
 
         /// <summary>
+        /// Takes another vectangle and returns the vectangle made by their overlap
+        /// </summary>
+        /// <param name="other">Vectangle to check</param>
+        /// <returns>Overlaping vectangle</returns>
+        public Vectangle GetOverlap(Vectangle other)
+        {
+            if (!Intersects(other))
+            {
+                return new(0, 0, 0, 0);
+            }
+
+            float num = Math.Min(_x + _width, other._x + other._width);
+            float num2 = Math.Max(_x, other._x);
+            float num3 = Math.Max(_y, other._y);
+            float num4 = Math.Min(_y + _height, other._y + other._height);
+
+            return new(num2, num3, num - num2, num4 - num3);
+        }
+
+        /// <summary>
         /// Rounds vectangle values to ints and returns a rectangle with these values.
         /// </summary>
         /// <param name="v"></param>

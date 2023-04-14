@@ -307,7 +307,8 @@ namespace PawnGame
                     if (testTimer <= 0)
                     {
                         //Adds a random pawn, for the demo
-                        Manager.Add(new Pawn(AssetNames.PawnWhite, new Rectangle(random.Next(0, 2) * WindowWidth, random.Next(0, 2) * WindowHeight, Assets[AssetNames.PawnWhite].Width/6, Assets[AssetNames.PawnWhite].Height/6)));
+                        // Commented for bug testing
+                        //Manager.Add(new Pawn(AssetNames.PawnWhite, new Rectangle(random.Next(0, 2) * WindowWidth, random.Next(0, 2) * WindowHeight, Assets[AssetNames.PawnWhite].Width/6, Assets[AssetNames.PawnWhite].Height/6)));
                         testTimer = 300;
                     }
                     //Virtual mouse stuff
@@ -318,7 +319,7 @@ namespace PawnGame
                     _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState);
 
                     // Put this in player update, and make check collision public
-                    CheckCollisions(_player);
+                    ResolveCollisions(_player);
 
                     _weapon.Update(_player,VMouse);
                     #endregion
@@ -452,47 +453,6 @@ namespace PawnGame
 
             _graphics.IsFullScreen = !_graphics.IsFullScreen;
             _graphics.ApplyChanges();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="entity"></param>
-        private void CheckCollisions(Entity entity)
-        {
-            for (int i = 0; i < _currLevel.Tiles.GetLength(0); i++)
-            {
-                for (int j = 0; j < _currLevel.Tiles.GetLength(1); j++)
-                {
-
-                }
-            }
-
-            // Left
-            if (entity.X < _currLevel.Location.X)
-            {
-                entity.X = _currLevel.Location.X;
-            }
-
-            // Up (broken)
-            if (entity.Y < _currLevel.Location.Y)
-            {
-                entity.Y = _currLevel.Location.Y;
-            }
-
-            // Right
-            if (entity.X + entity.Width > _currLevel.Location.X + _currLevel.Width)
-            {
-                entity.X = _currLevel.Location.X + _currLevel.Width - entity.Width;
-            }
-
-            // Down (broken)
-            if (entity.Y + entity.Height > _currLevel.Location.Y + _currLevel.Height)
-            {
-                entity.Y = _currLevel.Location.Y + _currLevel.Height - entity.Height;
-            }
-
-
         }
     }
 }
