@@ -456,29 +456,31 @@ namespace PawnGame
         }
 
         /// <summary>
-        /// 
+        /// Determines if an entity is in bounds of the screen or colliding with an
+        /// exit or solid tile. Then resolves those collisions
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="entity">The entity to look for</param>
         private void ResolveCollisions(Entity entity)
         {
             #region Checking Solid Tiles
             List<Tile> collisions = new List<Tile>();
+
+            // Looping through the 2D array of tiles
             for (int i = 0; i < _currLevel.Tiles.GetLength(0); i++)
             {
                 for (int j = 0; j < _currLevel.Tiles.GetLength(1); j++)
                 {
+                    // Seeing if the current tile is a solid wall or exit tile
+                    // and the entity collides with either
                     if (_currLevel.Tiles[i, j].Hitbox.Intersects(entity.Hitbox))
                     {
-                        if (_currLevel.Tiles[i, j].Hitbox.Intersects(entity.Hitbox))
+                        if (_currLevel.Tiles[i, j].IsSolid)
                         {
-                            if (_currLevel.Tiles[i, j].IsSolid)
-                            {
-                                collisions.Add(_currLevel.Tiles[i, j]);
-                            }
-                            else if (_currLevel.Tiles[i, j].IsExit)
-                            {
-
-                            }
+                            collisions.Add(_currLevel.Tiles[i, j]);
+                        }
+                        else if (_currLevel.Tiles[i, j].IsExit)
+                        {
+                            _currLevel = _levels[1];
                         }
                     }
                 }
@@ -488,6 +490,8 @@ namespace PawnGame
             for (int i = 0; i < collisions.Count; i++)
             {
                 Vectangle collisionVect = collisions[i].Hitbox.GetOverlap(entity.Hitbox);
+
+                // If the height is greater than the width, then the collision is horizontal
                 if (collisionVect.Height >= collisionVect.Width)
                 {
                     if (_player.X < collisions[i].X)
@@ -505,6 +509,8 @@ namespace PawnGame
             for (int i = 0; i < collisions.Count; i++)
             {
                 Rectangle collisionVect = collisions[i].Hitbox.GetOverlap(entity.Hitbox);
+
+                // If the width is greater than the height, then the collision is vertical
                 if (collisionVect.Width > collisionVect.Height)
                 {
                     if (_player.Y < collisions[i].Y)
