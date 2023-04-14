@@ -476,7 +476,7 @@ namespace PawnGame
             // Checking horizontal collisions
             for (int i = 0; i < collisions.Count; i++)
             {
-                Vectangle collisionVect = new Vectangle();
+                Vectangle collisionVect = collisions[i].Hitbox.GetOverlap(entity.Hitbox);
                 if (collisionVect.Height >= collisionVect.Width)
                 {
                     if (_player.X < collisions[i].X)
@@ -493,7 +493,7 @@ namespace PawnGame
             // Checking vertical collisions
             for (int i = 0; i < collisions.Count; i++)
             {
-                Rectangle collisionVect = new Vectangle();
+                Rectangle collisionVect = collisions[i].Hitbox.GetOverlap(entity.Hitbox);
                 if (collisionVect.Width > collisionVect.Height)
                 {
                     if (_player.Y < collisions[i].Y)
