@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using PawnGame.GameObjects.Enemies;
 using System.Windows.Forms;
 using static PawnGame.Game1;
+using Microsoft.Xna.Framework.Input;
 
 namespace PawnGame
 {
@@ -18,6 +19,7 @@ namespace PawnGame
         private Vector2 _cameraPosition;
         private bool _canClick;
         private MouseState _mState;
+        private MouseState _mStatePrev;
         private Game1 _game;
         #endregion
 
@@ -101,6 +103,15 @@ namespace PawnGame
                 Assets[AssetNames.TileWhite].Height / paletteDownscale,
                 Color.Green));
 
+            //pawn enemy
+            _palette.Add(new Button(
+                Assets[AssetNames.PawnWhite],
+                _paletteTopLeft + new Vector2(0,
+                (_palette[0].ButtonBox.Height + _ButtonSpacing) * 3),
+                Assets[AssetNames.TileWhite].Width / paletteDownscale,
+                Assets[AssetNames.TileWhite].Height / paletteDownscale,
+                Color.Green));
+
             //create options
             float optionsX = _game.WindowWidth - _paletteTopLeft.X - Assets[AssetNames.IconLoad].Width;
             _options.Add(new Button(
@@ -144,6 +155,7 @@ namespace PawnGame
         public void Update()
         {
             //manage clicking
+            _mStatePrev = _mState;
             _mState = Mouse.GetState();
 
             if (!_canClick && _mState.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Released)
@@ -240,12 +252,49 @@ namespace PawnGame
                                     //create an exit
                                     _level.Tiles[x, y] = new Tile(AssetNames.IconLoad, new Vectangle(_level.Tiles[x, y].X, _level.Tiles[x, y].Y, _level.Tiles[x, y].Width, _level.Tiles[x, y].Height), false, true);
                                     break;
+                                case 3:
+                                    //make sure there isn't already an enemy there
+                                    bool occupied = false;
+                                    foreach(Enemy enemy in _level.EnemySpawns)
+                                    {
+                                        if (enemy.Hitbox.Contains(_mState.X, _mState.Y))
+                                        {
+                                            occupied = true;
+                                        }
+                                    }
+                                    //create an pawn enemy
+                                    if (!occupied)
+                                    {
+                                        Vector2 pawnDimensions = new Vector2(Game1.Assets[AssetNames.PawnWhite].Width / 6, Game1.Assets[AssetNames.PawnWhite].Height / 6);
+                                        _level.EnemySpawns.Add(new Pawn(AssetNames.PawnWhite, new Rectangle(
+                                            (int)(_level.Tiles[x, y].X + _level.Tiles[x, y].Width / 2 - pawnDimensions.X / 2),
+                                            (int)(_level.Tiles[x, y].Y + _level.Tiles[x, y].Height / 2 - pawnDimensions.Y / 2),
+                                            (int)pawnDimensions.X,
+                                            (int)pawnDimensions.Y
+                                            )));
+                                    }
+                                    break;
                             }
                         }
                         if (_mState.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
                         {
+                            //if there's an enemy on top of the tile, remove it first
+                            bool occupied = false;
+                            for(int i = 0; i < _level.EnemySpawns.Count; i++)
+                            {
+                                if (_level.EnemySpawns[i].Hitbox.Contains(_mState.X, _mState.Y))
+                                {
+                                    _level.EnemySpawns.RemoveAt(i);
+                                    occupied = true;
+                                    break;
+                                }
+                            }
+
                             //should spawn an empty texture tile
-                            _level.Tiles[x, y] = new Tile(AssetNames.GameLogo, new Vectangle(_level.Tiles[x, y].X, _level.Tiles[x, y].Y, _level.Tiles[x, y].Width, _level.Tiles[x, y].Height), true);
+                            if (!occupied && JustRightClicked())
+                            {
+                                _level.Tiles[x, y] = new Tile(AssetNames.GameLogo, new Vectangle(_level.Tiles[x, y].X, _level.Tiles[x, y].Y, _level.Tiles[x, y].Width, _level.Tiles[x, y].Height), true);
+                            }
                         }
                     }
                 }
@@ -269,6 +318,11 @@ namespace PawnGame
             {
                 _options[i].Draw(sb);
             }
+            //draw enemies
+            for(int i = 0; i < _level.EnemySpawns.Count; i++)
+            {
+                _level.EnemySpawns[i].Draw(sb);
+            }
         }
 
         /// <summary>
@@ -282,6 +336,24 @@ namespace PawnGame
                 return false;
             }
             return _mState.X > g.X && _mState.Y > g.Y && _mState.X < g.X + g.Width && _mState.Y < g.Y + g.Height;
+        }
+
+        /// <summary>
+        /// return whether the mouse was just clicked
+        /// </summary>
+        /// <returns></returns>
+        private bool JustClicked()
+        {
+            return _mState.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed && _mStatePrev.LeftButton != Microsoft.Xna.Framework.Input.ButtonState.Pressed;
+        }
+
+        /// <summary>
+        /// return whether the mouse was just right clicked
+        /// </summary>
+        /// <returns></returns>
+        private bool JustRightClicked()
+        {
+            return _mState.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed && _mStatePrev.RightButton != Microsoft.Xna.Framework.Input.ButtonState.Pressed;
         }
     }
 }
