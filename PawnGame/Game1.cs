@@ -182,6 +182,7 @@ namespace PawnGame
                 #region Menu State
                 case GameState.Menu:
 
+                    IsMouseVisible = true;
                     _menuButtons.Clear();
 
                     // Adding all 3 buttons on the menu screen
@@ -208,7 +209,7 @@ namespace PawnGame
                                 // Start a new game
                                 // (whatever that means)
                                 _gameState = GameState.Game;
-                                IsMouseVisible = false;
+                                
                                 Mouse.SetPosition(WindowWidth / 2, WindowHeight / 2);
                             }
                             else if (i == 1)
@@ -229,6 +230,8 @@ namespace PawnGame
 
                 #region DebugMenu State
                 case GameState.DebugMenu:
+
+                    IsMouseVisible = true;
 
                     // Make a button to each screen
                     // but make the previous one disabled since they were already on it
@@ -292,6 +295,8 @@ namespace PawnGame
                 #region Game State
                 case GameState.Game:
 
+                    IsMouseVisible = false;
+
                     // Play the game here
                     //TODO: Ask chris how GameTime works
                     testTimer--;
@@ -317,6 +322,7 @@ namespace PawnGame
 
                 #region LevelEditor State
                 case GameState.LevelEditor:
+                    IsMouseVisible = true;
                     // Update logic for level editor
                     _levelEditor.Update();
                     #endregion
