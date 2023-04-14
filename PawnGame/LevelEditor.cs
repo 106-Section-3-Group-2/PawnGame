@@ -291,7 +291,7 @@ namespace PawnGame
                             }
 
                             //should spawn an empty texture tile
-                            if (!occupied && JustRightClicked())
+                            if (!occupied)
                             {
                                 _level.Tiles[x, y] = new Tile(AssetNames.GameLogo, new Vectangle(_level.Tiles[x, y].X, _level.Tiles[x, y].Y, _level.Tiles[x, y].Width, _level.Tiles[x, y].Height), true);
                             }
