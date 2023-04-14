@@ -36,7 +36,7 @@ namespace PawnGame.GameObjects
         public float Y 
         { 
             get { return _hitbox.Y; }
-            set { _hitbox.X = value; }
+            set { _hitbox.Y = value; }
         }
 
         /// <summary>

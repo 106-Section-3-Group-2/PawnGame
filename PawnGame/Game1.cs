@@ -456,26 +456,39 @@ namespace PawnGame
         /// <param name="entity"></param>
         private void CheckCollisions(Entity entity)
         {
+            for (int i = 0; i < _currLevel.Tiles.GetLength(0); i++)
+            {
+                for (int j = 0; j < _currLevel.Tiles.GetLength(1); j++)
+                {
 
+                }
+            }
+
+            // Left
             if (entity.X < _currLevel.Location.X)
             {
                 entity.X = _currLevel.Location.X;
             }
 
+            // Up (broken)
             if (entity.Y < _currLevel.Location.Y)
             {
                 entity.Y = _currLevel.Location.Y;
             }
 
+            // Right
             if (entity.X + entity.Width > _currLevel.Location.X + _currLevel.Width)
             {
                 entity.X = _currLevel.Location.X + _currLevel.Width - entity.Width;
             }
 
+            // Down (broken)
             if (entity.Y + entity.Height > _currLevel.Location.Y + _currLevel.Height)
             {
                 entity.Y = _currLevel.Location.Y + _currLevel.Height - entity.Height;
             }
+
+
         }
     }
 }
