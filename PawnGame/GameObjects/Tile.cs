@@ -12,6 +12,13 @@ namespace PawnGame.GameObjects
         /// </summary>
         [JsonProperty]
         private bool _isSolid;
+
+        /// <summary>
+        /// If the tile is an exit
+        /// </summary>
+        [JsonProperty]
+        private bool _isExit;
+
         /// <summary>
         /// represents whether the Tile is solid and can trigger collision resolutions
         /// </summary>
@@ -26,6 +33,21 @@ namespace PawnGame.GameObjects
             {
                 _isSolid = value;
             } 
+        }
+
+        /// <summary>
+        /// represents whether the tile is an exit and can trigger a level advancement
+        /// </summary>
+        public bool IsExit
+        {
+            get 
+            {
+                return _isExit;
+            }
+            set
+            {
+                _isExit = value;
+            }
         }
 
         /// <summary>
