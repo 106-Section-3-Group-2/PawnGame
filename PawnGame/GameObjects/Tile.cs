@@ -38,6 +38,7 @@ namespace PawnGame.GameObjects
         /// <summary>
         /// represents whether the tile is an exit and can trigger a level advancement
         /// </summary>
+        [JsonIgnore]
         public bool IsExit
         {
             get 
@@ -59,6 +60,20 @@ namespace PawnGame.GameObjects
         public Tile(Game1.AssetNames textureKey, Vectangle hitbox, bool solid) : base(textureKey, hitbox)
         {
             _isSolid = solid;
+            _isExit = false;
+        }
+
+        /// <summary>
+        /// create a new tile, specifying whether it is solid and whether it is an exit
+        /// </summary>
+        /// <param name="texture"></param>
+        /// <param name="hitbox"></param>
+        /// <param name="solid"></param>
+        [JsonConstructor]
+        public Tile(Game1.AssetNames textureKey, Vectangle hitbox, bool solid, bool exit) : base(textureKey, hitbox)
+        {
+            _isSolid = solid;
+            _isExit = exit;
         }
     }
 }
