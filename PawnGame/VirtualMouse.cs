@@ -19,8 +19,6 @@ namespace PawnGame
         float x;
         float y;
         float maxSpeed = 1f;
-        float windowWidth;
-        float windowHeight;
         float rotation;
 
         public float X
@@ -38,20 +36,15 @@ namespace PawnGame
         }
         
 
-        public void Update(MouseState mouse)
+        public void Update(MouseState mouse, int windowWidth, int windowHeight)
         {
-
-            x = mouse.X-windowWidth/2;
-            y = mouse.Y-windowHeight/2;
-
-            rotation = MathF.Atan2(y, x);
-
-            //Setting the vector size
-            Vector2 mouseVector = new Vector2(x, y);
+            
+            Vector2 mouseVector = new Vector2(mouse.X-windowWidth/2, mouse.Y-windowHeight/2);
             mouseVector.Normalize();
             mouseVector *= 200;
-            x = mouseVector.X+windowWidth/2;
-            y = mouseVector.Y+windowHeight/2;
+            Mouse.SetPosition((int)(mouseVector.X+windowWidth/2),(int)(mouseVector.Y+windowHeight/2));
+            x = mouse.X;
+            y = mouse.Y;
         }
 
     }

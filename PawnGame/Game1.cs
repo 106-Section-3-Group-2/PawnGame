@@ -212,9 +212,8 @@ namespace PawnGame
                             {
                                 // Start a new game
                                 // (whatever that means)
-                                _gameState = GameState.Game;
-                                
                                 Mouse.SetPosition(WindowWidth / 2, WindowHeight / 2);
+                                _gameState = GameState.Game;
                             }
                             else if (i == 1)
                             {
@@ -299,7 +298,7 @@ namespace PawnGame
                 #region Game State
                 case GameState.Game:
 
-                    IsMouseVisible = false;
+                    IsMouseVisible = true;
 
                     // Play the game here
                     //TODO: Ask chris how GameTime works
@@ -312,8 +311,8 @@ namespace PawnGame
                     }
                     //Virtual mouse stuff
                     
-                    VMouse.Update(Mouse.GetState());
-                    Mouse.SetPosition(WindowWidth / 2, WindowHeight / 2);
+                    VMouse.Update(Mouse.GetState(), WindowWidth,WindowHeight);
+
                     Manager.Update(_player);
                     _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState);
 
