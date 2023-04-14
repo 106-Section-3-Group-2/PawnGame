@@ -75,6 +75,7 @@ namespace PawnGame
             int paletteDownscale = 4;
 
             #region Add palette information
+            //standard tile
             _palette.Add(new Button(
                 Assets[AssetNames.TileWhite],
                 _paletteTopLeft,
@@ -82,12 +83,22 @@ namespace PawnGame
                 Assets[AssetNames.TileWhite].Height / paletteDownscale,
                 Color.Green));
 
+            //wall
             _palette.Add(new Button(
                 Assets[AssetNames.DebugError],
                 _paletteTopLeft + new Vector2(0,
                 (_palette[0].ButtonBox.Height + _ButtonSpacing)/* times n*/),
                 Assets[AssetNames.TileWhite].Width / paletteDownscale,
                 Assets[AssetNames.TileWhite].Height / paletteDownscale,
+                Color.Green));
+
+            //exit
+            _palette.Add(new Button(
+                Assets[AssetNames.DebugError],
+                _paletteTopLeft + new Vector2(0,
+                (_palette[0].ButtonBox.Height + _ButtonSpacing) * 2),
+                Assets[AssetNames.IconLoad].Width / paletteDownscale,
+                Assets[AssetNames.IconLoad].Height / paletteDownscale,
                 Color.Green));
 
             //create options
