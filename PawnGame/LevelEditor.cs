@@ -94,11 +94,11 @@ namespace PawnGame
 
             //exit
             _palette.Add(new Button(
-                Assets[AssetNames.DebugError],
+                Assets[AssetNames.IconLoad],
                 _paletteTopLeft + new Vector2(0,
                 (_palette[0].ButtonBox.Height + _ButtonSpacing) * 2),
-                Assets[AssetNames.IconLoad].Width / paletteDownscale,
-                Assets[AssetNames.IconLoad].Height / paletteDownscale,
+                Assets[AssetNames.TileWhite].Width / paletteDownscale,
+                Assets[AssetNames.TileWhite].Height / paletteDownscale,
                 Color.Green));
 
             //create options
@@ -194,7 +194,7 @@ namespace PawnGame
                             }
                             break;
                         //load error, should always be last case
-                        case 2:
+                        case 3:
                             _options.RemoveAt(i);
                             break;
                     }
@@ -235,6 +235,10 @@ namespace PawnGame
                                     {
                                         _level.Tiles[x, y] = new Tile(AssetNames.DebugError, new Vectangle(_level.Tiles[x, y].X, _level.Tiles[x, y].Y, _level.Tiles[x, y].Width, _level.Tiles[x, y].Height), true);
                                     }
+                                    break;
+                                case 2:
+                                    //create an exit
+                                    _level.Tiles[x, y] = new Tile(AssetNames.IconLoad, new Vectangle(_level.Tiles[x, y].X, _level.Tiles[x, y].Y, _level.Tiles[x, y].Width, _level.Tiles[x, y].Height), false, true);
                                     break;
                             }
                         }
