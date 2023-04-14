@@ -306,7 +306,8 @@ namespace PawnGame
                     if (testTimer <= 0)
                     {
                         //Adds a random pawn, for the demo
-                        Manager.Add(new Pawn(AssetNames.PawnWhite, new Rectangle(random.Next(0, 2) * WindowWidth, random.Next(0, 2) * WindowHeight, Assets[AssetNames.PawnWhite].Width/6, Assets[AssetNames.PawnWhite].Height/6)));
+                        // Commented for bug testing
+                        //Manager.Add(new Pawn(AssetNames.PawnWhite, new Rectangle(random.Next(0, 2) * WindowWidth, random.Next(0, 2) * WindowHeight, Assets[AssetNames.PawnWhite].Width/6, Assets[AssetNames.PawnWhite].Height/6)));
                         testTimer = 300;
                     }
                     //Virtual mouse stuff
@@ -451,91 +452,6 @@ namespace PawnGame
 
             _graphics.IsFullScreen = !_graphics.IsFullScreen;
             _graphics.ApplyChanges();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="entity"></param>
-        private void ResolveCollisions(Entity entity)
-        {
-            #region Checking Solid Tiles
-            List<Tile> collisions = new List<Tile>();
-            for (int i = 0; i < _currLevel.Tiles.GetLength(0); i++)
-            {
-                for (int j = 0; j < _currLevel.Tiles.GetLength(1); j++)
-                {
-                    if (_currLevel.Tiles[i, j].IsSolid && _currLevel.Tiles[i, j].Hitbox.Intersects(entity.Hitbox))
-                    {
-                        collisions.Add(_currLevel.Tiles[i, j]);
-                    }
-                }
-            }
-
-            // Checking horizontal collisions
-            for (int i = 0; i < collisions.Count; i++)
-            {
-                Vectangle collisionVect = collisions[i].Hitbox.GetOverlap(entity.Hitbox);
-                if (collisionVect.Height >= collisionVect.Width)
-                {
-                    if (_player.X < collisions[i].X)
-                    {
-                        _player.X -= collisionVect.Width;
-                    }
-                    else
-                    {
-                        _player.X += collisionVect.Width;
-                    }
-                }
-            }
-
-            // Checking vertical collisions
-            for (int i = 0; i < collisions.Count; i++)
-            {
-                Rectangle collisionVect = collisions[i].Hitbox.GetOverlap(entity.Hitbox);
-                if (collisionVect.Width > collisionVect.Height)
-                {
-                    if (_player.Y < collisions[i].Y)
-                    {
-                        _player.Y -= collisionVect.Height;
-                    }
-                    else
-                    {
-                        _player.Y += collisionVect.Height;
-                    }
-                }
-            }
-            #endregion
-
-            #region Checking Outside Bounds 
-            // Checking bounds of entire level just in case
-            // there is no wall tile outside the perimeter
-
-            // Left
-            if (entity.X < _currLevel.Location.X)
-            {
-            entity.X = _currLevel.Location.X;
-            }
-
-            // Up (broken)
-            if (entity.Y < _currLevel.Location.Y)
-            {
-                entity.Y = _currLevel.Location.Y;
-            }
-
-            // Right
-            if (entity.X + entity.Width > _currLevel.Location.X + _currLevel.Width)
-            {
-                entity.X = _currLevel.Location.X + _currLevel.Width - entity.Width;
-            }
-
-            // Down (broken)
-            if (entity.Y + entity.Height > _currLevel.Location.Y + _currLevel.Height)
-            {
-                entity.Y = _currLevel.Location.Y + _currLevel.Height - entity.Height;
-            }
-                #endregion
-
         }
     }
 }
