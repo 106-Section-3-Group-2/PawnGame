@@ -316,10 +316,7 @@ namespace PawnGame
                     VMouse.Update(Mouse.GetState());
                     Mouse.SetPosition(WindowWidth / 2, WindowHeight / 2);
                     Manager.Update(_player);
-                    _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState);
-
-                    // Put this in player update, and make check collision public
-                    ResolveCollisions(_player);
+                    _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState, _currLevel.Tiles);
 
                     _weapon.Update(_player,VMouse);
                     #endregion

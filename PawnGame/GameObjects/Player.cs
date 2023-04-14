@@ -40,12 +40,24 @@ namespace PawnGame.GameObjects
             _currentWeapon = weapon;
             
         }
-        public void Update(KeyboardState currentKBState, KeyboardState previousKBState, MouseState currentMouseState, MouseState prevMouseState)
+
+        public void Update(KeyboardState currentKBState, KeyboardState previousKBState, MouseState currentMouseState, MouseState prevMouseState, Tile[,] tiles)
         {
             ReadInputs(currentKBState, previousKBState,currentMouseState,prevMouseState);
             Move();
             
+            for (int i = 0; i < tiles.GetLength(0); i++)
+            {
+                for (int j = 0; j < tiles.GetLength(1); j++)
+                {
+                    if (CheckCollision(tiles[i, j]) && tiles[i, j].IsSolid)
+                    {
+                        ResolveCollisions(tiles[i,j]);
+                    }
+                }
+            }
         }
+
         protected void Attack()
         {
             if (_activeAbility == Ability.None)
@@ -53,6 +65,7 @@ namespace PawnGame.GameObjects
                 _currentWeapon.Attack();
             }
         }
+
         protected void Move()
         {
             switch (_playerState)
@@ -110,6 +123,7 @@ namespace PawnGame.GameObjects
                     break;
             }
 
+            
         }
 
         private void ReadInputs(KeyboardState currentKBState, KeyboardState previousKBState,MouseState currentMouseState, MouseState prevMouseState)
@@ -151,6 +165,7 @@ namespace PawnGame.GameObjects
                     break;
             }
         }
+
         public override void Draw(SpriteBatch sb)
         {
             if (_isAlive)
@@ -197,6 +212,7 @@ namespace PawnGame.GameObjects
             
             return output;
         }
+
         private void UseAbility(Vector2 direction)
         {
             if (_heldAbility != Ability.None)
@@ -229,6 +245,7 @@ namespace PawnGame.GameObjects
             }
 
         }
+
         public void GetAbility(Ability ability)
         {
             if (_heldAbility == Ability.None)
@@ -236,6 +253,7 @@ namespace PawnGame.GameObjects
                 _heldAbility = ability;
             }
         }
+
         protected override void OnDeath()
         {
             throw new System.NotImplementedException();
