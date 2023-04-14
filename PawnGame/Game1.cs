@@ -307,7 +307,8 @@ namespace PawnGame
                     if (testTimer <= 0)
                     {
                         //Adds a random pawn, for the demo
-                        Manager.Add(new Pawn(AssetNames.PawnWhite, new Rectangle(random.Next(0, 2) * WindowWidth, random.Next(0, 2) * WindowHeight, Assets[AssetNames.PawnWhite].Width/6, Assets[AssetNames.PawnWhite].Height/6)));
+                        // Commented for bug testing
+                        //Manager.Add(new Pawn(AssetNames.PawnWhite, new Rectangle(random.Next(0, 2) * WindowWidth, random.Next(0, 2) * WindowHeight, Assets[AssetNames.PawnWhite].Width/6, Assets[AssetNames.PawnWhite].Height/6)));
                         testTimer = 300;
                     }
                     //Virtual mouse stuff
@@ -466,9 +467,19 @@ namespace PawnGame
             {
                 for (int j = 0; j < _currLevel.Tiles.GetLength(1); j++)
                 {
-                    if (_currLevel.Tiles[i, j].IsSolid && _currLevel.Tiles[i, j].Hitbox.Intersects(entity.Hitbox))
+                    if (_currLevel.Tiles[i, j].Hitbox.Intersects(entity.Hitbox))
                     {
-                        collisions.Add(_currLevel.Tiles[i, j]);
+                        if (_currLevel.Tiles[i, j].Hitbox.Intersects(entity.Hitbox))
+                        {
+                            if (_currLevel.Tiles[i, j].IsSolid)
+                            {
+                                collisions.Add(_currLevel.Tiles[i, j]);
+                            }
+                            else if (_currLevel.Tiles[i, j].IsExit)
+                            {
+
+                            }
+                        }
                     }
                 }
             }
