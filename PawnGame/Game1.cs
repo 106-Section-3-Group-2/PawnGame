@@ -314,7 +314,7 @@ namespace PawnGame
                     _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState);
 
                     // Put this in player update, and make check collision public
-                    CheckCollisions(_player);
+                    ResolveCollisions(_player);
 
                     _weapon.Update(_player,VMouse);
                     #endregion
@@ -454,20 +454,64 @@ namespace PawnGame
         /// 
         /// </summary>
         /// <param name="entity"></param>
-        private void CheckCollisions(Entity entity)
+        private void ResolveCollisions(Entity entity)
         {
+            #region Checking Solid Tiles
+            List<Tile> collisions = new List<Tile>();
             for (int i = 0; i < _currLevel.Tiles.GetLength(0); i++)
             {
                 for (int j = 0; j < _currLevel.Tiles.GetLength(1); j++)
                 {
-
+                    if (_currLevel.Tiles[i, j].IsSolid && _currLevel.Tiles[i, j].Hitbox.Intersects(entity.Hitbox))
+                    {
+                        collisions.Add(_currLevel.Tiles[i, j]);
+                    }
                 }
             }
+
+            // Checking horizontal collisions
+            for (int i = 0; i < collisions.Count; i++)
+            {
+                Vectangle collisionVect = new Vectangle();
+                if (collisionVect.Height >= collisionVect.Width)
+                {
+                    if (_player.X < collisions[i].X)
+                    {
+                        _player.X -= collisionVect.Width;
+                    }
+                    else
+                    {
+                        _player.X += collisionVect.Width;
+                    }
+                }
+            }
+
+            // Checking vertical collisions
+            for (int i = 0; i < collisions.Count; i++)
+            {
+                Rectangle collisionVect = new Vectangle();
+                if (collisionVect.Width > collisionVect.Height)
+                {
+                    if (_player.Y < collisions[i].Y)
+                    {
+                        _player.Y -= collisionVect.Height;
+                    }
+                    else
+                    {
+                        _player.Y += collisionVect.Height;
+                    }
+                }
+            }
+            #endregion
+
+            #region Checking Outside Bounds 
+            // Checking bounds of entire level just in case
+            // there is no wall tile outside the perimeter
 
             // Left
             if (entity.X < _currLevel.Location.X)
             {
-                entity.X = _currLevel.Location.X;
+            entity.X = _currLevel.Location.X;
             }
 
             // Up (broken)
@@ -487,7 +531,7 @@ namespace PawnGame
             {
                 entity.Y = _currLevel.Location.Y + _currLevel.Height - entity.Height;
             }
-
+                #endregion
 
         }
     }
