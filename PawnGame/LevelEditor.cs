@@ -327,8 +327,14 @@ namespace PawnGame
                             //should spawn an empty texture tile
                             if (!occupied && _canClick)
                             {
+                                AssetNames holeTexture = AssetNames.HoleBlack;
+                                if ((x + y) % 2 == 0)
+                                {
+                                    holeTexture = AssetNames.HoleWhite;
+                                }
+
                                 _level.Tiles[x, y] = new Tile(
-                                    AssetNames.GameLogo,
+                                    holeTexture,
                                     new Vectangle(_level.Tiles[x, y].X,
                                     _level.Tiles[x, y].Y,
                                     _level.Tiles[x, y].Width,
