@@ -1,4 +1,4 @@
-﻿using PawnGame.GameObjects.Enemies;
+﻿using PawnGame;
 namespace PawnGame.GameObjects
 {
     public class Player : Entity

@@ -274,7 +274,7 @@ namespace PawnGame
                                     occupied = false;
                                     foreach(Enemy enemy in _level.EnemySpawns)
                                     {
-                                        if (enemy.Hitbox.Contains(_mState.X, _mState.Y) || _level.Tiles[x,y].IsSolid == true)
+                                        if (enemy.Hitbox.Intersects(_level.Tiles[x, y].Hitbox) || _level.Tiles[x, y].IsSolid == true)
                                         {
                                             occupied = true;
                                         }
@@ -327,8 +327,14 @@ namespace PawnGame
                             //should spawn an empty texture tile
                             if (!occupied && _canClick)
                             {
+                                AssetNames holeTexture = AssetNames.HoleBlack;
+                                if ((x + y) % 2 == 0)
+                                {
+                                    holeTexture = AssetNames.HoleWhite;
+                                }
+
                                 _level.Tiles[x, y] = new Tile(
-                                    AssetNames.GameLogo,
+                                    holeTexture,
                                     new Vectangle(_level.Tiles[x, y].X,
                                     _level.Tiles[x, y].Y,
                                     _level.Tiles[x, y].Width,
