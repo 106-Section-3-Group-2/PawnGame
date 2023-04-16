@@ -39,6 +39,8 @@ namespace PawnGame
             //Tiles
             TileBlack,
             TileWhite,
+            WallBlack,
+            WallWhite,
 
             //Pieces
             PawnBlack,
@@ -82,6 +84,7 @@ namespace PawnGame
         //Entities
         private Player _player;
         private Weapon _weapon;
+        private int _playerScale;
 
         // Menu buttons
         private List<Button> _menuButtons = new List<Button>();
@@ -139,6 +142,7 @@ namespace PawnGame
             Assets = new Dictionary<AssetNames, Texture2D>();
             LevelIndex = 0;
             _prevLevelIndex = 0;
+            _playerScale = 4;
             base.Initialize();
         }
 
@@ -156,11 +160,13 @@ namespace PawnGame
             Assets.Add(AssetNames.PawnWhite, Content.Load<Texture2D>("PawnWhite"));
             Assets.Add(AssetNames.TileBlack, Content.Load<Texture2D>("TileBlack"));
             Assets.Add(AssetNames.TileWhite, Content.Load<Texture2D>("TileWhite"));
+            Assets.Add(AssetNames.WallWhite, Content.Load<Texture2D>("WallBlack"));
+            Assets.Add(AssetNames.WallBlack, Content.Load<Texture2D>("WallWhite"));
             Assets.Add(AssetNames.WeaponSword, Content.Load<Texture2D>("Sword"));
             Assets.Add(AssetNames.DebugError, Content.Load<Texture2D>("Error"));
 
             _weapon = new Weapon(AssetNames.WeaponSword, new Rectangle(WindowWidth / 2, WindowHeight / 2, Assets[AssetNames.WeaponSword].Width / 2, Assets[AssetNames.WeaponSword].Height / 2));
-            _player = new Player(AssetNames.PawnBlack, new Rectangle(WindowWidth / 2, WindowHeight / 2, Assets[AssetNames.PawnBlack].Width/6, Assets[AssetNames.PawnBlack].Height/6), _weapon);
+            _player = new Player(AssetNames.PawnBlack, new Rectangle(WindowWidth / 2, WindowHeight / 2, Assets[AssetNames.PawnBlack].Width/_playerScale, Assets[AssetNames.PawnBlack].Height/ _playerScale), _weapon);
 
             //initialize level editor (needs textures loaded)
             _levelEditor = new LevelEditor(8, 8, this);
