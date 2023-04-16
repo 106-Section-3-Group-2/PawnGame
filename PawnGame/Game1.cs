@@ -331,11 +331,11 @@ namespace PawnGame
                     //Virtual mouse stuff
                     
                     VMouse.Update(Mouse.GetState(), WindowWidth,WindowHeight);
-
+                    _weapon.Update(_player, VMouse);
                     Manager.Update(_player);
                     _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState, _currLevel.Tiles);
 
-                    _weapon.Update(_player,VMouse);
+
 
                     if (!_player.IsAlive)
                     {
@@ -426,11 +426,8 @@ namespace PawnGame
                     _currLevel.Draw(_spriteBatch);
                     _player.Draw(_spriteBatch);
                     Manager.Draw(_spriteBatch);
-                    _weapon.Draw(_spriteBatch, _player, Mouse.GetState(),WindowWidth,WindowHeight);
-                    _weapon.Draw(_spriteBatch, _player, Mouse.GetState(),WindowWidth,WindowHeight);
-                    _spriteBatch.DrawString(_font, "X: " + VMouse.X, new Vector2(30, 50), Color.Red);
-                    _spriteBatch.DrawString(_font, "Y: " + VMouse.Y, new Vector2(30, 70), Color.Red);
-                    _spriteBatch.DrawString(_font, "Speed: " + VMouse.Speed, new Vector2(30, 90), Color.Red);
+                    //_weapon.Draw(_spriteBatch, _player, Mouse.GetState(),WindowWidth,WindowHeight);
+                    _weapon.Draw(_spriteBatch, _player, VMouse.Rotation);
                     #endregion
                     break;
 
