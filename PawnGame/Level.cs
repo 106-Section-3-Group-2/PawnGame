@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 namespace PawnGame
 {
     /// <summary>
-    /// 
+    /// holds an array of tiles and lists of enemy. Serializable and has static functions to save and load.
     /// </summary>
     public class Level
     {
@@ -35,10 +35,30 @@ namespace PawnGame
                 Tiles[index1, index2] = value;
             }
         }
-        /// <summary>
-        /// the spawn locations of enemies
-        /// </summary>
-        public List<Enemy> EnemySpawns { get; set; }
+
+        //lists of enemies
+        public List<Pawn> PawnSpawns { get; set; }
+        public List<Bishop> BishopSpawns { get; set; }
+        public List<Rook> RookSpawns { get; set; }
+        public List<Knight> KnightSpawns { get; set; }
+        public List<Queen> QueenSpawns { get; set; }
+        public List<King> KingSpawns { get; set; }
+        [JsonIgnore]
+        public List<Enemy> EnemySpawns
+        {
+            get
+            {
+                List<Enemy> enemies = new();
+                enemies.AddRange(PawnSpawns);
+                enemies.AddRange(BishopSpawns);
+                enemies.AddRange(RookSpawns);
+                enemies.AddRange(KnightSpawns);
+                enemies.AddRange(QueenSpawns);
+                enemies.AddRange(KingSpawns);
+                return enemies;
+            }
+        }
+
         /// <summary>
         /// the spawn location of the player
         /// </summary>
@@ -76,17 +96,48 @@ namespace PawnGame
         #endregion
 
         /// <summary>
-        /// create a level that holds an array of tiles, an array of enemies, and a spawnpoint.
+        /// create a level that holds an array of tiles, and a spawnpoint.
         /// </summary>
         /// <param name="tiles"></param>
         /// <param name="enemies"></param>
         /// <param name="spawnPoint"></param>
-        public Level(Tile[,] tiles, List<Enemy> enemies, Vector2 spawnPoint)
+        public Level(Tile[,] tiles, Vector2 spawnPoint)
         {
             Tiles = tiles;
-            EnemySpawns = enemies;
+            SpawnPoint = spawnPoint;
+            PawnSpawns = new();
+            BishopSpawns = new();
+            RookSpawns = new();
+            KnightSpawns = new();
+            QueenSpawns = new();
+            KingSpawns = new();
+        }
+
+        /// <summary>
+        /// create a level with enemies (this is for serialization)
+        /// </summary>
+        /// <param name="tiles"></param>
+        /// <param name="pawnSpawns"></param>
+        /// <param name="bishopSpawns"></param>
+        /// <param name="rookSpawns"></param>
+        /// <param name="knightSpawns"></param>
+        /// <param name="queenSpawns"></param>
+        /// <param name="kingSpawns"></param>
+        /// <param name="spawnPoint"></param>
+        [JsonConstructor]
+        public Level(Tile[,] tiles, List<Pawn> pawnSpawns, List<Bishop> bishopSpawns, List<Rook> rookSpawns, List<Knight> knightSpawns, List<Queen> queenSpawns, List<King> kingSpawns, Vector2 spawnPoint)
+        {
+            Tiles = tiles;
+            PawnSpawns = pawnSpawns;
+            BishopSpawns = bishopSpawns;
+            RookSpawns = rookSpawns;
+            KnightSpawns = knightSpawns;
+            QueenSpawns = queenSpawns;
+            KingSpawns = kingSpawns;
             SpawnPoint = spawnPoint;
         }
+
+
 
         /// <summary>
         /// update the level

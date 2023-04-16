@@ -38,7 +38,7 @@ namespace PawnGame
         /// <param name="y"></param>
         public LevelEditor(int x, int y, Game1 game)
         {
-            _level = new Level(new Tile[x, y], new List<Enemy>(), new Vector2());
+            _level = new Level(new Tile[x, y], new Vector2());
             _game = game;
             Initialize();
         }
@@ -56,7 +56,7 @@ namespace PawnGame
             }
             catch (Exception e)
             {
-                _level = new Level(new Tile[8, 8], new List<Enemy>(), new Vector2());
+                _level = new Level(new Tile[8, 8], new Vector2());
                 throw e;
             }
             _game = game;
@@ -72,7 +72,6 @@ namespace PawnGame
             //set up buttons and variables
             _paletteTopLeft = new Vector2(10, 10);
             _ButtonSpacing = 10;
-
             _options = new List<Button>();
             _palette = new List<Button>();
 
