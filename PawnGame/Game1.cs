@@ -1,6 +1,7 @@
 ﻿global using Microsoft.Xna.Framework;
 global using Microsoft.Xna.Framework.Graphics;
 global using Microsoft.Xna.Framework.Input;
+global using System.Diagnostics;
 using System.Collections.Generic;
 using System;
 using System.IO;
@@ -298,7 +299,7 @@ namespace PawnGame
                 #region Game State
                 case GameState.Game:
 
-                    IsMouseVisible = true;
+                    IsMouseVisible = false;
 
                     // Play the game here
                     //TODO: Ask chris how GameTime works
@@ -317,7 +318,7 @@ namespace PawnGame
                     Manager.Update(_player);
                     _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState, _currLevel.Tiles);
 
-                    _weapon.Update(_player,VMouse);
+                    _weapon.Update(_player,VMouse,gameTime);
                     #endregion
                     break;
 
@@ -397,11 +398,11 @@ namespace PawnGame
                     _currLevel.Draw(_spriteBatch);
                     _player.Draw(_spriteBatch);
                     Manager.Draw(_spriteBatch);
-                    _weapon.Draw(_spriteBatch, _player, Mouse.GetState());
-                    _spriteBatch.Draw(Assets[AssetNames.DebugError], new Rectangle((int)VMouse.X, (int)VMouse.Y, 100, 100),Color.White);
-                    _spriteBatch.DrawString(_font, "Rotation: " + VMouse.Rotation, new Vector2(30, 30), Color.Red);
+                    _weapon.Draw(_spriteBatch, _player, Mouse.GetState(),WindowWidth,WindowHeight);
+                    _weapon.Draw(_spriteBatch, _player, Mouse.GetState(),WindowWidth,WindowHeight);
                     _spriteBatch.DrawString(_font, "X: " + VMouse.X, new Vector2(30, 50), Color.Red);
                     _spriteBatch.DrawString(_font, "Y: " + VMouse.Y, new Vector2(30, 70), Color.Red);
+                    _spriteBatch.DrawString(_font, "Speed: " + VMouse.Speed, new Vector2(30, 90), Color.Red);
                     #endregion
                     break;
 
