@@ -40,6 +40,8 @@ namespace PawnGame
             //Tiles
             TileBlack,
             TileWhite,
+            WallBlack,
+            WallWhite,
 
             //Pieces
             PawnBlack,
@@ -62,7 +64,7 @@ namespace PawnGame
         private GameState _prevGameState;
         private Level[] _levels;
         private Level _currLevel;
-        private int _levelIndex;
+        private int _prevLevelIndex;
         #endregion
 
         #region Keyboard and mouse states
@@ -83,6 +85,7 @@ namespace PawnGame
         //Entities
         private Player _player;
         private Weapon _weapon;
+        private int _playerScale;
 
         // Menu buttons
         private List<Button> _menuButtons = new List<Button>();
@@ -99,6 +102,12 @@ namespace PawnGame
         /// Dictionary containing all assets used for the game
         /// </summary>
         public static Dictionary<AssetNames, Texture2D> Assets;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static int LevelIndex; 
+
 
         /// <summary>
         /// Gets the width of the window
@@ -132,7 +141,9 @@ namespace PawnGame
             random = new Random();
             _prevKbState = Keyboard.GetState();
             Assets = new Dictionary<AssetNames, Texture2D>();
-            _levelIndex = 0;
+            LevelIndex = 0;
+            _prevLevelIndex = 0;
+            _playerScale = 4;
             base.Initialize();
         }
 
@@ -150,11 +161,13 @@ namespace PawnGame
             Assets.Add(AssetNames.PawnWhite, Content.Load<Texture2D>("PawnWhite"));
             Assets.Add(AssetNames.TileBlack, Content.Load<Texture2D>("TileBlack"));
             Assets.Add(AssetNames.TileWhite, Content.Load<Texture2D>("TileWhite"));
+            Assets.Add(AssetNames.WallWhite, Content.Load<Texture2D>("WallBlack"));
+            Assets.Add(AssetNames.WallBlack, Content.Load<Texture2D>("WallWhite"));
             Assets.Add(AssetNames.WeaponSword, Content.Load<Texture2D>("Sword"));
             Assets.Add(AssetNames.DebugError, Content.Load<Texture2D>("Error"));
 
             _weapon = new Weapon(AssetNames.WeaponSword, new Rectangle(WindowWidth / 2, WindowHeight / 2, Assets[AssetNames.WeaponSword].Width / 2, Assets[AssetNames.WeaponSword].Height / 2));
-            _player = new Player(AssetNames.PawnBlack, new Rectangle(WindowWidth / 2, WindowHeight / 2, Assets[AssetNames.PawnBlack].Width/6, Assets[AssetNames.PawnBlack].Height/6), _weapon);
+            _player = new Player(AssetNames.PawnBlack, new Rectangle(WindowWidth / 2, WindowHeight / 2, Assets[AssetNames.PawnBlack].Width/_playerScale, Assets[AssetNames.PawnBlack].Height/ _playerScale), _weapon);
 
             //initialize level editor (needs textures loaded)
             _levelEditor = new LevelEditor(8, 8, this);
@@ -167,6 +180,8 @@ namespace PawnGame
                 _levels[i] = Level.Read(fileNames[i]);
             }
             _currLevel = _levels[0];
+            
+            
         }
 
         protected override void Update(GameTime gameTime)
@@ -213,6 +228,8 @@ namespace PawnGame
                             {
                                 // Start a new game
                                 // (whatever that means)
+                                ResetLevel();
+                                NextLevel();
                                 Mouse.SetPosition(WindowWidth / 2, WindowHeight / 2);
                                 _gameState = GameState.Game;
                             }
@@ -308,7 +325,7 @@ namespace PawnGame
                     {
                         //Adds a random pawn, for the demo
                         // Commented for bug testing
-                        //Manager.Add(new Pawn(AssetNames.PawnWhite, new Rectangle(random.Next(0, 2) * WindowWidth, random.Next(0, 2) * WindowHeight, Assets[AssetNames.PawnWhite].Width/6, Assets[AssetNames.PawnWhite].Height/6)));
+                        Manager.Add(new Pawn(AssetNames.PawnWhite, new Rectangle(random.Next(0, 2) * WindowWidth, random.Next(0, 2) * WindowHeight, Assets[AssetNames.PawnWhite].Width/6, Assets[AssetNames.PawnWhite].Height/6)));
                         testTimer = 300;
                     }
                     //Virtual mouse stuff
@@ -319,6 +336,18 @@ namespace PawnGame
                     _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState, _currLevel.Tiles);
 
                     _weapon.Update(_player,VMouse,gameTime);
+                    _weapon.Update(_player,VMouse);
+
+                    if (!_player.IsAlive)
+                    {
+                        ResetLevel();
+                    }
+
+                    if (LevelIndex > _prevLevelIndex)
+                    {
+                        NextLevel();
+                    }
+
                     #endregion
                     break;
 
@@ -450,6 +479,41 @@ namespace PawnGame
 
             _graphics.IsFullScreen = !_graphics.IsFullScreen;
             _graphics.ApplyChanges();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void NextLevel()
+        {
+            if (LevelIndex < _levels.Length)
+            {
+                _currLevel = _levels[LevelIndex];
+
+                if (LevelIndex > _prevLevelIndex)
+                {
+                    _prevLevelIndex++;
+                }
+                
+                _player.X = _currLevel.SpawnPoint.X;
+                _player.Y = _currLevel.SpawnPoint.Y;
+
+            }
+            else
+            {
+                _gameState = GameState.Victory;
+            }
+
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void ResetLevel()
+        {
+            _currLevel = _levels[0];
+            LevelIndex = 0;
+            _prevLevelIndex = 0;
         }
     }
 }
