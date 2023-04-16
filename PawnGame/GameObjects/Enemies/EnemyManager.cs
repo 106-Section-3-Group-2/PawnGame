@@ -14,6 +14,8 @@ namespace PawnGame.GameObjects.Enemies
 
         private List<Enemy> _enemies;
 
+        public int Count { get { return _enemies.Count; } }
+
         private EnemyManager()
         {
             _enemies = new List<Enemy>();
@@ -22,6 +24,19 @@ namespace PawnGame.GameObjects.Enemies
         public void Add(Enemy enemy)
         {
             _enemies.Add(enemy);
+        }
+
+        public void AddRange(List<Enemy> enemies)
+        {
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                _enemies.Add(enemies[i]);
+            }
+        }
+
+        public void Clear()
+        {
+            _enemies = new List<Enemy>();
         }
 
         /// <summary>

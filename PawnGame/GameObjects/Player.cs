@@ -41,23 +41,23 @@ namespace PawnGame.GameObjects
             
         }
 
-        public void Update(KeyboardState currentKBState, KeyboardState previousKBState, MouseState currentMouseState, MouseState prevMouseState, Level level)
+        public void Update(KeyboardState currentKBState, KeyboardState previousKBState, MouseState currentMouseState, MouseState prevMouseState)
         {
             ReadInputs(currentKBState, previousKBState,currentMouseState,prevMouseState);
             Move();
             KeepInBounds();
             
-            for (int i = 0; i < level.Tiles.GetLength(0); i++)
+            for (int i = 0; i < Game1.CurrentLevel.Tiles.GetLength(0); i++)
             {
-                for (int j = 0; j < level.Tiles.GetLength(1); j++)
+                for (int j = 0; j < Game1.CurrentLevel.Tiles.GetLength(1); j++)
                 {
-                    if (CheckCollision(level.Tiles[i, j]))
+                    if (CheckCollision(Game1.CurrentLevel.Tiles[i, j]))
                     {
-                        if (level.Tiles[i, j].IsSolid)
+                        if (Game1.CurrentLevel.Tiles[i, j].IsSolid)
                         {
-                            ResolveCollisions(level.Tiles[i, j]);
+                            ResolveCollisions(Game1.CurrentLevel.Tiles[i, j]);
                         }
-                        else if (level.Tiles[i, j].IsExit)
+                        else if (Game1.CurrentLevel.Tiles[i, j].IsExit && EnemyManager.Manager.Count <= 0)
                         {
                             Game1.LevelIndex++; 
                         }
