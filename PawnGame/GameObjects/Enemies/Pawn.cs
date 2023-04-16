@@ -24,10 +24,6 @@ namespace PawnGame.GameObjects.Enemies
                         {
                             ResolveCollisions(Game1.CurrentLevel.Tiles[i, j]);
                         }
-                        else if (Game1.CurrentLevel.Tiles[i, j].IsExit)
-                        {
-                            Game1.LevelIndex++;
-                        }
                     }
                 }
             }

@@ -101,7 +101,6 @@ namespace PawnGame.GameObjects
             _collisionVectors.Clear();
             Vector2 vector1 = new Vector2(MathF.Cos(VMouse.Rotation), MathF.Sin(VMouse.Rotation));
             //Vector2 vector1 = new Vector2(VMouse.X, VMouse.Y);
-            Debug.WriteLine("Rotation: " +VMouse.Rotation);
             vector1.Normalize();
             vector1 *= 100;
             Vector2 vector2 = vector1 / 5 * 4;
