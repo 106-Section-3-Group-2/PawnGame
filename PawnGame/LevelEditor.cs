@@ -92,7 +92,7 @@ namespace PawnGame
 
             //wall
             _palette.Add(new Button(
-                Assets[AssetNames.DebugError],
+                Assets[AssetNames.WallWhite],
                 _paletteTopLeft + new Vector2(0,
                 (_palette[0].ButtonBox.Height + _ButtonSpacing)/* times n*/),
                 Assets[AssetNames.TileWhite].Width / paletteDownscale,
@@ -259,11 +259,11 @@ namespace PawnGame
                                     //create a solid wall
                                     if ((x + y) % 2 == 0)
                                     {
-                                        _level.Tiles[x, y] = new Tile(AssetNames.DebugError, new Vectangle(_level.Tiles[x, y].X, _level.Tiles[x, y].Y, _level.Tiles[x, y].Width, _level.Tiles[x, y].Height), true);
+                                        _level.Tiles[x, y] = new Tile(AssetNames.WallBlack, new Vectangle(_level.Tiles[x, y].X, _level.Tiles[x, y].Y, _level.Tiles[x, y].Width, _level.Tiles[x, y].Height), true);
                                     }
                                     else
                                     {
-                                        _level.Tiles[x, y] = new Tile(AssetNames.DebugError, new Vectangle(_level.Tiles[x, y].X, _level.Tiles[x, y].Y, _level.Tiles[x, y].Width, _level.Tiles[x, y].Height), true);
+                                        _level.Tiles[x, y] = new Tile(AssetNames.WallWhite, new Vectangle(_level.Tiles[x, y].X, _level.Tiles[x, y].Y, _level.Tiles[x, y].Width, _level.Tiles[x, y].Height), true);
                                     }
                                     break;
                                 case 2:

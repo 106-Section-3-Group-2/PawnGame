@@ -39,6 +39,8 @@ namespace PawnGame
             //Tiles
             TileBlack,
             TileWhite,
+            WallBlack,
+            WallWhite,
 
             //Pieces
             PawnBlack,
@@ -155,6 +157,8 @@ namespace PawnGame
             Assets.Add(AssetNames.PawnWhite, Content.Load<Texture2D>("PawnWhite"));
             Assets.Add(AssetNames.TileBlack, Content.Load<Texture2D>("TileBlack"));
             Assets.Add(AssetNames.TileWhite, Content.Load<Texture2D>("TileWhite"));
+            Assets.Add(AssetNames.WallWhite, Content.Load<Texture2D>("WallBlack"));
+            Assets.Add(AssetNames.WallBlack, Content.Load<Texture2D>("WallWhite"));
             Assets.Add(AssetNames.WeaponSword, Content.Load<Texture2D>("Sword"));
             Assets.Add(AssetNames.DebugError, Content.Load<Texture2D>("Error"));
 
