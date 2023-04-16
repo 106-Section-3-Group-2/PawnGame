@@ -99,6 +99,9 @@ namespace PawnGame
         /// </summary>
         public static Dictionary<AssetNames, Texture2D> Assets;
 
+        public static int LevelIndex; 
+
+
         /// <summary>
         /// Gets the width of the window
         /// </summary>
@@ -132,6 +135,7 @@ namespace PawnGame
             _prevKbState = Keyboard.GetState();
             Assets = new Dictionary<AssetNames, Texture2D>();
             _levelIndex = 0;
+            LevelIndex = _levelIndex;
             base.Initialize();
         }
 
@@ -166,6 +170,8 @@ namespace PawnGame
                 _levels[i] = Level.Read(fileNames[i]);
             }
             _currLevel = _levels[0];
+            
+            
         }
 
         protected override void Update(GameTime gameTime)
@@ -318,6 +324,12 @@ namespace PawnGame
                     _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState, _currLevel.Tiles);
 
                     _weapon.Update(_player,VMouse);
+
+                    if (LevelIndex > this._levelIndex)
+                    {
+                        NextLevel();
+                    }
+
                     #endregion
                     break;
 
@@ -449,6 +461,23 @@ namespace PawnGame
 
             _graphics.IsFullScreen = !_graphics.IsFullScreen;
             _graphics.ApplyChanges();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void NextLevel()
+        {
+            if (LevelIndex < _levels.Length)
+            {
+                _currLevel = _levels[LevelIndex];
+                _levelIndex++;
+            }
+            else
+            {
+                _gameState = GameState.Victory;
+            }
+            
         }
     }
 }

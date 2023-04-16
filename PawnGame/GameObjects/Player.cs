@@ -50,9 +50,17 @@ namespace PawnGame.GameObjects
             {
                 for (int j = 0; j < tiles.GetLength(1); j++)
                 {
-                    if (CheckCollision(tiles[i, j]) && tiles[i, j].IsSolid)
+                    if (CheckCollision(tiles[i, j]))
                     {
-                        ResolveCollisions(tiles[i,j]);
+                        if (tiles[i, j].IsSolid)
+                        {
+                            ResolveCollisions(tiles[i, j]);
+                        }
+                        else if (tiles[i, j].IsExit)
+                        {
+                            Game1.LevelIndex++; 
+                        }
+                        
                     }
                 }
             }
