@@ -65,7 +65,7 @@ namespace PawnGame.GameObjects
                 }
             }
         }
-
+        /*
         protected void Attack()
         {
             if (_activeAbility == Ability.None)
@@ -73,7 +73,7 @@ namespace PawnGame.GameObjects
                 _currentWeapon.Attack();
             }
         }
-
+        */
         protected void Move()
         {
             switch (_playerState)
@@ -149,11 +149,13 @@ namespace PawnGame.GameObjects
                     {
                         UseAbility(direction);
                     }
+                    /*
                     //Mouse
                     if (currentMouseState.LeftButton == ButtonState.Pressed)
                     {
                         Attack();
                     }
+                                        */
                     break;
 
                 case PlayerState.Abilitying: //If the player is using an ability that makes them dash
