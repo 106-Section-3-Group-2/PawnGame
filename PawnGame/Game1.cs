@@ -106,7 +106,9 @@ namespace PawnGame
         /// <summary>
         /// 
         /// </summary>
-        public static int LevelIndex; 
+        public static int LevelIndex;
+
+        public static Level CurrentLevel;
 
 
         /// <summary>
@@ -180,6 +182,7 @@ namespace PawnGame
                 _levels[i] = Level.Read(fileNames[i]);
             }
             _currLevel = _levels[0];
+            CurrentLevel = _currLevel;
             
             
         }
@@ -488,6 +491,7 @@ namespace PawnGame
             if (LevelIndex < _levels.Length)
             {
                 _currLevel = _levels[LevelIndex];
+                CurrentLevel = _currLevel;
 
                 if (LevelIndex > _prevLevelIndex)
                 {
@@ -511,6 +515,7 @@ namespace PawnGame
         public void ResetLevel()
         {
             _currLevel = _levels[0];
+            CurrentLevel = _currLevel;
             LevelIndex = 0;
             _prevLevelIndex = 0;
         }
