@@ -317,7 +317,32 @@ namespace PawnGame
                             {
                                 if (_level.EnemySpawns[i].Hitbox.Contains(_mState.X, _mState.Y))
                                 {
-                                    _level.EnemySpawns.RemoveAt(i);
+                                    #region remove enemy spawn
+                                    if (_level.EnemySpawns[i] is Pawn)
+                                    {
+                                        _level.PawnSpawns.Remove((Pawn)_level.EnemySpawns[i]);
+                                    }
+                                    else if (_level.EnemySpawns[i] is Bishop)
+                                    {
+                                        _level.BishopSpawns.Remove((Bishop)_level.EnemySpawns[i]);
+                                    }
+                                    else if (_level.EnemySpawns[i] is Knight)
+                                    {
+                                        _level.KnightSpawns.Remove((Knight)_level.EnemySpawns[i]);
+                                    }
+                                    else if (_level.EnemySpawns[i] is Rook)
+                                    {
+                                        _level.RookSpawns.Remove((Rook)_level.EnemySpawns[i]);
+                                    }
+                                    else if (_level.EnemySpawns[i] is Queen)
+                                    {
+                                        _level.QueenSpawns.Remove((Queen)_level.EnemySpawns[i]);
+                                    }
+                                    else if (_level.EnemySpawns[i] is King)
+                                    {
+                                        _level.KingSpawns.Remove((King)_level.EnemySpawns[i]);
+                                    }
+                                    #endregion
                                     occupied = true;
                                     _canClick = false;
                                     break;
