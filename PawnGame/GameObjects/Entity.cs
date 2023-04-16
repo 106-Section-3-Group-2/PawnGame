@@ -67,5 +67,31 @@
                 Y -= overlap.Height;
             }
         }
+
+        /// <summary>
+        /// Checks to see if the player is out of the bounds entered and returns them to in bounds if yes
+        /// </summary>
+        /// <param name="levelWidth">Width of the level</param>
+        /// <param name="levelHeight">Height of the level</param>
+        protected void KeepInBounds(float levelWidth, float levelHeight)
+        {
+            if (X < levelWidth)
+            {
+                X += levelWidth - X;
+            }
+            else if (X > levelWidth)
+            {
+                X -= (X - Width);
+            }
+
+            if (Y < levelHeight)
+            {
+                Y += levelHeight - Y;
+            }
+            else if (Y > levelHeight)
+            {
+                Y -= (Y - levelHeight);
+            }
+        }
     }
 }

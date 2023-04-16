@@ -321,7 +321,7 @@ namespace PawnGame
                     VMouse.Update(Mouse.GetState(), WindowWidth,WindowHeight);
 
                     Manager.Update(_player);
-                    _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState, _currLevel.Tiles);
+                    _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState, _currLevel);
 
                     _weapon.Update(_player,VMouse);
 
