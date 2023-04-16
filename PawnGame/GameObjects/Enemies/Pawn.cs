@@ -17,6 +17,26 @@ namespace PawnGame.GameObjects.Enemies
         public override void Update(Player player)
         {
             Move(player);
+            KeepInBounds();
+
+            for (int i = 0; i < Game1.CurrentLevel.Tiles.GetLength(0); i++)
+            {
+                for (int j = 0; j < Game1.CurrentLevel.Tiles.GetLength(1); j++)
+                {
+                    if (CheckCollision(Game1.CurrentLevel.Tiles[i, j]))
+                    {
+                        if (Game1.CurrentLevel.Tiles[i, j].IsSolid)
+                        {
+                            ResolveCollisions(Game1.CurrentLevel.Tiles[i, j]);
+                        }
+                        else if (Game1.CurrentLevel.Tiles[i, j].IsExit)
+                        {
+                            Game1.LevelIndex++;
+                        }
+                    }
+                }
+            }
+
             CheckPlayerCollision(player);
             CheckWeaponCollision(player.Weapon);
             if (!_isAlive) OnDeath();
@@ -50,7 +70,7 @@ namespace PawnGame.GameObjects.Enemies
             {
                 IsAlive = false;
             }
-            
+            /*
             if (CheckCollision(weapon) && weapon.IsActive == false)
             {
                 Vector2 launch = new Vector2(X-weapon.Hitbox.X, Y-weapon.Hitbox.Y);
@@ -62,6 +82,7 @@ namespace PawnGame.GameObjects.Enemies
                 X += launch.X;
                 Y += launch.Y;
             }
+            */
             
         }
 

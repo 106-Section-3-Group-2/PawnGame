@@ -15,7 +15,7 @@ namespace PawnGame.GameObjects
         private bool _isActive;
 
         //Counts how long the weapon has been active
-        private float _activeCounter;
+        private int _activeCounter;
 
         //A counter for how long the weapon has been inactive, to make it a little more forgiving
         private float _forgivenessCounter;
@@ -58,7 +58,7 @@ namespace PawnGame.GameObjects
                 _activeCounter += 1;
                 _forgivenessCounter = 0;
             }
-            else if (_forgivenessCounter <=10)
+            else if (_forgivenessCounter <=5)
             {
                 MakeCollisionVectors(VMouse);
 
@@ -74,20 +74,20 @@ namespace PawnGame.GameObjects
             switch (_activeCounter)
             {
                 case 0:
-                    _color = Color.White;
+                    _color = Color.Black;
                     _isActive = false;
                     break;
-                case > 210:
+                case > 70:
                     _isActive = true;
                     _color = Color.Red;
                     break;
-                case >180:
+                case >60:
                     _isActive = true;
                     _color = Color.Blue;
                     break;
-                case > 50:
-                    _isActive = true;
-                    _color = new Color(255, 255 - (int)_activeCounter, 255 - (int)_activeCounter);
+                case > 0:
+                    _isActive = false;
+                    _color = new Color(0,0,_activeCounter * 4);
                     break;
             }
 
@@ -141,17 +141,7 @@ namespace PawnGame.GameObjects
         }
         public void Draw(SpriteBatch sb, Player player, float rotation)
         {
-            if (_isActive)
-            {
-
-                sb.Draw(Texture, _hitbox, null, _color, rotation+MathF.PI / 2, new Vector2(Texture.Width / 2, Texture.Height), SpriteEffects.None, 0);
-                //Debug.WriteLine("R:"+color.R +"G:"+ color.G + "B:"+color.B);
-            }
-            else
-            {
-
-                sb.Draw(Texture, _hitbox, null, Color.White, rotation+MathF.PI/2, new Vector2(Texture.Width / 2, Texture.Height), SpriteEffects.None, 0);
-            }
+            sb.Draw(Texture, _hitbox, null, _color, rotation+MathF.PI / 2, new Vector2(Texture.Width / 2, Texture.Height), SpriteEffects.None, 0);
         }
     }
 }
