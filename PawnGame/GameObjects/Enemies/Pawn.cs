@@ -17,6 +17,26 @@ namespace PawnGame.GameObjects.Enemies
         public override void Update(Player player)
         {
             Move(player);
+            KeepInBounds();
+
+            for (int i = 0; i < Game1.CurrentLevel.Tiles.GetLength(0); i++)
+            {
+                for (int j = 0; j < Game1.CurrentLevel.Tiles.GetLength(1); j++)
+                {
+                    if (CheckCollision(Game1.CurrentLevel.Tiles[i, j]))
+                    {
+                        if (Game1.CurrentLevel.Tiles[i, j].IsSolid)
+                        {
+                            ResolveCollisions(Game1.CurrentLevel.Tiles[i, j]);
+                        }
+                        else if (Game1.CurrentLevel.Tiles[i, j].IsExit)
+                        {
+                            Game1.LevelIndex++;
+                        }
+                    }
+                }
+            }
+
             CheckPlayerCollision(player);
             CheckWeaponCollision(player.Weapon);
             if (!_isAlive) OnDeath();
