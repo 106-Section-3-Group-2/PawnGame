@@ -42,6 +42,8 @@ namespace PawnGame
             TileWhite,
             WallBlack,
             WallWhite,
+            HoleBlack,
+            HoleWhite,
 
             //Pieces
             PawnBlack,
@@ -165,6 +167,8 @@ namespace PawnGame
             Assets.Add(AssetNames.TileWhite, Content.Load<Texture2D>("TileWhite"));
             Assets.Add(AssetNames.WallWhite, Content.Load<Texture2D>("WallBlack"));
             Assets.Add(AssetNames.WallBlack, Content.Load<Texture2D>("WallWhite"));
+            Assets.Add(AssetNames.HoleWhite, Content.Load<Texture2D>("HoleBlack"));
+            Assets.Add(AssetNames.HoleBlack, Content.Load<Texture2D>("HoleWhite"));
             Assets.Add(AssetNames.WeaponSword, Content.Load<Texture2D>("Sword"));
             Assets.Add(AssetNames.DebugError, Content.Load<Texture2D>("Error"));
 
@@ -346,8 +350,8 @@ namespace PawnGame
 
                     VMouse.Update(Mouse.GetState(), WindowWidth,WindowHeight);
                     Manager.Update(_player);
-                    _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState, _currLevel);
-                    _weapon.Update(_player, VMouse);
+                    _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState);
+
 
 
                     if (!_player.IsAlive)
@@ -392,7 +396,7 @@ namespace PawnGame
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.DarkOliveGreen);
+            GraphicsDevice.Clear(Color.Black);
 
             _spriteBatch.Begin();
             switch (_gameState)
