@@ -19,7 +19,11 @@ namespace PawnGame.GameObjects.Enemies
             Move(player);
             CheckPlayerCollision(player);
             CheckWeaponCollision(player.Weapon);
-            if (!_isAlive) OnDeath();
+            if (!_isAlive)
+            {
+                player.GetAbility(Player.Ability.Pawn);
+                OnDeath();
+            }
         }
 
         protected override void Attack()
@@ -39,7 +43,7 @@ namespace PawnGame.GameObjects.Enemies
         }
         protected void CheckPlayerCollision(Player player)
         {
-            if (CheckCollision(player))
+            if (CheckCollision(player)&&(player.IsInvincible==false))
             {
                 player.IsAlive = false;
             }

@@ -21,15 +21,29 @@ namespace PawnGame.GameObjects
 
         private Ability _heldAbility;
         private Ability _activeAbility;
+        private Vector2 _abilityMove;
         private Weapon _currentWeapon;
         private int _speed;
         private PlayerState _playerState;
-        private int _abilityTimer;        
+        private int _abilityTimer;
+        private bool _isInvincible;
+        private bool _weaponOverride;
 
         public Weapon Weapon
         {
             get { return _currentWeapon; }
         }
+
+        public bool IsInvincible
+        {
+            get { return _isInvincible; }
+        }
+
+        public bool WeaponOverride
+        {
+            get { return _weaponOverride; }
+        }
+
 
         public Player(Game1.AssetNames textureKey, Rectangle hitbox, Weapon weapon) : base(textureKey, hitbox)
         {
@@ -38,7 +52,8 @@ namespace PawnGame.GameObjects
             _heldAbility = Ability.None;
             _activeAbility = Ability.None;
             _currentWeapon = weapon;
-            
+            _isInvincible = false;
+            _weaponOverride = false;
         }
 
         public void Update(KeyboardState currentKBState, KeyboardState previousKBState, MouseState currentMouseState, MouseState prevMouseState, Level level)
@@ -65,15 +80,6 @@ namespace PawnGame.GameObjects
                 }
             }
         }
-        /*
-        protected void Attack()
-        {
-            if (_activeAbility == Ability.None)
-            {
-                _currentWeapon.Attack();
-            }
-        }
-        */
         protected void Move()
         {
             switch (_playerState)
@@ -87,7 +93,6 @@ namespace PawnGame.GameObjects
 
                     _hitbox.X += _velocity.X;
                     _hitbox.Y += _velocity.Y;
-
                     break;
 
                 case PlayerState.Abilitying:
@@ -101,6 +106,10 @@ namespace PawnGame.GameObjects
                         switch (_activeAbility)
                         {
                             case Ability.Pawn:
+                                _isInvincible = true;
+                                _weaponOverride = true;
+                                _hitbox.X += _abilityMove.X*15;
+                                _hitbox.Y += _abilityMove.Y*15;
                                 break;
 
                             case Ability.Knight:
@@ -122,6 +131,8 @@ namespace PawnGame.GameObjects
                     }
                     else
                     {
+                        _isInvincible = false;
+                        _weaponOverride = false;
                         _playerState = PlayerState.Moving;
                     }
 
@@ -164,7 +175,9 @@ namespace PawnGame.GameObjects
                                              //Space
                     if (currentKBState.IsKeyDown(Keys.Space))
                     {
+                        /*
                         UseAbility(direction);
+                        */
                     }
                     break;
 
@@ -231,8 +244,9 @@ namespace PawnGame.GameObjects
                 switch (_heldAbility)
                 {
                     case Ability.Pawn:
+                        _abilityMove = direction;
                         _activeAbility = Ability.Pawn;
-                        _abilityTimer = 40;
+                        _abilityTimer = 10;
                         break;
 
                     case Ability.Knight:

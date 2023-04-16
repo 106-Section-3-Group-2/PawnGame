@@ -342,11 +342,12 @@ namespace PawnGame
                     }
                     //Virtual mouse stuff
                     
+                    //Vmouse has to update virst, and weapon has to update after player
+
                     VMouse.Update(Mouse.GetState(), WindowWidth,WindowHeight);
-                    _weapon.Update(_player, VMouse);
                     Manager.Update(_player);
                     _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState, _currLevel);
-
+                    _weapon.Update(_player, VMouse);
 
 
                     if (!_player.IsAlive)
