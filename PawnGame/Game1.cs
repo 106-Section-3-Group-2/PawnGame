@@ -391,7 +391,7 @@ namespace PawnGame
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.DarkOliveGreen);
+            GraphicsDevice.Clear(Color.Black);
 
             _spriteBatch.Begin();
             switch (_gameState)

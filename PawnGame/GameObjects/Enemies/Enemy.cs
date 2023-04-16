@@ -4,10 +4,10 @@ namespace PawnGame.GameObjects.Enemies
 {
     public abstract class Enemy : Entity
     {
-        [JsonProperty]
+        [JsonIgnore]
         protected bool _isAlerted;
 
-        [JsonProperty]
+        [JsonIgnore]
         protected int _speed;
 
         public Enemy(Game1.AssetNames textureKey, Rectangle hitbox) : base(textureKey, hitbox)
