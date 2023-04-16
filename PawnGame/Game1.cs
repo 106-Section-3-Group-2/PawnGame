@@ -325,7 +325,7 @@ namespace PawnGame
                     {
                         //Adds a random pawn, for the demo
                         // Commented for bug testing
-                        Manager.Add(new Pawn(AssetNames.PawnWhite, new Rectangle(random.Next(0, 2) * WindowWidth, random.Next(0, 2) * WindowHeight, Assets[AssetNames.PawnWhite].Width/6, Assets[AssetNames.PawnWhite].Height/6)));
+                        Manager.Add(new Pawn(AssetNames.PawnWhite, new Rectangle(random.Next(0, 2) * WindowWidth, random.Next(0, 2) * WindowHeight, Assets[AssetNames.PawnWhite].Width/_playerScale, Assets[AssetNames.PawnWhite].Height/ _playerScale)));
                         testTimer = 300;
                     }
                     //Virtual mouse stuff
