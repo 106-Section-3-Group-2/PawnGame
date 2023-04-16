@@ -274,7 +274,7 @@ namespace PawnGame
                                     occupied = false;
                                     foreach(Enemy enemy in _level.EnemySpawns)
                                     {
-                                        if (enemy.Hitbox.Contains(_mState.X, _mState.Y) || _level.Tiles[x,y].IsSolid == true)
+                                        if (enemy.Hitbox.Intersects(_level.Tiles[x, y].Hitbox) || _level.Tiles[x, y].IsSolid == true)
                                         {
                                             occupied = true;
                                         }

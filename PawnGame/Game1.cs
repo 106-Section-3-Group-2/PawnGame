@@ -499,10 +499,12 @@ namespace PawnGame
         /// </summary>
         private void NextLevel()
         {
+            Manager.Clear();
             if (LevelIndex < _levels.Length)
             {
                 _currLevel = _levels[LevelIndex];
                 CurrentLevel = _currLevel;
+                Manager.AddRange(_currLevel.EnemySpawns);
 
                 if (LevelIndex > _prevLevelIndex)
                 {
@@ -528,6 +530,8 @@ namespace PawnGame
             _currLevel = _levels[0];
             CurrentLevel = _currLevel;
             LevelIndex = 0;
+
+            Manager.Clear();
             _prevLevelIndex = 0;
         }
     }

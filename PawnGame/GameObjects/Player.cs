@@ -72,7 +72,7 @@ namespace PawnGame.GameObjects
                         {
                             ResolveCollisions(Game1.CurrentLevel.Tiles[i, j]);
                         }
-                        else if (Game1.CurrentLevel.Tiles[i, j].IsExit)
+                        else if (Game1.CurrentLevel.Tiles[i, j].IsExit && EnemyManager.Manager.Count <= 0)
                         {
                             Game1.LevelIndex++; 
                         }
