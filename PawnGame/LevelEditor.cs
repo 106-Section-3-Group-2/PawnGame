@@ -21,7 +21,8 @@ namespace PawnGame
         private MouseState _mState;
         private MouseState _mStatePrev;
         private Game1 _game;
-        Point _pawnDimensions;
+        private int _playerScale;
+        private Point _pawnDimensions;
         #endregion
 
         #region Spacing variables
@@ -75,7 +76,8 @@ namespace PawnGame
             _options = new List<Button>();
             _palette = new List<Button>();
 
-            _pawnDimensions = new Point(Game1.Assets[AssetNames.PawnWhite].Width / 6, Game1.Assets[AssetNames.PawnWhite].Height / 6);
+            _playerScale = 4;
+            _pawnDimensions = new Point(Game1.Assets[AssetNames.PawnWhite].Width / _playerScale, Game1.Assets[AssetNames.PawnWhite].Height / _playerScale);
 
             int paletteDownscale = 4;
 
