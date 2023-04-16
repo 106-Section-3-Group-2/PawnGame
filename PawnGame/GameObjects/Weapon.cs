@@ -22,6 +22,8 @@ namespace PawnGame.GameObjects
 
         private List<Vector2> _collisionVectors;
 
+        private List<Vector2> _lastCollisionVectors;
+
         private Color _color;
 
         public bool IsActive
@@ -47,12 +49,12 @@ namespace PawnGame.GameObjects
         {
             _hitbox.Location = player.Hitbox.Location + new Vector2(player.Hitbox.Width/2,player.Hitbox.Height/2);
 
-            if (VMouse.Speed > MathF.PI/26)
+            if (Math.Abs(VMouse.Speed) > MathF.PI/26)
             {
 
                 MakeCollisionVectors(VMouse);
 
-                _isActive = true;
+
                 _activeCounter += 1;
                 _forgivenessCounter = 0;
             }
@@ -60,13 +62,12 @@ namespace PawnGame.GameObjects
             {
                 MakeCollisionVectors(VMouse);
 
-                _isActive = true;
+
                 _activeCounter += 1;
                 _forgivenessCounter += 1;
             }
             else
             {
-                _isActive = false;
                 _activeCounter = 0;
             }
 
@@ -74,14 +75,18 @@ namespace PawnGame.GameObjects
             {
                 case 0:
                     _color = Color.White;
+                    _isActive = false;
                     break;
                 case > 210:
+                    _isActive = true;
                     _color = Color.Red;
                     break;
                 case >180:
+                    _isActive = true;
                     _color = Color.Blue;
                     break;
-                case > 1:
+                case > 50:
+                    _isActive = true;
                     _color = new Color(255, 255 - (int)_activeCounter, 255 - (int)_activeCounter);
                     break;
             }
@@ -91,7 +96,9 @@ namespace PawnGame.GameObjects
         public void MakeCollisionVectors(VirtualMouse VMouse)
         {
             _collisionVectors.Clear();
-            Vector2 vector1 = new Vector2(VMouse.X, VMouse.Y);
+            Vector2 vector1 = new Vector2(MathF.Cos(VMouse.Rotation), MathF.Sin(VMouse.Rotation));
+            //Vector2 vector1 = new Vector2(VMouse.X, VMouse.Y);
+            Debug.WriteLine("Rotation: " +VMouse.Rotation);
             vector1.Normalize();
             vector1 *= 100;
             Vector2 vector2 = vector1 / 5 * 4;
@@ -102,7 +109,7 @@ namespace PawnGame.GameObjects
             _collisionVectors.Add(vector2);
             _collisionVectors.Add(vector3);
             _collisionVectors.Add(vector4);
-            _collisionVectors.Add(vector3);
+            _collisionVectors.Add(vector5);
         }
 
         public bool IsColliding(Vectangle vectangle)
@@ -130,6 +137,20 @@ namespace PawnGame.GameObjects
             {
 
                 sb.Draw(Texture, _hitbox, null, Color.White, MathF.Atan2((mouse.Y - windowHeight/2), (mouse.X - windowWidth/2)) + MathF.PI /2f , new Vector2(Texture.Width/2, Texture.Height), SpriteEffects.None, 0);
+            }
+        }
+        public void Draw(SpriteBatch sb, Player player, float rotation)
+        {
+            if (_isActive)
+            {
+
+                sb.Draw(Texture, _hitbox, null, _color, rotation+MathF.PI / 2, new Vector2(Texture.Width / 2, Texture.Height), SpriteEffects.None, 0);
+                //Debug.WriteLine("R:"+color.R +"G:"+ color.G + "B:"+color.B);
+            }
+            else
+            {
+
+                sb.Draw(Texture, _hitbox, null, Color.White, rotation+MathF.PI/2, new Vector2(Texture.Width / 2, Texture.Height), SpriteEffects.None, 0);
             }
         }
     }

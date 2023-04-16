@@ -50,7 +50,7 @@ namespace PawnGame
             x = mouse.X;
             y = mouse.Y;
             rotation = MathF.Atan2(y - windowHeight / 2, x - windowWidth / 2);
-            speed = Math.Abs(Rotation - lastRotation);
+            speed = Rotation - lastRotation;
             lastRotation = rotation;
         }
 
