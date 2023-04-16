@@ -335,7 +335,6 @@ namespace PawnGame
                     Manager.Update(_player);
                     _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState, _currLevel.Tiles);
 
-                    _weapon.Update(_player,VMouse,gameTime);
                     _weapon.Update(_player,VMouse);
 
                     if (!_player.IsAlive)

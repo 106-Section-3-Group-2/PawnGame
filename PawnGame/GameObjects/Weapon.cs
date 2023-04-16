@@ -43,7 +43,7 @@ namespace PawnGame.GameObjects
             _color = Color.White;
         }
 
-        public void Update(Player player, VirtualMouse VMouse, GameTime gameTime)
+        public void Update(Player player, VirtualMouse VMouse)
         {
             _hitbox.Location = player.Hitbox.Location + new Vector2(player.Hitbox.Width/2,player.Hitbox.Height/2);
 
