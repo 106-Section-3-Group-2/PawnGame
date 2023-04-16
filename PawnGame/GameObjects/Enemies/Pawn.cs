@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;w
+using System.Threading.Tasks;
 using static PawnGame.GameObjects.Enemies.EnemyManager;
 
 namespace PawnGame.GameObjects.Enemies

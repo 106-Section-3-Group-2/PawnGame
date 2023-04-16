@@ -45,7 +45,7 @@ namespace PawnGame.GameObjects
         {
             ReadInputs(currentKBState, previousKBState,currentMouseState,prevMouseState);
             Move();
-            KeepInBounds(level);
+            KeepInBounds();
             
             for (int i = 0; i < level.Tiles.GetLength(0); i++)
             {
