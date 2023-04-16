@@ -21,6 +21,7 @@ namespace PawnGame
         private MouseState _mState;
         private MouseState _mStatePrev;
         private Game1 _game;
+        Point _pawnDimensions;
         #endregion
 
         #region Spacing variables
@@ -74,6 +75,8 @@ namespace PawnGame
             _options = new List<Button>();
             _palette = new List<Button>();
 
+            _pawnDimensions = new Point(Game1.Assets[AssetNames.PawnWhite].Width / 6, Game1.Assets[AssetNames.PawnWhite].Height / 6);
+
             int paletteDownscale = 4;
 
             #region Add palette information
@@ -112,13 +115,23 @@ namespace PawnGame
                 Assets[AssetNames.TileWhite].Height / paletteDownscale,
                 Color.Green));
 
+            //spawn point
+            _palette.Add(new Button(
+                Assets[AssetNames.PawnBlack],
+                _paletteTopLeft + new Vector2(0,
+                (_palette[0].ButtonBox.Height + _ButtonSpacing) * 4),
+                Assets[AssetNames.TileWhite].Width / paletteDownscale,
+                Assets[AssetNames.TileWhite].Height / paletteDownscale,
+                Color.Green));
+
             //create options
             float optionsX = _game.WindowWidth - _paletteTopLeft.X - Assets[AssetNames.IconLoad].Width;
+            //save
             _options.Add(new Button(
                 Assets[AssetNames.IconLoad],
                 new Vector2(optionsX, _paletteTopLeft.Y),
                 Color.Green));
-
+            //load
             _options.Add(new Button(
                 Assets[AssetNames.IconSave],
                 new Vector2(optionsX, _paletteTopLeft.Y + (Assets[AssetNames.IconLoad].Height + _ButtonSpacing) /* times n*/),
@@ -147,6 +160,8 @@ namespace PawnGame
                     }
                 }
             }
+            //default spawn point
+            _level.SpawnPoint = _level.Tiles[0, 0].Hitbox.Location;
         }
 
         /// <summary>
@@ -223,6 +238,7 @@ namespace PawnGame
                         if (_mState.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
                         {
                             //set the tile corresponding to palette
+                            bool occupied;
                             switch (_selected)
                             {
                                 case -1:
@@ -253,11 +269,11 @@ namespace PawnGame
                                     _level.Tiles[x, y] = new Tile(AssetNames.IconLoad, new Vectangle(_level.Tiles[x, y].X, _level.Tiles[x, y].Y, _level.Tiles[x, y].Width, _level.Tiles[x, y].Height), false, true);
                                     break;
                                 case 3:
-                                    //make sure there isn't already an enemy there
-                                    bool occupied = false;
+                                    //make sure there isn't already an enemy or solid wall there
+                                    occupied = false;
                                     foreach(Enemy enemy in _level.EnemySpawns)
                                     {
-                                        if (enemy.Hitbox.Contains(_mState.X, _mState.Y))
+                                        if (enemy.Hitbox.Contains(_mState.X, _mState.Y) || _level.Tiles[x,y].IsSolid == true)
                                         {
                                             occupied = true;
                                         }
@@ -265,13 +281,29 @@ namespace PawnGame
                                     //create an pawn enemy
                                     if (!occupied)
                                     {
-                                        Vector2 pawnDimensions = new Vector2(Game1.Assets[AssetNames.PawnWhite].Width / 6, Game1.Assets[AssetNames.PawnWhite].Height / 6);
                                         _level.EnemySpawns.Add(new Pawn(AssetNames.PawnWhite, new Rectangle(
-                                            (int)(_level.Tiles[x, y].X + _level.Tiles[x, y].Width / 2 - pawnDimensions.X / 2),
-                                            (int)(_level.Tiles[x, y].Y + _level.Tiles[x, y].Height / 2 - pawnDimensions.Y / 2),
-                                            (int)pawnDimensions.X,
-                                            (int)pawnDimensions.Y
+                                            (int)(_level.Tiles[x, y].X + _level.Tiles[x, y].Width / 2 - _pawnDimensions.X / 2),
+                                            (int)(_level.Tiles[x, y].Y + _level.Tiles[x, y].Height / 2 - _pawnDimensions.Y / 2),
+                                            (int)_pawnDimensions.X,
+                                            (int)_pawnDimensions.Y
                                             )));
+                                    }
+                                    break;
+                                case 4:
+                                    //make sure there isn't already an enemy, solid wall, or exit there
+                                    occupied = false;
+                                    foreach (Enemy enemy in _level.EnemySpawns)
+                                    {
+                                        if (enemy.Hitbox.Contains(_mState.X, _mState.Y) || _level.Tiles[x, y].IsSolid == true)
+                                        {
+                                            occupied = true;
+                                        }
+                                    }
+                                    //set spawn point
+                                    if (!occupied)
+                                    {
+                                        _level.SpawnPoint = new Vector2((int)(_level.Tiles[x, y].X + _level.Tiles[x, y].Width / 2 - _pawnDimensions.X / 2),
+                                            (int)(_level.Tiles[x, y].Y + _level.Tiles[x, y].Height / 2 - _pawnDimensions.Y / 2));
                                     }
                                     break;
                             }
@@ -294,7 +326,13 @@ namespace PawnGame
                             //should spawn an empty texture tile
                             if (!occupied && _canClick)
                             {
-                                _level.Tiles[x, y] = new Tile(AssetNames.GameLogo, new Vectangle(_level.Tiles[x, y].X, _level.Tiles[x, y].Y, _level.Tiles[x, y].Width, _level.Tiles[x, y].Height), true);
+                                _level.Tiles[x, y] = new Tile(
+                                    AssetNames.GameLogo,
+                                    new Vectangle(_level.Tiles[x, y].X,
+                                    _level.Tiles[x, y].Y,
+                                    _level.Tiles[x, y].Width,
+                                    _level.Tiles[x, y].Height),
+                                    true);
                             }
                         }
                     }
@@ -324,6 +362,12 @@ namespace PawnGame
             {
                 _level.EnemySpawns[i].Draw(sb);
             }
+            //draw spawn point
+            sb.Draw(
+                Game1.Assets[AssetNames.PawnBlack],
+                new Rectangle(new Point((int)_level.SpawnPoint.X,(int)_level.SpawnPoint.Y),
+                _pawnDimensions),
+                Color.White);
         }
 
         /// <summary>
