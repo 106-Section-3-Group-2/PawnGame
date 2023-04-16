@@ -1,4 +1,5 @@
-﻿using PawnGame;
+﻿using PawnGame.GameObjects.Enemies;
+
 namespace PawnGame.GameObjects
 {
     public class Player : Entity
@@ -139,6 +140,10 @@ namespace PawnGame.GameObjects
                     break;
 
                 case PlayerState.NoControl:
+                    if (_isAlive)
+                    {
+                        _playerState = PlayerState.Moving;
+                    }
                     break;
             }
 
@@ -282,5 +287,6 @@ namespace PawnGame.GameObjects
         {
             throw new System.NotImplementedException();
         }
+
     }
 }

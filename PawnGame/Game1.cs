@@ -527,11 +527,16 @@ namespace PawnGame
         /// </summary>
         public void ResetLevel()
         {
+            _player.IsAlive = true;
+            _player.X = _currLevel.SpawnPoint.X;
+            _player.Y = _currLevel.SpawnPoint.Y;
+
             _currLevel = _levels[0];
             CurrentLevel = _currLevel;
             LevelIndex = 0;
 
             Manager.Clear();
+            Manager.AddRange(_currLevel.EnemySpawns);
             _prevLevelIndex = 0;
         }
     }
