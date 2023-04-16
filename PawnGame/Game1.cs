@@ -61,7 +61,7 @@ namespace PawnGame
         private GameState _prevGameState;
         private Level[] _levels;
         private Level _currLevel;
-        private int _levelIndex;
+        private int _prevLevelIndex;
         #endregion
 
         #region Keyboard and mouse states
@@ -134,8 +134,8 @@ namespace PawnGame
             random = new Random();
             _prevKbState = Keyboard.GetState();
             Assets = new Dictionary<AssetNames, Texture2D>();
-            _levelIndex = 0;
-            LevelIndex = _levelIndex;
+            LevelIndex = 0;
+            _prevLevelIndex = 0;
             base.Initialize();
         }
 
@@ -325,7 +325,7 @@ namespace PawnGame
 
                     _weapon.Update(_player,VMouse);
 
-                    if (LevelIndex > this._levelIndex)
+                    if (LevelIndex > _prevLevelIndex)
                     {
                         NextLevel();
                     }
@@ -471,13 +471,12 @@ namespace PawnGame
             if (LevelIndex < _levels.Length)
             {
                 _currLevel = _levels[LevelIndex];
-                _levelIndex++;
+                _prevLevelIndex++;
             }
             else
             {
                 _gameState = GameState.Victory;
             }
-            
         }
     }
 }
