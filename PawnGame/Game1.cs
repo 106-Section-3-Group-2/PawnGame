@@ -309,7 +309,16 @@ namespace PawnGame
                         if (_debugButtons[i].Clicked())
                         {
                             _gameState = (GameState)i;
+
+                            // Resetting the level editor if the level editor was exited out of
+                            if (i == 2 && _prevGameState != (GameState)2)
+                            {
+                                _levelEditor = new LevelEditor(8, 8, this);
+                            }
+
                             _prevGameState = GameState.DebugMenu;
+
+                            
                         }
                     }
 
