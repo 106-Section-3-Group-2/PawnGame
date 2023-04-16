@@ -106,7 +106,9 @@ namespace PawnGame
         /// <summary>
         /// 
         /// </summary>
-        public static int LevelIndex; 
+        public static int LevelIndex;
+
+        public static Level CurrentLevel;
 
 
         /// <summary>
@@ -180,6 +182,7 @@ namespace PawnGame
                 _levels[i] = Level.Read(fileNames[i]);
             }
             _currLevel = _levels[0];
+            CurrentLevel = _currLevel;
             
             
         }
@@ -306,7 +309,16 @@ namespace PawnGame
                         if (_debugButtons[i].Clicked())
                         {
                             _gameState = (GameState)i;
+
+                            // Resetting the level editor if the level editor was exited out of
+                            if (i == 2 && _prevGameState != (GameState)2)
+                            {
+                                _levelEditor = new LevelEditor(8, 8, this);
+                            }
+
                             _prevGameState = GameState.DebugMenu;
+
+                            
                         }
                     }
 
@@ -325,7 +337,7 @@ namespace PawnGame
                     {
                         //Adds a random pawn, for the demo
                         // Commented for bug testing
-                        Manager.Add(new Pawn(AssetNames.PawnWhite, new Rectangle(random.Next(0, 2) * WindowWidth, random.Next(0, 2) * WindowHeight, Assets[AssetNames.PawnWhite].Width/6, Assets[AssetNames.PawnWhite].Height/6)));
+                        Manager.Add(new Pawn(AssetNames.PawnWhite, new Rectangle(random.Next(0, 2) * WindowWidth, random.Next(0, 2) * WindowHeight, Assets[AssetNames.PawnWhite].Width/_playerScale, Assets[AssetNames.PawnWhite].Height/ _playerScale)));
                         testTimer = 300;
                     }
                     //Virtual mouse stuff
@@ -333,7 +345,7 @@ namespace PawnGame
                     VMouse.Update(Mouse.GetState(), WindowWidth,WindowHeight);
                     _weapon.Update(_player, VMouse);
                     Manager.Update(_player);
-                    _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState, _currLevel.Tiles);
+                    _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState, _currLevel);
 
 
 
@@ -485,6 +497,7 @@ namespace PawnGame
             if (LevelIndex < _levels.Length)
             {
                 _currLevel = _levels[LevelIndex];
+                CurrentLevel = _currLevel;
 
                 if (LevelIndex > _prevLevelIndex)
                 {
@@ -508,6 +521,7 @@ namespace PawnGame
         public void ResetLevel()
         {
             _currLevel = _levels[0];
+            CurrentLevel = _currLevel;
             LevelIndex = 0;
             _prevLevelIndex = 0;
         }
