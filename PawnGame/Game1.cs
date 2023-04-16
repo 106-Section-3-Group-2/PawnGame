@@ -9,6 +9,7 @@ using PawnGame.GameObjects;
 using PawnGame.GameObjects.Enemies;
 using static PawnGame.GameObjects.Enemies.EnemyManager;
 using static PawnGame.VirtualMouse;
+using System.Reflection;
 
 namespace PawnGame
 {
@@ -534,7 +535,7 @@ namespace PawnGame
             _currLevel = _levels[0];
             CurrentLevel = _currLevel;
             LevelIndex = 0;
-
+            _levels[LevelIndex] = Level.Read(Directory.GetFiles(Directory.GetCurrentDirectory() + "/Levels")[LevelIndex]);
             Manager.Clear();
             Manager.AddRange(_currLevel.EnemySpawns);
             _prevLevelIndex = 0;
