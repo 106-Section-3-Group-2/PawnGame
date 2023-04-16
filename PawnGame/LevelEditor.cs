@@ -158,7 +158,7 @@ namespace PawnGame
             _mStatePrev = _mState;
             _mState = Mouse.GetState();
 
-            if (!_canClick && _mState.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Released)
+            if (!_canClick && _mState.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Released)
             {
                 _canClick = true;
             }
@@ -286,12 +286,13 @@ namespace PawnGame
                                 {
                                     _level.EnemySpawns.RemoveAt(i);
                                     occupied = true;
+                                    _canClick = false;
                                     break;
                                 }
                             }
 
                             //should spawn an empty texture tile
-                            if (!occupied)
+                            if (!occupied && _canClick)
                             {
                                 _level.Tiles[x, y] = new Tile(AssetNames.GameLogo, new Vectangle(_level.Tiles[x, y].X, _level.Tiles[x, y].Y, _level.Tiles[x, y].Width, _level.Tiles[x, y].Height), true);
                             }
