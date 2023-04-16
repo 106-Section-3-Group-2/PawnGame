@@ -1,10 +1,13 @@
-﻿namespace PawnGame.GameObjects
+﻿using Newtonsoft.Json;
+
+namespace PawnGame.GameObjects
 {
     public abstract class Entity : GameObject
     {
         protected bool _isAlive;
         protected Vector2 _velocity;
 
+        [JsonIgnore]
         public bool IsAlive
         {
             get
