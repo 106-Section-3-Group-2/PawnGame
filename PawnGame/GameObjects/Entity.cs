@@ -73,24 +73,24 @@
         /// </summary>
         /// <param name="levelWidth">Width of the level</param>
         /// <param name="levelHeight">Height of the level</param>
-        protected void KeepInBounds(float levelWidth, float levelHeight)
+        protected void KeepInBounds(Level level)
         {
-            if (X < levelWidth)
+            if (X < level.Location.X)
             {
-                X += levelWidth - X;
+                X += level.Location.X - X;
             }
-            else if (X > levelWidth)
+            else if (X + Width > level.Location.X + level.Width)
             {
-                X -= (X - Width);
+                X -= (X + Width) - (level.Location.X + level.Width);
             }
 
-            if (Y < levelHeight)
+            if (Y < level.Location.Y)
             {
-                Y += levelHeight - Y;
+                Y += level.Location.Y - Y;
             }
-            else if (Y > levelHeight)
+            else if (Y + Height > level.Location.Y + level.Height)
             {
-                Y -= (Y - levelHeight);
+                Y -= (Y + Height) - (level.Location.Y + level.Height);
             }
         }
     }
