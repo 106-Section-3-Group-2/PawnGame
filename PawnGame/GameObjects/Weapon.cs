@@ -87,7 +87,7 @@ namespace PawnGame.GameObjects
                     break;
                 case > 0:
                     _isActive = false;
-                    //_color = new Color(_activeCounter*4, 0+_activeCounter * 4, 0+_activeCounter * 4);
+                    _color = new Color(0,0,_activeCounter * 4);
                     break;
             }
 
