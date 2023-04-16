@@ -70,7 +70,7 @@ namespace PawnGame.GameObjects.Enemies
             {
                 IsAlive = false;
             }
-            
+            /*
             if (CheckCollision(weapon) && weapon.IsActive == false)
             {
                 Vector2 launch = new Vector2(X-weapon.Hitbox.X, Y-weapon.Hitbox.Y);
@@ -82,6 +82,7 @@ namespace PawnGame.GameObjects.Enemies
                 X += launch.X;
                 Y += launch.Y;
             }
+            */
             
         }
 
