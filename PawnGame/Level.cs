@@ -11,7 +11,7 @@ namespace PawnGame
     /// <summary>
     /// 
     /// </summary>
-    internal class Level
+    public class Level
     {
         #region properties
         /// <summary>
