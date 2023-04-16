@@ -99,6 +99,9 @@ namespace PawnGame
         /// </summary>
         public static Dictionary<AssetNames, Texture2D> Assets;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static int LevelIndex; 
 
 
@@ -218,6 +221,8 @@ namespace PawnGame
                             {
                                 // Start a new game
                                 // (whatever that means)
+                                ResetLevel();
+                                NextLevel();
                                 Mouse.SetPosition(WindowWidth / 2, WindowHeight / 2);
                                 _gameState = GameState.Game;
                             }
@@ -313,7 +318,7 @@ namespace PawnGame
                     {
                         //Adds a random pawn, for the demo
                         // Commented for bug testing
-                        //Manager.Add(new Pawn(AssetNames.PawnWhite, new Rectangle(random.Next(0, 2) * WindowWidth, random.Next(0, 2) * WindowHeight, Assets[AssetNames.PawnWhite].Width/6, Assets[AssetNames.PawnWhite].Height/6)));
+                        Manager.Add(new Pawn(AssetNames.PawnWhite, new Rectangle(random.Next(0, 2) * WindowWidth, random.Next(0, 2) * WindowHeight, Assets[AssetNames.PawnWhite].Width/6, Assets[AssetNames.PawnWhite].Height/6)));
                         testTimer = 300;
                     }
                     //Virtual mouse stuff
@@ -324,6 +329,11 @@ namespace PawnGame
                     _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState, _currLevel.Tiles);
 
                     _weapon.Update(_player,VMouse);
+
+                    if (!_player.IsAlive)
+                    {
+                        ResetLevel();
+                    }
 
                     if (LevelIndex > _prevLevelIndex)
                     {
@@ -471,12 +481,31 @@ namespace PawnGame
             if (LevelIndex < _levels.Length)
             {
                 _currLevel = _levels[LevelIndex];
-                _prevLevelIndex++;
+
+                if (LevelIndex > _prevLevelIndex)
+                {
+                    _prevLevelIndex++;
+                }
+                
+                _player.X = _currLevel.SpawnPoint.X;
+                _player.Y = _currLevel.SpawnPoint.Y;
+
             }
             else
             {
                 _gameState = GameState.Victory;
             }
+
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void ResetLevel()
+        {
+            _currLevel = _levels[0];
+            LevelIndex = 0;
+            _prevLevelIndex = 0;
         }
     }
 }
