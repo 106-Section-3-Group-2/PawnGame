@@ -346,11 +346,12 @@ namespace PawnGame
                     }
                     //Virtual mouse stuff
                     
+                    //Vmouse has to update virst, and weapon has to update after player
+
                     VMouse.Update(Mouse.GetState(), WindowWidth,WindowHeight);
-                    _weapon.Update(_player, VMouse);
                     Manager.Update(_player);
                     _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState);
-
+                    _weapon.Update(_player,VMouse);
 
 
                     if (!_player.IsAlive)
@@ -498,10 +499,12 @@ namespace PawnGame
         /// </summary>
         private void NextLevel()
         {
+            Manager.Clear();
             if (LevelIndex < _levels.Length)
             {
                 _currLevel = _levels[LevelIndex];
                 CurrentLevel = _currLevel;
+                Manager.AddRange(_currLevel.EnemySpawns);
 
                 if (LevelIndex > _prevLevelIndex)
                 {
@@ -527,6 +530,8 @@ namespace PawnGame
             _currLevel = _levels[0];
             CurrentLevel = _currLevel;
             LevelIndex = 0;
+
+            Manager.Clear();
             _prevLevelIndex = 0;
         }
     }
