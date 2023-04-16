@@ -282,7 +282,7 @@ namespace PawnGame
                                     //create an pawn enemy
                                     if (!occupied)
                                     {
-                                        _level.EnemySpawns.Add(new Pawn(AssetNames.PawnWhite, new Rectangle(
+                                        _level.PawnSpawns.Add(new Pawn(AssetNames.PawnWhite, new Rectangle(
                                             (int)(_level.Tiles[x, y].X + _level.Tiles[x, y].Width / 2 - _pawnDimensions.X / 2),
                                             (int)(_level.Tiles[x, y].Y + _level.Tiles[x, y].Height / 2 - _pawnDimensions.Y / 2),
                                             (int)_pawnDimensions.X,
