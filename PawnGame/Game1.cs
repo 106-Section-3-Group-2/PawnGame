@@ -342,7 +342,7 @@ namespace PawnGame
                     {
                         //Adds a random pawn, for the demo
                         // Commented for bug testing
-                        Manager.Add(new Pawn(AssetNames.PawnWhite, new Rectangle(random.Next(0, 2) * WindowWidth, random.Next(0, 2) * WindowHeight, Assets[AssetNames.PawnWhite].Width/_playerScale, Assets[AssetNames.PawnWhite].Height/ _playerScale)));
+                        //Manager.Add(new Pawn(AssetNames.PawnWhite, new Rectangle(random.Next(0, 2) * WindowWidth, random.Next(0, 2) * WindowHeight, Assets[AssetNames.PawnWhite].Width/_playerScale, Assets[AssetNames.PawnWhite].Height/ _playerScale)));
                         testTimer = 300;
                     }
                     //Virtual mouse stuff
@@ -520,7 +520,7 @@ namespace PawnGame
             {
                 _gameState = GameState.Victory;
             }
-
+            
         }
 
         /// <summary>
@@ -528,16 +528,24 @@ namespace PawnGame
         /// </summary>
         public void ResetLevel()
         {
-            _player.IsAlive = true;
-            _player.X = _currLevel.SpawnPoint.X;
-            _player.Y = _currLevel.SpawnPoint.Y;
+            _player.IsAlive = true; 
+
+            //get all the levels from the levels folder, deserialize and store them
+            string[] fileNames = Directory.GetFiles(Directory.GetCurrentDirectory() + "/Levels");
+            _levels = new Level[fileNames.Length];
+            for (int i = 0; i < _levels.Length; i++)
+            {
+                _levels[i] = Level.Read(fileNames[i]);
+            }
 
             _currLevel = _levels[0];
             CurrentLevel = _currLevel;
-            LevelIndex = 0;
-            _levels[LevelIndex] = Level.Read(Directory.GetFiles(Directory.GetCurrentDirectory() + "/Levels")[LevelIndex]);
+
+            _player.X = _currLevel.SpawnPoint.X;
+            _player.Y = _currLevel.SpawnPoint.Y;
             Manager.Clear();
             Manager.AddRange(_currLevel.EnemySpawns);
+            LevelIndex = 0;
             _prevLevelIndex = 0;
         }
     }

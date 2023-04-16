@@ -56,6 +56,7 @@ namespace PawnGame.GameObjects.Enemies
             {
                 if (!_enemies[i].IsAlive)
                 {
+                    _enemies.RemoveAt(i);
                     continue;
                 }
                 _enemies[i].Update(player);
