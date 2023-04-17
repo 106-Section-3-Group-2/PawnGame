@@ -21,7 +21,7 @@
             throw new System.NotImplementedException();
         }
 
-        protected override void OnDeath()
+        protected override void OnDeath(Player p)
         {
             throw new System.NotImplementedException();
         }
