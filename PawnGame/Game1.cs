@@ -549,7 +549,7 @@ namespace PawnGame
         /// send the player to a room without adding enemies
         /// </summary>
         /// <param name="room"></param>
-        private void GotoRoom(Level room)
+        private void GotoRoom(Room room)
         {
             _currLevel = room;
             CurrentLevel = _currLevel;
