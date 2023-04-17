@@ -81,11 +81,11 @@ namespace PawnGame.GameObjects
                         _color = Color.Black;
                         _isActive = false;
                         break;
-                    case > 70:
+                    case > 40:
                         _isActive = true;
                         _color = Color.Red;
                         break;
-                    case > 60:
+                    case > 30:
                         _isActive = true;
                         _color = Color.Blue;
                         break;
@@ -134,7 +134,7 @@ namespace PawnGame.GameObjects
                 {
                     return true;
                 }
-                else if (vectangle.Contains(Vector2.Transform(_lastCollisionVectors[i], rotation)))
+                else if (vectangle.Contains(Vector2.Transform(_lastCollisionVectors[i], rotation) + Hitbox.Location))
                 {
                     return true;
                 }
