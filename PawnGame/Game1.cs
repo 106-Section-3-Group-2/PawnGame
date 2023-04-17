@@ -232,7 +232,7 @@ namespace PawnGame
                                 // Start a new game
                                 // (whatever that means)
                                 ResetLevel();
-                                NextLevel();
+                                NextRoom();
                                 Mouse.SetPosition(WindowWidth / 2, WindowHeight / 2);
                                 _gameState = GameState.Game;
                             }
@@ -357,7 +357,7 @@ namespace PawnGame
 
                     if (LevelIndex > _prevLevelIndex)
                     {
-                        NextLevel();
+                        NextRoom();
                     }
 
                     #endregion
@@ -494,7 +494,7 @@ namespace PawnGame
         /// <summary>
         /// load the next room in the level array, or go to win screen if conditions are met
         /// </summary>
-        private void NextLevel()
+        private void NextRoom()
         {
             Manager.Clear();
             if (LevelIndex < _levels.Length)
@@ -543,6 +543,19 @@ namespace PawnGame
             Manager.AddRange(_currLevel.EnemySpawns);
             LevelIndex = 0;
             _prevLevelIndex = 0;
+        }
+
+        /// <summary>
+        /// send the player to a room without adding enemies
+        /// </summary>
+        /// <param name="room"></param>
+        private void GotoRoom(Level room)
+        {
+            _currLevel = room;
+            CurrentLevel = _currLevel;
+            _player.X = _currLevel.SpawnPoint.X;
+            _player.Y = _currLevel.SpawnPoint.Y;
+            Manager.Clear();
         }
     }
 }
