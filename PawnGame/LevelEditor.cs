@@ -100,7 +100,7 @@ namespace PawnGame
 
             //exit
             _palette.Add(new Button(
-                Assets[AssetNames.IconLoad],
+                Assets[AssetNames.ExitWhite],
                 _paletteTopLeft + new Vector2(0,
                 (_palette[0].ButtonBox.Height + _ButtonSpacing) * 2),
                 Assets[AssetNames.TileWhite].Width / paletteDownscale,
