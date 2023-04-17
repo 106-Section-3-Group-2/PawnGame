@@ -67,8 +67,8 @@ namespace PawnGame
         #region GameStates and level
         private GameState _gameState;
         private GameState _prevGameState;
-        private Level[] _levels;
-        private Level _currLevel;
+        private Room[] _levels;
+        private Room _currLevel;
         private int _prevLevelIndex;
         #endregion
 
@@ -113,7 +113,7 @@ namespace PawnGame
         /// </summary>
         public static int LevelIndex;
 
-        public static Level CurrentLevel;
+        public static Room CurrentLevel;
 
 
         /// <summary>
@@ -217,8 +217,8 @@ namespace PawnGame
                     _menuButtons.Add(new(_font, "Load Game",
                             new Vector2(WindowWidth / 2 - _font.MeasureString("Load Game").X / 2, WindowHeight - 75),
                             Color.LightGray));
-                    _menuButtons.Add(new(_font, "Level Editor",
-                            new Vector2(WindowWidth / 2 - _font.MeasureString("Level Editor").X / 2, WindowHeight - 50),
+                    _menuButtons.Add(new(_font, "Room Editor",
+                            new Vector2(WindowWidth / 2 - _font.MeasureString("Room Editor").X / 2, WindowHeight - 50),
                             Color.LightGray));
 
                     // Updating the states depending on what button is clicked
@@ -280,8 +280,8 @@ namespace PawnGame
                         new Vector2(WindowWidth / 2 - _font.MeasureString("Game").X / 2, WindowHeight /2),
                         Color.LightGray));
 
-                    _debugButtons.Add(new(_font, "Level Editor",
-                            new Vector2(WindowWidth - WindowWidth / 4 - _font.MeasureString("Level Editor").X / 2, WindowHeight /2),
+                    _debugButtons.Add(new(_font, "Room Editor",
+                            new Vector2(WindowWidth - WindowWidth / 4 - _font.MeasureString("Room Editor").X / 2, WindowHeight /2),
                             Color.LightGray));
 
                     _debugButtons.Add(new(_font, "Victory",
@@ -528,10 +528,10 @@ namespace PawnGame
 
             //get all the levels from the levels folder, deserialize and store them
             string[] fileNames = Directory.GetFiles(Directory.GetCurrentDirectory() + "/Levels");
-            _levels = new Level[fileNames.Length];
+            _levels = new Room[fileNames.Length];
             for (int i = 0; i < _levels.Length; i++)
             {
-                _levels[i] = Level.Read(fileNames[i]);
+                _levels[i] = Room.Read(fileNames[i]);
             }
 
             _currLevel = _levels[0];

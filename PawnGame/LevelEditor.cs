@@ -15,7 +15,7 @@ namespace PawnGame
         private List<Button> _palette;
         private List<Button> _options;
         private int _selected;
-        private Level _level;
+        private Room _level;
         private Vector2 _cameraPosition;
         private bool _canClick;
         private MouseState _mState;
@@ -38,7 +38,7 @@ namespace PawnGame
         /// <param name="y"></param>
         public LevelEditor(int x, int y, Game1 game)
         {
-            _level = new Level(new Tile[x, y], new Vector2());
+            _level = new Room(new Tile[x, y], new Vector2());
             _game = game;
             Initialize();
         }
@@ -51,12 +51,12 @@ namespace PawnGame
         {
             try
             {
-                _level = Level.Read(filePath);
+                _level = Room.Read(filePath);
                 _filePath = filePath;
             }
             catch (Exception e)
             {
-                _level = new Level(new Tile[8, 8], new Vector2());
+                _level = new Room(new Tile[8, 8], new Vector2());
                 throw e;
             }
             _game = game;
@@ -203,7 +203,7 @@ namespace PawnGame
                             {
                                 //try
                                 //{
-                                    _level = Level.Read(openFileDialog.FileName);
+                                    _level = Room.Read(openFileDialog.FileName);
                                 //}
                                 /*catch
                                 {
@@ -218,7 +218,7 @@ namespace PawnGame
                             saveFileDialog.Filter = "Json files (*.json)|*.json|Text files (*.txt)|*.txt";
                             if (saveFileDialog.ShowDialog() == DialogResult.OK)
                             {
-                                Level.Write(_level, saveFileDialog.FileName);
+                                Room.Write(_level, saveFileDialog.FileName);
                             }
                             break;
                         //load error, should always be last case

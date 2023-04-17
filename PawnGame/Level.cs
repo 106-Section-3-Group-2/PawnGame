@@ -11,7 +11,7 @@ namespace PawnGame
     /// <summary>
     /// holds an array of tiles and lists of enemy. Serializable and has static functions to save and load.
     /// </summary>
-    public class Level
+    public class Room
     {
         #region properties
         /// <summary>
@@ -101,7 +101,7 @@ namespace PawnGame
         /// <param name="tiles"></param>
         /// <param name="enemies"></param>
         /// <param name="spawnPoint"></param>
-        public Level(Tile[,] tiles, Vector2 spawnPoint)
+        public Room(Tile[,] tiles, Vector2 spawnPoint)
         {
             Tiles = tiles;
             SpawnPoint = spawnPoint;
@@ -125,7 +125,7 @@ namespace PawnGame
         /// <param name="kingSpawns"></param>
         /// <param name="spawnPoint"></param>
         [JsonConstructor]
-        public Level(Tile[,] tiles, List<Pawn> pawnSpawns, List<Bishop> bishopSpawns, List<Rook> rookSpawns, List<Knight> knightSpawns, List<Queen> queenSpawns, List<King> kingSpawns, Vector2 spawnPoint)
+        public Room(Tile[,] tiles, List<Pawn> pawnSpawns, List<Bishop> bishopSpawns, List<Rook> rookSpawns, List<Knight> knightSpawns, List<Queen> queenSpawns, List<King> kingSpawns, Vector2 spawnPoint)
         {
             Tiles = tiles;
             PawnSpawns = pawnSpawns;
@@ -167,7 +167,7 @@ namespace PawnGame
         /// </summary>
         /// <param name="level"></param>
         /// <param name="filePath"></param>
-        public static void Write(Level level, string filePath)
+        public static void Write(Room level, string filePath)
         {
             try
             {
@@ -186,10 +186,10 @@ namespace PawnGame
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        public static Level Read(string filePath)
+        public static Room Read(string filePath)
         {
             using StreamReader reader = new(filePath);
-            return JsonConvert.DeserializeObject<Level>(reader.ReadLine());
+            return JsonConvert.DeserializeObject<Room>(reader.ReadLine());
         }
     }
 }
