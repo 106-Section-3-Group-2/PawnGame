@@ -61,6 +61,18 @@ namespace PawnGame
             _game = game;
             Initialize();
         }
+
+        /// <summary>
+        /// load the level editor given a room to edit
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public LevelEditor(Room level, Game1 game)
+        {
+            _level = level;
+            _game = game;
+            Initialize();
+        }
         #endregion
 
         /// <summary>
