@@ -23,7 +23,7 @@ namespace PawnGame.GameObjects.Enemies
             throw new NotImplementedException();
         }
 
-        protected override void OnDeath()
+        protected override void OnDeath(Player p)
         {
             throw new NotImplementedException();
         }

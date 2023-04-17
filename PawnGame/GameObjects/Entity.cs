@@ -40,11 +40,6 @@ namespace PawnGame.GameObjects
         }
 
         /// <summary>
-        /// Should occur when the entity dies
-        /// </summary>
-        protected abstract void OnDeath();
-
-        /// <summary>
         /// Resolves any collisions with the game object entered.
         /// </summary>
         /// <param name="other">Game object that is coliding with the current one</param>

@@ -17,5 +17,10 @@ namespace PawnGame.GameObjects.Enemies
         public abstract void Update(Player player);
         protected abstract void Move(Player player);
         protected abstract void TakeDamage(int amount);
+
+        /// <summary>
+        /// Should occur when the entity dies
+        /// </summary>
+        protected abstract void OnDeath(Player player);
     }
 }
