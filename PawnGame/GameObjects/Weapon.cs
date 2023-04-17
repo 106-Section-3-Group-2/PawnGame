@@ -42,6 +42,7 @@ namespace PawnGame.GameObjects
             _activeCounter = 0;
             _forgivenessCounter = 0;
             _collisionVectors = new List<Vector2>();
+            _lastCollisionVectors = new List<Vector2>();
             _color = Color.White;
         }
         
@@ -80,11 +81,11 @@ namespace PawnGame.GameObjects
                         _color = Color.Black;
                         _isActive = false;
                         break;
-                    case > 70:
+                    case > 40:
                         _isActive = true;
                         _color = Color.Red;
                         break;
-                    case > 60:
+                    case > 30:
                         _isActive = true;
                         _color = Color.Blue;
                         break;
@@ -98,6 +99,11 @@ namespace PawnGame.GameObjects
 
         public void MakeCollisionVectors(VirtualMouse VMouse)
         {
+            _lastCollisionVectors.Clear();
+            for (int i = 0; i < _collisionVectors.Count; i++)
+            {
+                _lastCollisionVectors.Add(_collisionVectors[i]);
+            }
             _collisionVectors.Clear();
             Vector2 vector1 = new Vector2(MathF.Cos(VMouse.Rotation), MathF.Sin(VMouse.Rotation));
             //Vector2 vector1 = new Vector2(VMouse.X, VMouse.Y);
@@ -116,9 +122,19 @@ namespace PawnGame.GameObjects
 
         public bool IsColliding(Vectangle vectangle)
         {
+            float theta = MathF.Atan2(_lastCollisionVectors[0].Y, _lastCollisionVectors[0].X) - MathF.Atan2(_collisionVectors[0].Y, _collisionVectors[0].X);
+            Matrix rotation = Matrix.CreateRotationZ(theta);
             for (int i = 0; i < _collisionVectors.Count; i++)
             {
-                if (vectangle.Contains(_collisionVectors[i]+Hitbox.Location))
+                if (vectangle.Contains(_collisionVectors[i] + Hitbox.Location))
+                {
+                    return true;
+                }
+                else if (vectangle.Contains(_lastCollisionVectors[i] + Hitbox.Location))
+                {
+                    return true;
+                }
+                else if (vectangle.Contains(Vector2.Transform(_lastCollisionVectors[i], rotation) + Hitbox.Location))
                 {
                     return true;
                 }
