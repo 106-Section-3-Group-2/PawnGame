@@ -45,6 +45,8 @@ namespace PawnGame
             WallWhite,
             HoleBlack,
             HoleWhite,
+            ExitBlack,
+            ExitWhite,
 
             //Pieces
             PawnBlack,
@@ -166,10 +168,12 @@ namespace PawnGame
             Assets.Add(AssetNames.PawnWhite, Content.Load<Texture2D>("PawnWhite"));
             Assets.Add(AssetNames.TileBlack, Content.Load<Texture2D>("TileBlack"));
             Assets.Add(AssetNames.TileWhite, Content.Load<Texture2D>("TileWhite"));
-            Assets.Add(AssetNames.WallWhite, Content.Load<Texture2D>("WallBlack"));
-            Assets.Add(AssetNames.WallBlack, Content.Load<Texture2D>("WallWhite"));
-            Assets.Add(AssetNames.HoleWhite, Content.Load<Texture2D>("HoleBlack"));
-            Assets.Add(AssetNames.HoleBlack, Content.Load<Texture2D>("HoleWhite"));
+            Assets.Add(AssetNames.WallBlack, Content.Load<Texture2D>("WallBlack"));
+            Assets.Add(AssetNames.WallWhite, Content.Load<Texture2D>("WallWhite"));
+            Assets.Add(AssetNames.HoleBlack, Content.Load<Texture2D>("HoleBlack"));
+            Assets.Add(AssetNames.HoleWhite, Content.Load<Texture2D>("HoleWhite"));
+            Assets.Add(AssetNames.ExitBlack, Content.Load<Texture2D>("ExitBlack"));
+            Assets.Add(AssetNames.ExitWhite, Content.Load<Texture2D>("ExitWhite"));
             Assets.Add(AssetNames.WeaponSword, Content.Load<Texture2D>("Sword"));
             Assets.Add(AssetNames.DebugError, Content.Load<Texture2D>("Error"));
 
