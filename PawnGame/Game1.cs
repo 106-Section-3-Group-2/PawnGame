@@ -29,7 +29,7 @@ namespace PawnGame
         }
 
         /// <summary>
-        /// Name of assets
+        /// Represents the various graphical assets used
         /// </summary>
         public enum AssetNames
         {
@@ -157,10 +157,9 @@ namespace PawnGame
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            //Debug font
-            _font = Content.Load<SpriteFont>("Arial");
 
-            //load textures
+            _font = Content.Load<SpriteFont>("Arial");
+            #region load textures
             Assets.Add(AssetNames.GameLogo, Content.Load<Texture2D>("logo"));
             Assets.Add(AssetNames.IconSave, Content.Load<Texture2D>("IconSave"));
             Assets.Add(AssetNames.IconLoad, Content.Load<Texture2D>("IconLoad"));
@@ -176,6 +175,7 @@ namespace PawnGame
             Assets.Add(AssetNames.ExitWhite, Content.Load<Texture2D>("ExitWhite"));
             Assets.Add(AssetNames.WeaponSword, Content.Load<Texture2D>("Sword"));
             Assets.Add(AssetNames.DebugError, Content.Load<Texture2D>("Error"));
+            #endregion
 
             _weapon = new Weapon(AssetNames.WeaponSword, new Rectangle(WindowWidth / 2, WindowHeight / 2, Assets[AssetNames.WeaponSword].Width / 2, Assets[AssetNames.WeaponSword].Height / 2));
             _player = new Player(AssetNames.PawnBlack, new Rectangle(WindowWidth / 2, WindowHeight / 2, Assets[AssetNames.PawnBlack].Width/_playerScale, Assets[AssetNames.PawnBlack].Height/ _playerScale), _weapon);
@@ -183,17 +183,8 @@ namespace PawnGame
             //initialize level editor (needs textures loaded)
             _levelEditor = new LevelEditor(8, 8, this);
 
-            //get all the levels from the levels folder, deserialize and store them
-            string[] fileNames = Directory.GetFiles(Directory.GetCurrentDirectory() + "/Levels");
-            _levels = new Level[fileNames.Length];
-            for(int i = 0; i < _levels.Length; i++)
-            {
-                _levels[i] = Level.Read(fileNames[i]);
-            }
-            _currLevel = _levels[0];
-            CurrentLevel = _currLevel;
-            
-            
+            //initialize and load the level array
+            ResetLevel();
         }
 
         protected override void Update(GameTime gameTime)
@@ -472,6 +463,7 @@ namespace PawnGame
             _spriteBatch.End();
             base.Draw(gameTime);
         }
+
         /// <summary>
         /// Fullscreens or unfullscreens the window accordingly
         /// </summary>
@@ -500,7 +492,7 @@ namespace PawnGame
         }
 
         /// <summary>
-        /// 
+        /// load the next room in the level array, or go to win screen if conditions are met
         /// </summary>
         private void NextLevel()
         {
@@ -528,7 +520,7 @@ namespace PawnGame
         }
 
         /// <summary>
-        /// 
+        /// return the player to the beginning of the level
         /// </summary>
         public void ResetLevel()
         {

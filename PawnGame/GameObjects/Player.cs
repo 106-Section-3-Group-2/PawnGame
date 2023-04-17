@@ -283,7 +283,7 @@ namespace PawnGame.GameObjects
             }
         }
 
-        protected override void OnDeath()
+        protected void OnDeath()
         {
             throw new System.NotImplementedException();
         }

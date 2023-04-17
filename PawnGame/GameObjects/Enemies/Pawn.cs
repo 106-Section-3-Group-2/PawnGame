@@ -30,10 +30,10 @@ namespace PawnGame.GameObjects.Enemies
 
             CheckPlayerCollision(player);
             CheckWeaponCollision(player.Weapon);
+
             if (!_isAlive)
             {
-                player.GetAbility(Player.Ability.Pawn);
-                OnDeath();
+                OnDeath(player);
             }
         }
 
@@ -81,8 +81,9 @@ namespace PawnGame.GameObjects.Enemies
             
         }
 
-        protected override void OnDeath()
+        protected override void OnDeath(Player player)
         {
+            player.GetAbility(Player.Ability.Pawn);
         }
         protected override void TakeDamage(int amount)
         {
