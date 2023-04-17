@@ -57,6 +57,9 @@ namespace PawnGame
 
             //Debug
             DebugError,
+
+            //Abilities
+            AbilityDash,
         }
         #endregion
 
@@ -89,6 +92,7 @@ namespace PawnGame
 
         //Entities
         private Player _player;
+        private Texture2D _heldAbilityTexture;
         private Weapon _weapon;
         private int _playerScale;
 
@@ -174,11 +178,13 @@ namespace PawnGame
             Assets.Add(AssetNames.ExitBlack, Content.Load<Texture2D>("ExitBlack"));
             Assets.Add(AssetNames.ExitWhite, Content.Load<Texture2D>("ExitWhite"));
             Assets.Add(AssetNames.WeaponSword, Content.Load<Texture2D>("Sword"));
+            Assets.Add(AssetNames.AbilityDash, Content.Load<Texture2D>("AbilityDash"));
             Assets.Add(AssetNames.DebugError, Content.Load<Texture2D>("Error"));
             #endregion
 
             _weapon = new Weapon(AssetNames.WeaponSword, new Rectangle(WindowWidth / 2, WindowHeight / 2, Assets[AssetNames.WeaponSword].Width / 2, Assets[AssetNames.WeaponSword].Height / 2));
             _player = new Player(AssetNames.PawnBlack, new Rectangle(WindowWidth / 2, WindowHeight / 2, Assets[AssetNames.PawnBlack].Width/_playerScale, Assets[AssetNames.PawnBlack].Height/ _playerScale), _weapon);
+            _heldAbilityTexture = null!;
 
             //initialize level editor (needs textures loaded)
             _levelEditor = new LevelEditor(8, 8, this);
@@ -355,6 +361,16 @@ namespace PawnGame
                         ResetLevel();
                     }
 
+                    switch (_player.HeldAbility)
+                    {
+                        case Player.Ability.Pawn:
+                            _heldAbilityTexture = Assets[AssetNames.AbilityDash];
+                            break;
+                        default:
+                            _heldAbilityTexture = null!;
+                            break;
+                    }
+
                     if (LevelIndex > _prevLevelIndex)
                     {
                         NextLevel();
@@ -441,6 +457,34 @@ namespace PawnGame
                     Manager.Draw(_spriteBatch);
                     //_weapon.Draw(_spriteBatch, _player, Mouse.GetState(),WindowWidth,WindowHeight);
                     _weapon.Draw(_spriteBatch, _player, VMouse.Rotation);
+
+                    //UI stuff
+                    Vector2 UIPos = new Vector2(0 + _currLevel.Location.X / 2,
+                                (_currLevel.Location.Y + _currLevel.Height) / 2 + 50);
+
+                    _spriteBatch.DrawString(_font, "Current Ability:", new Vector2(UIPos.X - _font.MeasureString("Current Ability:").X /2,
+                        UIPos.Y - 50), Color.White);
+
+                    if (_heldAbilityTexture != null!)
+                    {
+                        string abilityName = _heldAbilityTexture.Name.Substring(7);
+                        _spriteBatch.DrawString(_font, $"{abilityName}", new Vector2(UIPos.X - _font.MeasureString(abilityName).X / 2,
+                            UIPos.Y + 50), Color.White);
+                    }
+                    else
+                    {
+                        _spriteBatch.DrawString(_font, $"None", new Vector2(UIPos.X - _font.MeasureString("None").X / 2,
+                            UIPos.Y + 50), Color.White);
+                    }
+
+                    switch (_player.HeldAbility)
+                    {
+                        case Player.Ability.Pawn:
+                            _spriteBatch.Draw(_heldAbilityTexture, new Rectangle((int)UIPos.X - (_heldAbilityTexture.Width / _playerScale) / 2, 
+                                (int)UIPos.Y, _heldAbilityTexture.Width/_playerScale, _heldAbilityTexture.Height/_playerScale), Color.White);
+                            break;
+
+                    }
                     #endregion
                     break;
 
