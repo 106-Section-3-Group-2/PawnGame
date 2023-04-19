@@ -7,6 +7,9 @@ namespace PawnGame.GameObjects
         protected bool _isAlive;
         protected Vector2 _velocity;
 
+        /// <summary>
+        /// If the entity is alive or not
+        /// </summary>
         [JsonIgnore]
         public bool IsAlive
         {
