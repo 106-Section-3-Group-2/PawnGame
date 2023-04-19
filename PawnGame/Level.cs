@@ -28,17 +28,19 @@ namespace PawnGame
         /// <summary>
         /// Saves the current level to both the dev and user level folders
         /// </summary>
-        public void Save(string fileName)
+        public void Save(string filePath)
         {
             string jsonLevel = JsonConvert.SerializeObject(this);
 
             if (Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\Levels\")))
             {
+                string fileName = filePath.Substring(filePath.LastIndexOf(@"\") + 1);
+
                 using StreamWriter devWriter = new(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\Levels\" + fileName));
                 devWriter.Write(jsonLevel);
             }
 
-            using StreamWriter gameWriter = new(Directory.GetCurrentDirectory() + @"\Levels" + fileName);
+            using StreamWriter gameWriter = new(filePath);
             gameWriter.Write(jsonLevel);
         }
 
