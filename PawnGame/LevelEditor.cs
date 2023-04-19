@@ -69,7 +69,7 @@ namespace PawnGame
         /// <param name="y"></param>
         public LevelEditor(Room level, Game1 game)
         {
-            _level = level;
+            _room = level;
             _game = game;
             Initialize();
         }

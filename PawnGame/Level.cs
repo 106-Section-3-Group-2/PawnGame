@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.IO;
 
 namespace PawnGame
 {
@@ -28,6 +29,34 @@ namespace PawnGame
         public Level()
         {
             _rooms = new Room[5,5];
+        }
+
+        /// <summary>
+        /// Saves the current level to both the dev and user level folders
+        /// </summary>
+        public void Save()
+        {
+            string jsonLevel = JsonConvert.SerializeObject(this);
+
+            if (Directory.Exists(Directory.GetCurrentDirectory() + @"..\..\..\Levels"))
+            {
+                using StreamWriter devWriter = new(Directory.GetCurrentDirectory() + @"..\..\..\Levels");
+                devWriter.Write(jsonLevel);
+            }
+
+            using StreamWriter gameWriter = new(Directory.GetCurrentDirectory() + @"\Levels");
+            gameWriter.Write(jsonLevel);
+        }
+
+        /// <summary>
+        /// Takes a file path and returns the level stored in that file
+        /// </summary>
+        /// <param name="filePath">path of the file to load</param>
+        /// <returns>Level stored in that file</returns>
+        public static Level Load(string filePath)
+        {
+            using StreamReader reader = new(filePath);
+            return JsonConvert.DeserializeObject<Level>(reader.ReadLine());
         }
     }
 }
