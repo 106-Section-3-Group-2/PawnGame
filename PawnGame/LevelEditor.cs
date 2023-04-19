@@ -51,7 +51,6 @@ namespace PawnGame
             try
             {
                 _room = Room.Read(filePath);
-                _filePath = filePath;
             }
             catch (Exception e)
             {
@@ -151,7 +150,6 @@ namespace PawnGame
             #endregion
 
             _selected = -1;
-            _cameraPosition = new Vector2(100, 100);
             _canClick = true;
 
             //populate tile array

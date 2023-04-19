@@ -18,13 +18,7 @@ namespace PawnGame
         /// <param name="j"></param>
         /// <returns></returns>
         [JsonIgnore]
-        public Room this[int i, int j]
-        {
-            get
-            {
-                return _rooms[i, j];
-            }
-        }
+        public Room this[int i, int j] => _rooms[i, j];
 
         public Level()
         {
@@ -34,17 +28,17 @@ namespace PawnGame
         /// <summary>
         /// Saves the current level to both the dev and user level folders
         /// </summary>
-        public void Save()
+        public void Save(string fileName)
         {
             string jsonLevel = JsonConvert.SerializeObject(this);
 
-            if (Directory.Exists(Directory.GetCurrentDirectory() + @"..\..\..\Levels"))
+            if (Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\Levels\")))
             {
-                using StreamWriter devWriter = new(Directory.GetCurrentDirectory() + @"..\..\..\Levels");
+                using StreamWriter devWriter = new(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\Levels\" + fileName));
                 devWriter.Write(jsonLevel);
             }
 
-            using StreamWriter gameWriter = new(Directory.GetCurrentDirectory() + @"\Levels");
+            using StreamWriter gameWriter = new(Directory.GetCurrentDirectory() + @"\Levels" + fileName);
             gameWriter.Write(jsonLevel);
         }
 

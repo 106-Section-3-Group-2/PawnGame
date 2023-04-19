@@ -152,9 +152,6 @@ namespace PawnGame
             _prevLevelIndex = 0;
             _playerScale = 4;
 
-            Level test = new();
-            test.Save();
-
             base.Initialize();
         }
 
