@@ -33,10 +33,14 @@ namespace PawnGame
         /// </summary>
         public enum AssetNames
         {
-            //General stuff
+            //UI
             GameLogo,
             IconSave,
             IconLoad,
+            ButtonUp,
+            ButtonDown,
+            ButtonLeft,
+            ButtonRight,
 
             //Tiles
             TileBlack,
@@ -176,6 +180,10 @@ namespace PawnGame
             Assets.Add(AssetNames.ExitWhite, Content.Load<Texture2D>("ExitWhite"));
             Assets.Add(AssetNames.WeaponSword, Content.Load<Texture2D>("Sword"));
             Assets.Add(AssetNames.DebugError, Content.Load<Texture2D>("Error"));
+            Assets.Add(AssetNames.ButtonUp, Content.Load<Texture2D>("ButtonUp"));
+            Assets.Add(AssetNames.ButtonDown, Content.Load<Texture2D>("ButtonDown"));
+            Assets.Add(AssetNames.ButtonLeft, Content.Load<Texture2D>("ButtonLeft"));
+            Assets.Add(AssetNames.ButtonRight, Content.Load<Texture2D>("ButtonRight"));
             #endregion
 
             _weapon = new Weapon(AssetNames.WeaponSword, new Rectangle(WindowWidth / 2, WindowHeight / 2, Assets[AssetNames.WeaponSword].Width / 2, Assets[AssetNames.WeaponSword].Height / 2));
