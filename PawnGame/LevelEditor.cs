@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using PawnGame.GameObjects.Enemies;
 using System.Windows.Forms;
 using static PawnGame.Game1;
-using Microsoft.Xna.Framework.Input;
 
 namespace PawnGame
 {
@@ -155,7 +154,7 @@ namespace PawnGame
             //populate tile array
             int sideLength = _game.WindowHeight / _room.Tiles.GetLength(1);
             int margin = (_game.WindowWidth / 2) - _room.Tiles.GetLength(0) * sideLength / 2;
-
+            
             for(int x = 0; x < _room.Tiles.GetLength(0); x++)
             {
                 for(int y = 0; y < _room.Tiles.GetLength(1); y++)
