@@ -1,4 +1,5 @@
 ﻿using PawnGame.GameObjects.Enemies;
+using System;
 
 namespace PawnGame.GameObjects
 {
@@ -62,8 +63,10 @@ namespace PawnGame.GameObjects
             ReadInputs(currentKBState, previousKBState,currentMouseState,prevMouseState);
             Move();
             KeepInBounds();
-            
-            for (int i = 0; i < Game1.CurrentLevel.Tiles.GetLength(0); i++)
+            ManageCollisions(new((int)((X - Game1.CurrentLevel.Tiles[0, 0].X) / Game1.CurrentLevel.Tiles[0, 0].Width), (int)(Y / Game1.CurrentLevel.Tiles[0, 0].Height)));
+
+
+            /*for (int i = 0; i < Game1.CurrentLevel.Tiles.GetLength(0); i++)
             {
                 for (int j = 0; j < Game1.CurrentLevel.Tiles.GetLength(1); j++)
                 {
@@ -79,8 +82,9 @@ namespace PawnGame.GameObjects
                         }
                     }
                 }
-            }
+            }*/
         }
+
         protected void Move()
         {
             switch (_playerState)
@@ -280,6 +284,47 @@ namespace PawnGame.GameObjects
             if (_heldAbility == Ability.None)
             {
                 _heldAbility = ability;
+            }
+        }
+
+        public void ManageCollisions(Point tilePos)
+        {
+            tilePos.X--;
+            tilePos.Y--;
+
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (tilePos.X < 0 || tilePos.X >= Game1.CurrentLevel.Tiles.GetLength(0))
+                    {
+                        tilePos.X++;
+                        continue;
+                    }
+                    else if (tilePos.Y < 0 || tilePos.Y >= Game1.CurrentLevel.Tiles.GetLength(1))
+                    {
+                        tilePos.X -= i;
+                        break;
+                    }
+
+                    Tile tileToCheck = Game1.CurrentLevel.Tiles[tilePos.X, tilePos.Y];
+
+                    if (CheckCollision(tileToCheck))
+                    {
+                        if (tileToCheck.IsSolid)
+                        {
+                            ResolveCollisions(tileToCheck);
+                        }
+                        else if (tileToCheck.IsExit && EnemyManager.Manager.Count <= 0)
+                        {
+                            Game1.LevelIndex++;
+                        }
+                    }
+
+                    if (i == 2) tilePos.X -= 2;
+                    else tilePos.X++;
+                }
+                tilePos.Y++;
             }
         }
 
