@@ -49,7 +49,7 @@ namespace PawnGame
             Vector2 mouseVector = new Vector2(mouse.X - windowWidth / 2, mouse.Y - windowHeight / 2);
             mouseVector.Normalize();
             mouseVector *= 400;
-            Mouse.SetPosition((int)(mouseVector.X + windowWidth / 2), (int)(mouseVector.Y + windowHeight / 2));
+            //Mouse.SetPosition((int)(mouseVector.X + windowWidth / 2), (int)(mouseVector.Y + windowHeight / 2));
             #endregion
 
             x = mouse.X;

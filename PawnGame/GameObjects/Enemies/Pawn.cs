@@ -13,20 +13,7 @@ namespace PawnGame.GameObjects.Enemies
         {
             Move(player);
             KeepInBounds();
-
-            for (int i = 0; i < Game1.CurrentLevel.Tiles.GetLength(0); i++)
-            {
-                for (int j = 0; j < Game1.CurrentLevel.Tiles.GetLength(1); j++)
-                {
-                    if (CheckCollision(Game1.CurrentLevel.Tiles[i, j]))
-                    {
-                        if (Game1.CurrentLevel.Tiles[i, j].IsSolid)
-                        {
-                            ResolveCollisions(Game1.CurrentLevel.Tiles[i, j]);
-                        }
-                    }
-                }
-            }
+            ManageTileCollisions();
 
             CheckPlayerCollision(player);
             CheckWeaponCollision(player.Weapon);

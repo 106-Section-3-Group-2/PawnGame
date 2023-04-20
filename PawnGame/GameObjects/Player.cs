@@ -63,28 +63,13 @@ namespace PawnGame.GameObjects
             ReadInputs(currentKBState, previousKBState,currentMouseState,prevMouseState);
             Move();
             KeepInBounds();
-            ManageCollisions(new((int)((X - Game1.CurrentLevel.Tiles[0, 0].X) / Game1.CurrentLevel.Tiles[0, 0].Width), (int)(Y / Game1.CurrentLevel.Tiles[0, 0].Height)));
-
-
-            /*for (int i = 0; i < Game1.CurrentLevel.Tiles.GetLength(0); i++)
-            {
-                for (int j = 0; j < Game1.CurrentLevel.Tiles.GetLength(1); j++)
-                {
-                    if (CheckCollision(Game1.CurrentLevel.Tiles[i, j]))
-                    {
-                        if (Game1.CurrentLevel.Tiles[i, j].IsSolid)
-                        {
-                            ResolveCollisions(Game1.CurrentLevel.Tiles[i, j]);
-                        }
-                        else if (Game1.CurrentLevel.Tiles[i, j].IsExit && EnemyManager.Manager.Count <= 0)
-                        {
-                            Game1.LevelIndex++; 
-                        }
-                    }
-                }
-            }*/
+            ManageTileCollisions();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="System.Exception"></exception>
         protected void Move()
         {
             switch (_playerState)
@@ -154,6 +139,13 @@ namespace PawnGame.GameObjects
             
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="currentKBState"></param>
+        /// <param name="previousKBState"></param>
+        /// <param name="currentMouseState"></param>
+        /// <param name="prevMouseState"></param>
         private void ReadInputs(KeyboardState currentKBState, KeyboardState previousKBState,MouseState currentMouseState, MouseState prevMouseState)
         {
             //Returns a normalized 2D vector of player's input direction
@@ -198,6 +190,10 @@ namespace PawnGame.GameObjects
             }
         }
 
+        /// <summary>
+        /// Draws the player to the screen.
+        /// </summary>
+        /// <param name="sb"></param>
         public override void Draw(SpriteBatch sb)
         {
             if (_isAlive)
@@ -208,7 +204,7 @@ namespace PawnGame.GameObjects
         }
 
         /// <summary>
-        /// Returns a 
+        /// Takes keyboard state and returns the input vector
         /// </summary>
         /// <param name="currentKBState"></param>
         /// <returns></returns>
@@ -245,6 +241,11 @@ namespace PawnGame.GameObjects
             return output;
         }
 
+        /// <summary>
+        /// Executes code based on the player's current ability.
+        /// Pawn effect: 
+        /// </summary>
+        /// <param name="direction"></param>
         private void UseAbility(Vector2 direction)
         {
             if (_heldAbility != Ability.None)
@@ -279,52 +280,15 @@ namespace PawnGame.GameObjects
 
         }
 
+        /// <summary>
+        /// If the player doesnt currently have an ability, give the player the entered ability.
+        /// </summary>
+        /// <param name="ability"></param>
         public void GetAbility(Ability ability)
         {
             if (_heldAbility == Ability.None)
             {
                 _heldAbility = ability;
-            }
-        }
-
-        public void ManageCollisions(Point tilePos)
-        {
-            tilePos.X--;
-            tilePos.Y--;
-
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    if (tilePos.X < 0 || tilePos.X >= Game1.CurrentLevel.Tiles.GetLength(0))
-                    {
-                        tilePos.X++;
-                        continue;
-                    }
-                    else if (tilePos.Y < 0 || tilePos.Y >= Game1.CurrentLevel.Tiles.GetLength(1))
-                    {
-                        tilePos.X -= i;
-                        break;
-                    }
-
-                    Tile tileToCheck = Game1.CurrentLevel.Tiles[tilePos.X, tilePos.Y];
-
-                    if (CheckCollision(tileToCheck))
-                    {
-                        if (tileToCheck.IsSolid)
-                        {
-                            ResolveCollisions(tileToCheck);
-                        }
-                        else if (tileToCheck.IsExit && EnemyManager.Manager.Count <= 0)
-                        {
-                            Game1.LevelIndex++;
-                        }
-                    }
-
-                    if (i == 2) tilePos.X -= 2;
-                    else tilePos.X++;
-                }
-                tilePos.Y++;
             }
         }
 

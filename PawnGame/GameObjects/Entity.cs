@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PawnGame.GameObjects.Enemies;
 
 namespace PawnGame.GameObjects
 {
@@ -40,6 +41,74 @@ namespace PawnGame.GameObjects
         protected virtual void Attack()
         {
 
+        }
+
+        /// <summary>
+        /// Gets the index of the tile that the entity is currently on, then checks all tiles in a 3x3 grid for collisions.
+        /// </summary>
+        protected void ManageTileCollisions()
+        {
+            //Get curent entity tile
+            Point tilePos = new((int)((X - Game1.CurrentLevel.Tiles[0, 0].X) / Game1.CurrentLevel.Tiles[0, 0].Width), (int)(Y / Game1.CurrentLevel.Tiles[0, 0].Height));
+
+            //Prepare for the check
+            tilePos.X--;
+            tilePos.Y--;
+
+            //Loop through the rows
+            for (int i = 0; i < 3; i++)
+            {
+                //Loop through each column 
+                for (int j = 0; j < 3; j++)
+                {
+                    //If the row index is smaller than the min, skip this row
+                    if (tilePos.Y < 0)
+                    {
+                        break;
+                    }
+
+                    //If the row is larger than the max row, quit the method as no more checks are needed
+                    else if (tilePos.Y >= Game1.CurrentLevel.Tiles.GetLength(1))
+                    {
+                        return;
+                    }
+
+                    //If the column index is less than the min index then move to the next column
+                    else if (tilePos.X < 0)
+                    {
+                        tilePos.X++;
+                        continue;
+                    }
+
+                    //If the column index is larger than the max, reset the column and change row
+                    else if (tilePos.X >= Game1.CurrentLevel.Tiles.GetLength(0))
+                    {
+                        tilePos.X -= j;
+                        break;
+                    }
+
+                    Tile tileToCheck = Game1.CurrentLevel.Tiles[tilePos.X, tilePos.Y];
+
+                    if (CheckCollision(tileToCheck))
+                    {
+                        if (tileToCheck.IsSolid)
+                        {
+                            ResolveCollisions(tileToCheck);
+                        }
+                        else if (tileToCheck.IsExit && EnemyManager.Manager.Count <= 0)
+                        {
+                            Game1.LevelIndex++;
+                        }
+                    }
+
+                    //If the column index needs to be reset, reset it, else increase it
+                    if (j == 2) tilePos.X -= 2;
+                    else tilePos.X++;
+                }
+
+                //After all columns in the row have been checked (or no more valid tiles exist in the row), move to the next row
+                tilePos.Y++;
+            }
         }
 
         /// <summary>
