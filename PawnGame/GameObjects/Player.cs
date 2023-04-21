@@ -4,11 +4,12 @@ namespace PawnGame.GameObjects
 {
     public class Player : Entity
     {
-        private enum PlayerState
+        public enum PlayerState
         {
             Moving,
             Abilitying,
             NoControl,
+            Dizzy,
         }
         public enum Ability
         {
@@ -29,6 +30,7 @@ namespace PawnGame.GameObjects
         private int _abilityTimer;
         private bool _isInvincible;
         private bool _weaponOverride;
+        private int _dizzyCounter;
 
         public Weapon Weapon
         {
@@ -45,6 +47,16 @@ namespace PawnGame.GameObjects
             get { return _weaponOverride; }
         }
 
+        public int Dizzy
+        {
+            get { return _dizzyCounter; }
+            set { _dizzyCounter = value; }
+        }
+
+        public PlayerState State
+        {
+            get { return _playerState; }
+        }
         public Ability HeldAbility { get { return _heldAbility; } }
 
 
@@ -57,6 +69,7 @@ namespace PawnGame.GameObjects
             _currentWeapon = weapon;
             _isInvincible = false;
             _weaponOverride = false;
+            _dizzyCounter = 0;
         }
 
         public void Update(KeyboardState currentKBState, KeyboardState previousKBState, MouseState currentMouseState, MouseState prevMouseState)
@@ -64,7 +77,8 @@ namespace PawnGame.GameObjects
             ReadInputs(currentKBState, previousKBState,currentMouseState,prevMouseState);
             Move();
             KeepInBounds();
-            
+            Weapon.Update(this,VirtualMouse.VMouse);
+
             for (int i = 0; i < Game1.CurrentLevel.Tiles.GetLength(0); i++)
             {
                 for (int j = 0; j < Game1.CurrentLevel.Tiles.GetLength(1); j++)
@@ -87,13 +101,32 @@ namespace PawnGame.GameObjects
         {
             switch (_playerState)
             {
+                case PlayerState.Dizzy:
+                    if (!_isAlive)
+                    {
+                        _playerState = PlayerState.NoControl;
+                    }
+                    _hitbox.X += _velocity.X/3;
+                    _hitbox.Y += _velocity.Y/3;
+                    if (_dizzyCounter > 0)
+                    {
+                        _dizzyCounter--;
+                    }
+                    else
+                    {
+                        _playerState = PlayerState.Moving;
+                    }
+                    break;
+
                 case PlayerState.Moving:
                     if (!_isAlive)
                     {
                         _playerState = PlayerState.NoControl;
                     }
-
-
+                    if (Dizzy > 0)
+                    {
+                        _playerState = PlayerState.Dizzy;
+                    }
                     _hitbox.X += _velocity.X;
                     _hitbox.Y += _velocity.Y;
                     break;
@@ -147,6 +180,8 @@ namespace PawnGame.GameObjects
                         _playerState = PlayerState.Moving;
                     }
                     break;
+
+
             }
 
             
@@ -160,20 +195,24 @@ namespace PawnGame.GameObjects
             switch (_playerState)
             {
                 case PlayerState.Moving: //If the player is able to move, but is not taking other special actions
-                                         //Check WASD, Space, and mouse
+                                         //Check WASD, Space
                     _velocity = _speed * direction;
                     //Space
                     if (currentKBState.IsKeyDown(Keys.Space))
                     {
                         UseAbility(direction);
                     }
-                    /*
-                    //Mouse
-                    if (currentMouseState.LeftButton == ButtonState.Pressed)
+
+                    break;
+
+                case PlayerState.Dizzy:
+
+                    _velocity = _speed * direction;
+                    if (currentKBState.IsKeyDown(Keys.Space))
                     {
-                        Attack();
+                        UseAbility(direction);
+                        _dizzyCounter = 0;
                     }
-                                        */
                     break;
 
                 case PlayerState.Abilitying: //If the player is using an ability that makes them dash

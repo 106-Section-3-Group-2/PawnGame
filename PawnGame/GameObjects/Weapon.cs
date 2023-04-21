@@ -24,6 +24,10 @@ namespace PawnGame.GameObjects
 
         private List<Vector2> _lastCollisionVectors;
 
+        private List<Vector4> _lastFramesSword;
+
+        private int _dizzyCounter;
+
         private Color _color;
 
         public bool IsActive
@@ -41,33 +45,49 @@ namespace PawnGame.GameObjects
             _isActive = false;
             _activeCounter = 0;
             _forgivenessCounter = 0;
+            _dizzyCounter = 0;
             _collisionVectors = new List<Vector2>();
             _lastCollisionVectors = new List<Vector2>();
+            _lastFramesSword = new List<Vector4>();
             _color = Color.White;
+
         }
         
         public void Update(Player player, VirtualMouse VMouse)
         {   if (player.IsAlive)
             {
+
                 _hitbox.Location = player.Hitbox.Location + new Vector2(player.Hitbox.Width / 2, player.Hitbox.Height / 2);
-                if (player.WeaponOverride)
+
+                Vector4 swordVector = new Vector4(MathF.Cos(VMouse.Rotation), MathF.Sin(VMouse.Rotation),_hitbox.X,_hitbox.Y);
+                if (_lastFramesSword.Count < 10)
                 {
-                    _activeCounter = 1000;
+                    _lastFramesSword.Add(swordVector);
+                }
+                else
+                {
+                    _lastFramesSword.RemoveAt(0);
+                    _lastFramesSword.Add(swordVector);
+                }
+                
+                
+                if (player.State == Player.PlayerState.Dizzy)
+                {
+                    _activeCounter = -2;
+                }
+                else if (player.WeaponOverride)
+                {
+                    _activeCounter = -1;
                 }
                 else if (Math.Abs(VMouse.Speed) > MathF.PI / 26)
                 {
-
                     MakeCollisionVectors(VMouse);
-
-
                     _activeCounter += 1;
                     _forgivenessCounter = 0;
                 }
                 else if (_forgivenessCounter <= 5)
                 {
                     MakeCollisionVectors(VMouse);
-
-
                     _activeCounter += 1;
                     _forgivenessCounter += 1;
                 }
@@ -77,21 +97,27 @@ namespace PawnGame.GameObjects
                 }
                 switch (_activeCounter)
                 {
-                    case 0:
+                    case -2:
                         _color = Color.Black;
                         _isActive = false;
                         break;
-                    case > 40:
+                    case -1:
+                        _color = Color.Green;
                         _isActive = true;
-                        _color = Color.Red;
                         break;
-                    case > 30:
-                        _isActive = true;
-                        _color = Color.Blue;
+                    case 0:
+                        _color = Color.White;
+                        _isActive = false;
+                        break;
+                    case > 250:
+                        _color = Color.White;
+                        _isActive = false;
+                        _activeCounter = 0;
+                        player.Dizzy = 150;
                         break;
                     case > 0:
-                        _isActive = false;
-                        _color = new Color(0, 0, _activeCounter * 4);
+                        _color = new Color(255*_activeCounter/250, 255-255*_activeCounter / 250, 0);
+                        _isActive = true;
                         break;
                 }
             }
@@ -141,18 +167,32 @@ namespace PawnGame.GameObjects
             }
             return false;
         }
-        public void Draw(SpriteBatch sb, Player player, MouseState mouse, int windowWidth, int windowHeight)
-        {
-            if (player.IsAlive)
-            {
-                sb.Draw(Texture, _hitbox, null, _color, MathF.Atan2((mouse.Y - windowHeight / 2), (mouse.X - windowWidth / 2)) + MathF.PI / 2f, new Vector2(Texture.Width / 2, Texture.Height), SpriteEffects.None, 0);
-            }
-            
-        }
         public void Draw(SpriteBatch sb, Player player, float rotation)
         {
             if (player.IsAlive)
             {
+                if(player.State == Player.PlayerState.Abilitying)
+                {
+                    for (int i = 0; i < _lastFramesSword.Count; i++)
+                    {
+                        Color alphaColor = new Color(_color.R,_color.G,_color.B,(0 + (255 * i / _lastFramesSword.Count)));
+                        //Color alphaColor = new Color(255, 255, 255, (0 + (255 * i / _lastFramesSword.Count)));
+                        Vectangle tempPosition = new Vectangle(_lastFramesSword[i].Z, _lastFramesSword[i].W, 100, 100);
+                        sb.Draw(Texture, tempPosition, null, alphaColor, MathF.Atan2(_lastFramesSword[i].Y, _lastFramesSword[i].X) + MathF.PI / 2, new Vector2(Texture.Width / 2, Texture.Height), SpriteEffects.None, 0);
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < _lastFramesSword.Count; i++)
+                    {
+                        Color alphaColor = new Color(_color.R,_color.G,_color.B,(0 + (255 * i / _lastFramesSword.Count)));
+                        //Color alphaColor = new Color(255, 255, 255, (0 + (255 * i / _lastFramesSword.Count)));
+                        sb.Draw(Texture, _hitbox, null, alphaColor, MathF.Atan2(_lastFramesSword[i].Y, _lastFramesSword[i].X) + MathF.PI / 2, new Vector2(Texture.Width / 2, Texture.Height), SpriteEffects.None, 0);
+                    }
+                }
+                
+
+
                 sb.Draw(Texture, _hitbox, null, _color, rotation + MathF.PI / 2, new Vector2(Texture.Width / 2, Texture.Height), SpriteEffects.None, 0);
             }
         }

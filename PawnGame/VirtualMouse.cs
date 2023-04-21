@@ -18,7 +18,6 @@ namespace PawnGame
 
         float x;
         float y;
-        float maxSpeed = 1f;
         float rotation;
         float lastRotation;
         float speed;
@@ -45,12 +44,14 @@ namespace PawnGame
 
 
             //Comment out this region
+            /*
             #region Locking to circle
             Vector2 mouseVector = new Vector2(mouse.X - windowWidth / 2, mouse.Y - windowHeight / 2);
             mouseVector.Normalize();
             mouseVector *= 400;
             Mouse.SetPosition((int)(mouseVector.X + windowWidth / 2), (int)(mouseVector.Y + windowHeight / 2));
             #endregion
+            */
 
             x = mouse.X;
             y = mouse.Y;
