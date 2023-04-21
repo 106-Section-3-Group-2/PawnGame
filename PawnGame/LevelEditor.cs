@@ -10,14 +10,23 @@ namespace PawnGame
     internal class LevelEditor
     {
         private static Level s_level;
+        private Room Room
+        {
+            get
+            {
+                return s_level[s_level.ActiveRoomIndex.X, s_level.ActiveRoomIndex.Y];
+            }
+        }
+
         #region Fields
         private List<Button> _palette;
         private List<Button> _options;
         private int _selected;
-        private Room _room;
         private bool _canClick;
         private MouseState _mState;
         private MouseState _mStatePrev;
+        private KeyboardState _kbState;
+        private KeyboardState _kbStatePrev;
         private Game1 _game;
         private int _playerScale;
         private Point _pawnDimensions;
@@ -36,7 +45,7 @@ namespace PawnGame
         /// <param name="y"></param>
         public LevelEditor(int x, int y, Game1 game)
         {
-            _room = new Room(new Tile[x, y], new Vector2());
+            //Room = new Room(new Tile[x, y], new Vector2()); need new
             _game = game;
             Initialize();
         }
@@ -49,11 +58,11 @@ namespace PawnGame
         {
             try
             {
-                _room = Room.Read(filePath);
+                //Room = Room.Read(filePath); //need new
             }
             catch (Exception e)
             {
-                _room = new Room(new Tile[8, 8], new Vector2());
+                //Room = new Room(new Tile[8, 8], new Vector2()); //need new
                 throw e;
             }
             _game = game;
@@ -67,7 +76,7 @@ namespace PawnGame
         /// <param name="y"></param>
         public LevelEditor(Room level, Game1 game)
         {
-            _room = level;
+            //Room = level; //need new
             _game = game;
             Initialize();
         }
@@ -158,25 +167,25 @@ namespace PawnGame
             _canClick = true;
 
             //populate tile array
-            int sideLength = _game.WindowHeight / _room.Tiles.GetLength(1);
-            int margin = (_game.WindowWidth / 2) - _room.Tiles.GetLength(0) * sideLength / 2;
+            int sideLength = _game.WindowHeight / Room.Tiles.GetLength(1);
+            int margin = (_game.WindowWidth / 2) - Room.Tiles.GetLength(0) * sideLength / 2;
             
-            for(int x = 0; x < _room.Tiles.GetLength(0); x++)
+            for(int x = 0; x < Room.Tiles.GetLength(0); x++)
             {
-                for(int y = 0; y < _room.Tiles.GetLength(1); y++)
+                for(int y = 0; y < Room.Tiles.GetLength(1); y++)
                 {
                     if((x + y) % 2 == 0)
                     {
-                        _room.Tiles[x, y] = new Tile(AssetNames.TileBlack, new Rectangle(margin + x * sideLength, y * sideLength, sideLength, sideLength), false);
+                        Room.Tiles[x, y] = new Tile(AssetNames.TileBlack, new Rectangle(margin + x * sideLength, y * sideLength, sideLength, sideLength), false);
                     }
                     else
                     {
-                        _room.Tiles[x, y] = new Tile(AssetNames.TileWhite, new Rectangle(margin + x * sideLength, y * sideLength, sideLength, sideLength), false);
+                        Room.Tiles[x, y] = new Tile(AssetNames.TileWhite, new Rectangle(margin + x * sideLength, y * sideLength, sideLength, sideLength), false);
                     }
                 }
             }
             //default spawn point
-            _room.SpawnPoint = _room.Tiles[0, 0].Hitbox.Location;
+            Room.SpawnPoint = Room.Tiles[0, 0].Hitbox.Location;
         }
 
         /// <summary>
@@ -184,19 +193,35 @@ namespace PawnGame
         /// </summary>
         public void Update()
         {
-            //move between rooms
-            KeyboardState kbState = Keyboard.GetState();
-            int inputVert = Convert.ToInt32(kbState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.S)) - Convert.ToInt32(kbState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.W));
-            int inputHoriz = Convert.ToInt32(kbState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D)) - Convert.ToInt32(kbState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.A));
+            _kbStatePrev = _kbState;
+            _kbState = Keyboard.GetState();
+            #region move between rooms
+            int inputVert = Convert.ToInt32(_kbState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.S) && !_kbStatePrev.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.S)) - Convert.ToInt32(_kbState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.W) && !_kbStatePrev.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.W));
+            int inputHoriz = Convert.ToInt32(_kbState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D) && !_kbStatePrev.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D)) - Convert.ToInt32(_kbState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.A) && !_kbStatePrev.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.A));
             Point activeRoomIndex = s_level.ActiveRoomIndex;
             if (inputHoriz != 0 && activeRoomIndex.X + inputHoriz >= 0 && activeRoomIndex.X + inputHoriz < s_level.Length(0))
             {
-                _room = s_level[activeRoomIndex.X + inputHoriz, activeRoomIndex.Y];
+                if(inputHoriz > 0)
+                {
+                    s_level.AdvanceRoom(Level.Direction.East);
+                }
+                else
+                {
+                    s_level.AdvanceRoom(Level.Direction.West);
+                }
             }
             if (inputVert != 0 && activeRoomIndex.Y + inputVert >= 0 && activeRoomIndex.Y + inputVert < s_level.Length(1))
             {
-                _room = s_level[activeRoomIndex.X, activeRoomIndex.Y + inputVert];
+                if (inputVert > 0)
+                {
+                    s_level.AdvanceRoom(Level.Direction.South);
+                }
+                else
+                {
+                    s_level.AdvanceRoom(Level.Direction.North);
+                }
             }
+            #endregion
 
             //manage clicking
             _mStatePrev = _mState;
@@ -229,15 +254,7 @@ namespace PawnGame
                             openFileDialog.Filter = "Json files (*.json)|*.json|Text files (*.txt)|*.txt";
                             if (openFileDialog.ShowDialog() == DialogResult.OK)
                             {
-                                //try
-                                //{
-                                    _room = Room.Read(openFileDialog.FileName);
-                                //}
-                                /*catch
-                                {
-                                    We should put a popup on screen to let the user know what is happening
-                                    _options.Add(new Button(Assets[AssetNames.DebugError], new Vector2(_options[0].ButtonBox.X - Assets[AssetNames.DebugError].Width, _options[0].ButtonBox.Y), Color.Blue));
-                                }*/
+                                //need new
                             }
                             break;
                         //save
@@ -246,7 +263,7 @@ namespace PawnGame
                             saveFileDialog.Filter = "Json files (*.json)|*.json|Text files (*.txt)|*.txt";
                             if (saveFileDialog.ShowDialog() == DialogResult.OK)
                             {
-                                Room.Write(_room, saveFileDialog.FileName);
+                                Room.Write(Room, saveFileDialog.FileName);
                             }
                             break;
                         //load error, should always be last case
@@ -258,11 +275,11 @@ namespace PawnGame
             }
 
             //check for clicks on tiles in the level
-            for (int x = 0; x < _room.Tiles.GetLength(0); x++)
+            for (int x = 0; x < Room.Tiles.GetLength(0); x++)
             {
-                for (int y = 0; y < _room.Tiles.GetLength(1); y++)
+                for (int y = 0; y < Room.Tiles.GetLength(1); y++)
                 {
-                    if (CheckMouseOn(_room.Tiles[x, y]))
+                    if (CheckMouseOn(Room.Tiles[x, y]))
                     {
                         if (_mState.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
                         {
@@ -275,41 +292,41 @@ namespace PawnGame
                                 case 0:
                                     if ((x + y) % 2 == 0)
                                     {
-                                        _room.Tiles[x, y] = new Tile(AssetNames.TileBlack, new Vectangle(_room.Tiles[x, y].X, _room.Tiles[x, y].Y, _room.Tiles[x, y].Width, _room.Tiles[x, y].Height), false);
+                                        Room.Tiles[x, y] = new Tile(AssetNames.TileBlack, new Vectangle(Room.Tiles[x, y].X, Room.Tiles[x, y].Y, Room.Tiles[x, y].Width, Room.Tiles[x, y].Height), false);
                                     }
                                     else
                                     {
-                                        _room.Tiles[x, y] = new Tile(AssetNames.TileWhite, new Vectangle(_room.Tiles[x, y].X, _room.Tiles[x, y].Y, _room.Tiles[x, y].Width, _room.Tiles[x, y].Height), false);
+                                        Room.Tiles[x, y] = new Tile(AssetNames.TileWhite, new Vectangle(Room.Tiles[x, y].X, Room.Tiles[x, y].Y, Room.Tiles[x, y].Width, Room.Tiles[x, y].Height), false);
                                     }
                                     break;
                                 case 1:
                                     //create a solid wall
                                     if ((x + y) % 2 == 0)
                                     {
-                                        _room.Tiles[x, y] = new Tile(AssetNames.WallBlack, new Vectangle(_room.Tiles[x, y].X, _room.Tiles[x, y].Y, _room.Tiles[x, y].Width, _room.Tiles[x, y].Height), true);
+                                        Room.Tiles[x, y] = new Tile(AssetNames.WallBlack, new Vectangle(Room.Tiles[x, y].X, Room.Tiles[x, y].Y, Room.Tiles[x, y].Width, Room.Tiles[x, y].Height), true);
                                     }
                                     else
                                     {
-                                        _room.Tiles[x, y] = new Tile(AssetNames.WallWhite, new Vectangle(_room.Tiles[x, y].X, _room.Tiles[x, y].Y, _room.Tiles[x, y].Width, _room.Tiles[x, y].Height), true);
+                                        Room.Tiles[x, y] = new Tile(AssetNames.WallWhite, new Vectangle(Room.Tiles[x, y].X, Room.Tiles[x, y].Y, Room.Tiles[x, y].Width, Room.Tiles[x, y].Height), true);
                                     }
                                     break;
                                 case 2:
                                     //create an exit
                                     if ((x + y) % 2 == 0)
                                     {
-                                        _room.Tiles[x, y] = new Tile(AssetNames.ExitBlack, new Vectangle(_room.Tiles[x, y].X, _room.Tiles[x, y].Y, _room.Tiles[x, y].Width, _room.Tiles[x, y].Height), false, true);
+                                        Room.Tiles[x, y] = new Tile(AssetNames.ExitBlack, new Vectangle(Room.Tiles[x, y].X, Room.Tiles[x, y].Y, Room.Tiles[x, y].Width, Room.Tiles[x, y].Height), false, true);
                                     }
                                     else
                                     {
-                                        _room.Tiles[x, y] = new Tile(AssetNames.ExitWhite, new Vectangle(_room.Tiles[x, y].X, _room.Tiles[x, y].Y, _room.Tiles[x, y].Width, _room.Tiles[x, y].Height), false, true);
+                                        Room.Tiles[x, y] = new Tile(AssetNames.ExitWhite, new Vectangle(Room.Tiles[x, y].X, Room.Tiles[x, y].Y, Room.Tiles[x, y].Width, Room.Tiles[x, y].Height), false, true);
                                     }
                                     break;
                                 case 3:
                                     //make sure there isn't already an enemy or solid wall there
                                     occupied = false;
-                                    foreach(Enemy enemy in _room.EnemySpawns)
+                                    foreach(Enemy enemy in Room.EnemySpawns)
                                     {
-                                        if (enemy.Hitbox.Intersects(_room.Tiles[x, y].Hitbox) || _room.Tiles[x, y].IsSolid == true)
+                                        if (enemy.Hitbox.Intersects(Room.Tiles[x, y].Hitbox) || Room.Tiles[x, y].IsSolid == true)
                                         {
                                             occupied = true;
                                         }
@@ -317,9 +334,9 @@ namespace PawnGame
                                     //create an pawn enemy
                                     if (!occupied)
                                     {
-                                        _room.PawnSpawns.Add(new Pawn(AssetNames.PawnWhite, new Rectangle(
-                                            (int)(_room.Tiles[x, y].X + _room.Tiles[x, y].Width / 2 - _pawnDimensions.X / 2),
-                                            (int)(_room.Tiles[x, y].Y + _room.Tiles[x, y].Height / 2 - _pawnDimensions.Y / 2),
+                                        Room.PawnSpawns.Add(new Pawn(AssetNames.PawnWhite, new Rectangle(
+                                            (int)(Room.Tiles[x, y].X + Room.Tiles[x, y].Width / 2 - _pawnDimensions.X / 2),
+                                            (int)(Room.Tiles[x, y].Y + Room.Tiles[x, y].Height / 2 - _pawnDimensions.Y / 2),
                                             (int)_pawnDimensions.X,
                                             (int)_pawnDimensions.Y
                                             )));
@@ -328,9 +345,9 @@ namespace PawnGame
                                 case 4:
                                     //make sure there isn't already an enemy, solid wall, or exit there
                                     occupied = false;
-                                    foreach (Enemy enemy in _room.EnemySpawns)
+                                    foreach (Enemy enemy in Room.EnemySpawns)
                                     {
-                                        if (enemy.Hitbox.Contains(_mState.X, _mState.Y) || _room.Tiles[x, y].IsSolid == true)
+                                        if (enemy.Hitbox.Contains(_mState.X, _mState.Y) || Room.Tiles[x, y].IsSolid == true)
                                         {
                                             occupied = true;
                                         }
@@ -338,8 +355,8 @@ namespace PawnGame
                                     //set spawn point
                                     if (!occupied)
                                     {
-                                        _room.SpawnPoint = new Vector2((int)(_room.Tiles[x, y].X + _room.Tiles[x, y].Width / 2 - _pawnDimensions.X / 2),
-                                            (int)(_room.Tiles[x, y].Y + _room.Tiles[x, y].Height / 2 - _pawnDimensions.Y / 2));
+                                        Room.SpawnPoint = new Vector2((int)(Room.Tiles[x, y].X + Room.Tiles[x, y].Width / 2 - _pawnDimensions.X / 2),
+                                            (int)(Room.Tiles[x, y].Y + Room.Tiles[x, y].Height / 2 - _pawnDimensions.Y / 2));
                                     }
                                     break;
                             }
@@ -348,34 +365,34 @@ namespace PawnGame
                         {
                             //if there's an enemy on top of the tile, remove it first
                             bool occupied = false;
-                            for(int i = 0; i < _room.EnemySpawns.Count; i++)
+                            for(int i = 0; i < Room.EnemySpawns.Count; i++)
                             {
-                                if (_room.EnemySpawns[i].Hitbox.Contains(_mState.X, _mState.Y))
+                                if (Room.EnemySpawns[i].Hitbox.Contains(_mState.X, _mState.Y))
                                 {
                                     #region remove enemy spawn
-                                    if (_room.EnemySpawns[i] is Pawn)
+                                    if (Room.EnemySpawns[i] is Pawn)
                                     {
-                                        _room.PawnSpawns.Remove((Pawn)_room.EnemySpawns[i]);
+                                        Room.PawnSpawns.Remove((Pawn)Room.EnemySpawns[i]);
                                     }
-                                    else if (_room.EnemySpawns[i] is Bishop)
+                                    else if (Room.EnemySpawns[i] is Bishop)
                                     {
-                                        _room.BishopSpawns.Remove((Bishop)_room.EnemySpawns[i]);
+                                        Room.BishopSpawns.Remove((Bishop)Room.EnemySpawns[i]);
                                     }
-                                    else if (_room.EnemySpawns[i] is Knight)
+                                    else if (Room.EnemySpawns[i] is Knight)
                                     {
-                                        _room.KnightSpawns.Remove((Knight)_room.EnemySpawns[i]);
+                                        Room.KnightSpawns.Remove((Knight)Room.EnemySpawns[i]);
                                     }
-                                    else if (_room.EnemySpawns[i] is Rook)
+                                    else if (Room.EnemySpawns[i] is Rook)
                                     {
-                                        _room.RookSpawns.Remove((Rook)_room.EnemySpawns[i]);
+                                        Room.RookSpawns.Remove((Rook)Room.EnemySpawns[i]);
                                     }
-                                    else if (_room.EnemySpawns[i] is Queen)
+                                    else if (Room.EnemySpawns[i] is Queen)
                                     {
-                                        _room.QueenSpawns.Remove((Queen)_room.EnemySpawns[i]);
+                                        Room.QueenSpawns.Remove((Queen)Room.EnemySpawns[i]);
                                     }
-                                    else if (_room.EnemySpawns[i] is King)
+                                    else if (Room.EnemySpawns[i] is King)
                                     {
-                                        _room.KingSpawns.Remove((King)_room.EnemySpawns[i]);
+                                        Room.KingSpawns.Remove((King)Room.EnemySpawns[i]);
                                     }
                                     #endregion
                                     occupied = true;
@@ -393,12 +410,12 @@ namespace PawnGame
                                     holeTexture = AssetNames.HoleWhite;
                                 }
 
-                                _room.Tiles[x, y] = new Tile(
+                                Room.Tiles[x, y] = new Tile(
                                     holeTexture,
-                                    new Vectangle(_room.Tiles[x, y].X,
-                                    _room.Tiles[x, y].Y,
-                                    _room.Tiles[x, y].Width,
-                                    _room.Tiles[x, y].Height),
+                                    new Vectangle(Room.Tiles[x, y].X,
+                                    Room.Tiles[x, y].Y,
+                                    Room.Tiles[x, y].Width,
+                                    Room.Tiles[x, y].Height),
                                     true);
                             }
                         }
@@ -413,7 +430,7 @@ namespace PawnGame
         /// <param name="sb"></param>
         public void Draw(SpriteBatch sb)
         {
-            _room.Draw(sb);
+            Room.Draw(sb);
             //draw tile palette
             for (int i = 0; i < _palette.Count; i++)
             {
@@ -425,14 +442,14 @@ namespace PawnGame
                 _options[i].Draw(sb);
             }
             //draw enemies
-            for(int i = 0; i < _room.EnemySpawns.Count; i++)
+            for(int i = 0; i < Room.EnemySpawns.Count; i++)
             {
-                _room.EnemySpawns[i].Draw(sb);
+                Room.EnemySpawns[i].Draw(sb);
             }
             //draw spawn point
             sb.Draw(
                 Game1.Assets[AssetNames.PawnBlack],
-                new Rectangle(new Point((int)_room.SpawnPoint.X,(int)_room.SpawnPoint.Y),
+                new Rectangle(new Point((int)Room.SpawnPoint.X,(int)Room.SpawnPoint.Y),
                 _pawnDimensions),
                 Color.White);
         }
