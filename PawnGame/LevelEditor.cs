@@ -9,16 +9,16 @@ namespace PawnGame
 {
     internal class LevelEditor
     {
-        private static Level s_level;
         private Room Room
         {
             get
             {
-                return s_level[s_level.ActiveRoomIndex.X, s_level.ActiveRoomIndex.Y];
+                return level[level.ActiveRoomIndex.X, level.ActiveRoomIndex.Y];
             }
         }
 
         #region Fields
+        private Level level;
         private List<Button> _palette;
         private List<Button> _options;
         private int _selected;
@@ -88,9 +88,9 @@ namespace PawnGame
         private void Initialize()
         {
             //initialize static level if it hasn't been
-            if(s_level == null)
+            if(level == null)
             {
-                s_level = new Level(new Point(3, 3), new Point(0, 0));
+                level = new Level(new Point(3, 3), new Point(0, 0));
             }
 
             //set up buttons and variables
@@ -198,27 +198,27 @@ namespace PawnGame
             #region move between rooms
             int inputVert = Convert.ToInt32(_kbState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.S) && !_kbStatePrev.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.S)) - Convert.ToInt32(_kbState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.W) && !_kbStatePrev.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.W));
             int inputHoriz = Convert.ToInt32(_kbState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D) && !_kbStatePrev.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D)) - Convert.ToInt32(_kbState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.A) && !_kbStatePrev.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.A));
-            Point activeRoomIndex = s_level.ActiveRoomIndex;
-            if (inputHoriz != 0 && activeRoomIndex.X + inputHoriz >= 0 && activeRoomIndex.X + inputHoriz < s_level.Length(0))
+            Point activeRoomIndex = level.ActiveRoomIndex;
+            if (inputHoriz != 0 && activeRoomIndex.X + inputHoriz >= 0 && activeRoomIndex.X + inputHoriz < level.Length(0))
             {
                 if(inputHoriz > 0)
                 {
-                    s_level.AdvanceRoom(Level.Direction.East);
+                    level.AdvanceRoom(Level.Direction.East);
                 }
                 else
                 {
-                    s_level.AdvanceRoom(Level.Direction.West);
+                    level.AdvanceRoom(Level.Direction.West);
                 }
             }
-            if (inputVert != 0 && activeRoomIndex.Y + inputVert >= 0 && activeRoomIndex.Y + inputVert < s_level.Length(1))
+            if (inputVert != 0 && activeRoomIndex.Y + inputVert >= 0 && activeRoomIndex.Y + inputVert < level.Length(1))
             {
                 if (inputVert > 0)
                 {
-                    s_level.AdvanceRoom(Level.Direction.South);
+                    level.AdvanceRoom(Level.Direction.South);
                 }
                 else
                 {
-                    s_level.AdvanceRoom(Level.Direction.North);
+                    level.AdvanceRoom(Level.Direction.North);
                 }
             }
             #endregion
