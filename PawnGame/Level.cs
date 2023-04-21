@@ -45,6 +45,10 @@ namespace PawnGame
         /// </summary>
         [JsonIgnore]
         public Room ActiveRoom => _rooms[_activeRoomIndex.X, _activeRoomIndex.Y];
+        /// <summary>
+        /// the index of the active room
+        /// </summary>
+        public Point ActiveRoomIndex => _activeRoomIndex;
         #endregion
 
         #region Constructors
@@ -141,6 +145,16 @@ namespace PawnGame
         {
             using StreamReader reader = new(filePath);
             return JsonConvert.DeserializeObject<Level>(reader.ReadLine());
+        }
+
+        /// <summary>
+        /// get the length (in rooms) of the level in a given dimension
+        /// </summary>
+        /// <param name="dimension"></param>
+        /// <returns></returns>
+        public int Length(int dimension)
+        {
+            return _rooms.GetLength(dimension);
         }
     }
 }

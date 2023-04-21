@@ -78,6 +78,12 @@ namespace PawnGame
         /// </summary>
         private void Initialize()
         {
+            //initialize static level if it hasn't been
+            if(s_level == null)
+            {
+                s_level = new Level(new Point(3, 3), new Point(0, 0));
+            }
+
             //set up buttons and variables
             _paletteTopLeft = new Vector2(10, 10);
             _ButtonSpacing = 10;
@@ -178,6 +184,20 @@ namespace PawnGame
         /// </summary>
         public void Update()
         {
+            //move between rooms
+            KeyboardState kbState = Keyboard.GetState();
+            int inputVert = Convert.ToInt32(kbState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.S)) - Convert.ToInt32(kbState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.W));
+            int inputHoriz = Convert.ToInt32(kbState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D)) - Convert.ToInt32(kbState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.A));
+            Point activeRoomIndex = s_level.ActiveRoomIndex;
+            if (inputHoriz != 0 && activeRoomIndex.X + inputHoriz >= 0 && activeRoomIndex.X + inputHoriz < s_level.Length(0))
+            {
+                _room = s_level[activeRoomIndex.X + inputHoriz, activeRoomIndex.Y];
+            }
+            if (inputVert != 0 && activeRoomIndex.Y + inputVert >= 0 && activeRoomIndex.Y + inputVert < s_level.Length(1))
+            {
+                _room = s_level[activeRoomIndex.X, activeRoomIndex.Y + inputVert];
+            }
+
             //manage clicking
             _mStatePrev = _mState;
             _mState = Mouse.GetState();
