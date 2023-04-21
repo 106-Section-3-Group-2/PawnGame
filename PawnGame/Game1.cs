@@ -70,6 +70,9 @@ namespace PawnGame
         #region fields
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private RenderTarget2D _renderTarget;
+        private float _scale = 0;
+
 
         #region GameStates and level
         private GameState _gameState;
@@ -143,6 +146,10 @@ namespace PawnGame
         {
             get { return Window.ClientBounds.Height; }
         }
+
+        public int RenderTargetWidth => _renderTarget.Width;
+        public int RenderTargetHeight => _renderTarget.Height;
+
         #endregion
 
         public Game1()
@@ -157,6 +164,18 @@ namespace PawnGame
 
         protected override void Initialize()
         {
+            #region Screen and graphics size setup
+            _renderTarget = new(GraphicsDevice, 800, 480);
+
+            _graphics.PreferredBackBufferWidth = 800;
+            _graphics.PreferredBackBufferHeight = 480;
+            _graphics.ApplyChanges();
+
+            _prevWidth = _graphics.PreferredBackBufferWidth;
+            _prevHeight = _graphics.PreferredBackBufferHeight;
+            #endregion
+
+
             random = new Random();
             _prevKbState = Keyboard.GetState();
             Assets = new Dictionary<AssetNames, Texture2D>();
@@ -418,11 +437,18 @@ namespace PawnGame
             base.Update(gameTime);
         }
 
-        protected override void Draw(GameTime gameTime)
+        protected override void Draw(GameTime gameTime) 
         {
+            #region Sets scale and sets up spritebatch to draw to the render target
+            _scale = 1 / ((float)_renderTarget.Height / GraphicsDevice.Viewport.Height);
+
+            GraphicsDevice.SetRenderTarget(_renderTarget);
+
             GraphicsDevice.Clear(Color.Black);
+            #endregion
 
             _spriteBatch.Begin();
+
             switch (_gameState)
             {
                 #region Menu State
@@ -542,7 +568,20 @@ namespace PawnGame
             }
 
             _spriteBatch.End();
+
+            #region Draws render target to the screen
+            //Remove render target as location to draw to
+            GraphicsDevice.SetRenderTarget(null);
+
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            _spriteBatch.Begin();
+            _spriteBatch.Draw(_renderTarget, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, _scale, SpriteEffects.None, 0);
+            _spriteBatch.End();
+            #endregion
+
             base.Draw(gameTime);
+
         }
 
         /// <summary>
