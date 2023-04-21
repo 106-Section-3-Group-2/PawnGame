@@ -60,6 +60,10 @@ namespace PawnGame
 
             //Abilities
             AbilityDash,
+
+            //UI
+            SpacebarActive,
+            SpacebarInactive,
         }
         #endregion
 
@@ -99,6 +103,10 @@ namespace PawnGame
         // Menu buttons
         private List<Button> _menuButtons = new List<Button>();
         private List<Button> _debugButtons = new List<Button>();
+
+        // UI things
+        private int _spacebarBlinkFrames = 0;
+        private bool _spacebarActive;
 
         // This font is temporary
         // Will use for creating menu skeleton
@@ -155,6 +163,7 @@ namespace PawnGame
             LevelIndex = 0;
             _prevLevelIndex = 0;
             _playerScale = 4;
+            _spacebarActive = false;
             base.Initialize();
         }
 
@@ -179,6 +188,8 @@ namespace PawnGame
             Assets.Add(AssetNames.ExitWhite, Content.Load<Texture2D>("ExitWhite"));
             Assets.Add(AssetNames.WeaponSword, Content.Load<Texture2D>("Sword"));
             Assets.Add(AssetNames.AbilityDash, Content.Load<Texture2D>("AbilityDash"));
+            Assets.Add(AssetNames.SpacebarActive, Content.Load<Texture2D>("SpacebarActive"));
+            Assets.Add(AssetNames.SpacebarInactive, Content.Load<Texture2D>("SpacebarInactive"));
             Assets.Add(AssetNames.DebugError, Content.Load<Texture2D>("Error"));
             #endregion
 
@@ -239,6 +250,7 @@ namespace PawnGame
                                 // (whatever that means)
                                 ResetLevel();
                                 NextLevel();
+                                _player.HeldAbility = Player.Ability.None;
                                 Mouse.SetPosition(WindowWidth / 2, WindowHeight / 2);
                                 _gameState = GameState.Game;
                             }
@@ -462,7 +474,7 @@ namespace PawnGame
                     Vector2 UIPos = new Vector2(0 + _currLevel.Location.X / 2,
                                 (_currLevel.Location.Y + _currLevel.Height) / 2 + 50);
 
-                    _spriteBatch.DrawString(_font, "Current Ability:", new Vector2(UIPos.X - _font.MeasureString("Current Ability:").X /2,
+                    _spriteBatch.DrawString(_font, "Ability:", new Vector2(UIPos.X - _font.MeasureString("Ability:").X /2,
                         UIPos.Y - 50), Color.White);
 
                     if (_heldAbilityTexture != null!)
@@ -470,6 +482,31 @@ namespace PawnGame
                         string abilityName = _heldAbilityTexture.Name.Substring(7);
                         _spriteBatch.DrawString(_font, $"{abilityName}", new Vector2(UIPos.X - _font.MeasureString(abilityName).X / 2,
                             UIPos.Y + 50), Color.White);
+
+                        // Making the spacebar indicator blink
+                        // to make it look more dynamic
+                        if (!_spacebarActive)
+                        {
+                            _spriteBatch.Draw(Assets[AssetNames.SpacebarInactive], 
+                                new Rectangle((int)UIPos.X - Assets[AssetNames.SpacebarInactive].Width / 8, (int)UIPos.Y + 100,
+                                Assets[AssetNames.SpacebarInactive].Width / 4, Assets[AssetNames.SpacebarInactive].Height/4), Color.White);
+                        }
+                        else
+                        {
+                            _spriteBatch.Draw(Assets[AssetNames.SpacebarActive], 
+                                new Rectangle((int)UIPos.X - Assets[AssetNames.SpacebarActive].Width / 8, (int)UIPos.Y + 100,
+                                Assets[AssetNames.SpacebarActive].Width / 4, Assets[AssetNames.SpacebarActive].Height / 4), Color.White);
+                        }
+
+                        _spacebarBlinkFrames++;
+                        if (_spacebarBlinkFrames >= 10)
+                        {
+                            _spacebarActive = !(_spacebarActive);
+                            _spacebarBlinkFrames = 0;
+                        }
+
+                        
+
                     }
                     else
                     {

@@ -45,7 +45,7 @@ namespace PawnGame.GameObjects
             get { return _weaponOverride; }
         }
 
-        public Ability HeldAbility { get { return _heldAbility; } }
+        public Ability HeldAbility { get { return _heldAbility; } set { _heldAbility = value; } }
 
 
         public Player(Game1.AssetNames textureKey, Rectangle hitbox, Weapon weapon) : base(textureKey, hitbox)
