@@ -13,12 +13,12 @@ namespace PawnGame
         {
             get
             {
-                return level[level.ActiveRoomIndex.X, level.ActiveRoomIndex.Y];
+                return _level[_level.ActiveRoomIndex.X, _level.ActiveRoomIndex.Y];
             }
         }
 
         #region Fields
-        private Level level;
+        private Level _level;
         private List<Button> _palette;
         private List<Button> _options;
         private int _selected;
@@ -88,9 +88,9 @@ namespace PawnGame
         private void Initialize()
         {
             //initialize static level if it hasn't been
-            if(level == null)
+            if(_level == null)
             {
-                level = new Level(_game, new Point(3, 3), new Point(0, 0));
+                _level = new Level(_game, new Point(3, 3), new Point(0, 0));
             }
 
             //set up buttons and variables
@@ -177,27 +177,27 @@ namespace PawnGame
             #region move between rooms
             int inputVert = Convert.ToInt32(_kbState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.S) && !_kbStatePrev.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.S)) - Convert.ToInt32(_kbState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.W) && !_kbStatePrev.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.W));
             int inputHoriz = Convert.ToInt32(_kbState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D) && !_kbStatePrev.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D)) - Convert.ToInt32(_kbState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.A) && !_kbStatePrev.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.A));
-            Point activeRoomIndex = level.ActiveRoomIndex;
-            if (inputHoriz != 0 && activeRoomIndex.X + inputHoriz >= 0 && activeRoomIndex.X + inputHoriz < level.Length(0))
+            Point activeRoomIndex = _level.ActiveRoomIndex;
+            if (inputHoriz != 0 && activeRoomIndex.X + inputHoriz >= 0 && activeRoomIndex.X + inputHoriz < _level.Length(0))
             {
                 if(inputHoriz > 0)
                 {
-                    level.AdvanceRoom(Level.Direction.East);
+                    _level.AdvanceRoom(Level.Direction.East);
                 }
                 else
                 {
-                    level.AdvanceRoom(Level.Direction.West);
+                    _level.AdvanceRoom(Level.Direction.West);
                 }
             }
-            if (inputVert != 0 && activeRoomIndex.Y + inputVert >= 0 && activeRoomIndex.Y + inputVert < level.Length(1))
+            if (inputVert != 0 && activeRoomIndex.Y + inputVert >= 0 && activeRoomIndex.Y + inputVert < _level.Length(1))
             {
                 if (inputVert > 0)
                 {
-                    level.AdvanceRoom(Level.Direction.South);
+                    _level.AdvanceRoom(Level.Direction.South);
                 }
                 else
                 {
-                    level.AdvanceRoom(Level.Direction.North);
+                    _level.AdvanceRoom(Level.Direction.North);
                 }
             }
             #endregion
@@ -233,7 +233,7 @@ namespace PawnGame
                             openFileDialog.Filter = "Json files (*.json)|*.json|Text files (*.txt)|*.txt";
                             if (openFileDialog.ShowDialog() == DialogResult.OK)
                             {
-                                //need new
+                                _level = Level.Load(openFileDialog.FileName);
                             }
                             break;
                         //save
@@ -242,7 +242,7 @@ namespace PawnGame
                             saveFileDialog.Filter = "Json files (*.json)|*.json|Text files (*.txt)|*.txt";
                             if (saveFileDialog.ShowDialog() == DialogResult.OK)
                             {
-                                Room.Write(Room, saveFileDialog.FileName);
+                                _level.Save(saveFileDialog.FileName);
                             }
                             break;
                         //load error, should always be last case
