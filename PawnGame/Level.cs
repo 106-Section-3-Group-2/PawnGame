@@ -72,7 +72,7 @@ namespace PawnGame
             {
                 for(int y = 0; y < levelSize.Value.Y; y++)
                 {
-                    _rooms[x, y] = new Room(10, 8, game);
+                    _rooms[x, y] = new Room(8, 8, game);
                 }
             }
         }
