@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Diagnostics;
 using Newtonsoft.Json;
+using static PawnGame.Game1;
 
 namespace PawnGame
 {
@@ -114,7 +115,44 @@ namespace PawnGame
         }
 
         /// <summary>
-        /// create a level with enemies (this is for serialization)
+        /// constructor that pre-populates array
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="tileSize"></param>
+        public Room(int width, int height, Game1 game)
+        {
+            int sideLength = game.WindowHeight / height;
+            int margin = (game.WindowWidth / 2) - width * sideLength / 2;
+            Tiles = new Tile[width, height];
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    if ((x + y) % 2 == 0)
+                    {
+                        Tiles[x, y] = new Tile(AssetNames.TileBlack, new Rectangle(margin + x * sideLength, y * sideLength, sideLength, sideLength), false);
+                    }
+                    else
+                    {
+                        Tiles[x, y] = new Tile(AssetNames.TileWhite, new Rectangle(margin + x * sideLength, y * sideLength, sideLength, sideLength), false);
+                    }
+                }
+            }
+            //default spawn point
+            SpawnPoint = Tiles[0, 0].Hitbox.Location;
+
+            //initialize lists
+            PawnSpawns = new();
+            BishopSpawns = new();
+            RookSpawns = new();
+            KnightSpawns = new();
+            QueenSpawns = new();
+            KingSpawns = new();
+        }
+
+        /// <summary>
+        /// create a room with enemies (this is for serialization)
         /// </summary>
         /// <param name="tiles"></param>
         /// <param name="pawnSpawns"></param>

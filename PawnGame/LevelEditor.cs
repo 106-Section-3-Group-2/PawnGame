@@ -165,27 +165,6 @@ namespace PawnGame
 
             _selected = -1;
             _canClick = true;
-
-            //populate tile array
-            int sideLength = _game.WindowHeight / Room.Tiles.GetLength(1);
-            int margin = (_game.WindowWidth / 2) - Room.Tiles.GetLength(0) * sideLength / 2;
-            
-            for(int x = 0; x < Room.Tiles.GetLength(0); x++)
-            {
-                for(int y = 0; y < Room.Tiles.GetLength(1); y++)
-                {
-                    if((x + y) % 2 == 0)
-                    {
-                        Room.Tiles[x, y] = new Tile(AssetNames.TileBlack, new Rectangle(margin + x * sideLength, y * sideLength, sideLength, sideLength), false);
-                    }
-                    else
-                    {
-                        Room.Tiles[x, y] = new Tile(AssetNames.TileWhite, new Rectangle(margin + x * sideLength, y * sideLength, sideLength, sideLength), false);
-                    }
-                }
-            }
-            //default spawn point
-            Room.SpawnPoint = Room.Tiles[0, 0].Hitbox.Location;
         }
 
         /// <summary>

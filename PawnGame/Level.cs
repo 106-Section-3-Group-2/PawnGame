@@ -57,7 +57,8 @@ namespace PawnGame
         /// </summary>
         /// <param name="levelSize">Max size of the level. Default is 5x5.</param>
         /// <param name="spawnRoomIndex">Index of the starting room. Default is room 3,3.</param>
-        public Level(Point? levelSize = null, Point? spawnRoomIndex = null)
+        /// <param name="game">requires a Game1 reference</param>
+        public Level(Game1 game, Point? levelSize = null, Point? spawnRoomIndex = null)
         {
             #region Fill out values if any arent entered
             levelSize ??= new(5);
@@ -66,6 +67,14 @@ namespace PawnGame
 
             _rooms = new Room[levelSize.Value.X, levelSize.Value.Y];
             _activeRoomIndex = new(spawnRoomIndex.Value.X, spawnRoomIndex.Value.Y);
+            //populate rooms
+            for(int x = 0; x < levelSize.Value.X; x++)
+            {
+                for(int y = 0; y < levelSize.Value.Y; y++)
+                {
+                    _rooms[x, y] = new Room(10, 8, game);
+                }
+            }
         }
 
         /// <summary>
