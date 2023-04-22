@@ -291,6 +291,16 @@ namespace PawnGame
                                     break;
                                 case 2:
                                     //create an exit
+                                    //place only on edges
+                                    if(x != 0 && x != Room.Tiles.GetLength(0) - 1 && y != 0 && y != Room.Tiles.GetLength(1) - 1)
+                                    {
+                                        break;
+                                    }
+                                    //no place on corners
+                                    if ((x == 0 && y == 0) || (x == Room.Tiles.GetLength(0) - 1 && y == 0) || (x == 0 && y == Room.Tiles.GetLength(1) - 1) || x == Room.Tiles.GetLength(0) - 1 && y == Room.Tiles.GetLength(1) - 1)
+                                    {
+                                        break;
+                                    }
                                     if ((x + y) % 2 == 0)
                                     {
                                         Room.Tiles[x, y] = new Tile(AssetNames.ExitBlack, new Vectangle(Room.Tiles[x, y].X, Room.Tiles[x, y].Y, Room.Tiles[x, y].Width, Room.Tiles[x, y].Height), false, true);
