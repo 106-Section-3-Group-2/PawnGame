@@ -29,6 +29,11 @@ namespace PawnGame
         /// </summary>
         [JsonProperty]
         private Point _activeRoomIndex;
+
+        //drawing values for minimap
+        private static int _mapBoxSize;
+        private static Point _margin;
+        private static Point _bottomRight;
         #endregion
 
         #region Properties
@@ -75,6 +80,7 @@ namespace PawnGame
                     _rooms[x, y] = new Room(8, 8, game);
                 }
             }
+            Initialize();
         }
 
         /// <summary>
@@ -87,8 +93,40 @@ namespace PawnGame
         {
             _rooms = rooms;
             _activeRoomIndex = spawnRoomIndex;
+            Initialize();
         }
         #endregion
+
+        /// <summary>
+        /// initialize values for the Level
+        /// </summary>
+        private void Initialize()
+        {
+            _mapBoxSize = 10;
+            _bottomRight = new Point(800, 480);
+            _margin = new Point(10, 10);
+        }
+
+        /// <summary>
+        /// draw the level's minimap
+        /// </summary>
+        /// <param name="sb"></param>
+        public void Draw(SpriteBatch sb)
+        {
+            Point bottomRight = _bottomRight - _margin - new Point(_mapBoxSize, _mapBoxSize);
+            for(int x = _rooms.GetLength(0) - 1; x >= 0; x--)
+            {
+                for(int y = _rooms.GetLength(1) - 1; y >= 0; y--)
+                {
+                    Color drawColor = Color.Red;
+                    if(_activeRoomIndex.X == x  && _activeRoomIndex.Y == y)
+                    {
+                        drawColor = Color.White;
+                    }
+                    sb.Draw(Game1.Assets[Game1.AssetNames.TileWhite], new Rectangle(bottomRight.X - x * _mapBoxSize, bottomRight.Y - y * _mapBoxSize, _mapBoxSize, _mapBoxSize), drawColor);
+                }
+            }
+        }
 
         /// <summary>
         /// Moves one room in the entered direction

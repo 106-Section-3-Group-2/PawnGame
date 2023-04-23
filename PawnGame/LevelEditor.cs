@@ -441,6 +441,8 @@ namespace PawnGame
                 new Rectangle(new Point((int)Room.SpawnPoint.X,(int)Room.SpawnPoint.Y),
                 _pawnDimensions),
                 Color.White);
+            //draw minimap
+            _level.Draw(sb);
         }
 
         /// <summary>
