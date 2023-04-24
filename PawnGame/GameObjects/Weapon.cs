@@ -149,7 +149,7 @@ namespace PawnGame.GameObjects
         public bool IsColliding(Vectangle vectangle)
         {
             float theta = MathF.Atan2(_lastCollisionVectors[0].Y, _lastCollisionVectors[0].X) - MathF.Atan2(_collisionVectors[0].Y, _collisionVectors[0].X);
-            Matrix rotation = Matrix.CreateRotationZ(theta);
+            Matrix rotation = Matrix.CreateRotationZ(theta/2);
             for (int i = 0; i < _collisionVectors.Count; i++)
             {
                 if (vectangle.Contains(_collisionVectors[i] + Hitbox.Location))
