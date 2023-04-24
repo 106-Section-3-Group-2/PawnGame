@@ -262,7 +262,7 @@ namespace PawnGame
                     {
                         if (_mState.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
                         {
-                            //set the tile corresponding to palette
+# region set the tile corresponding to palette
                             bool occupied;
                             switch (_selected)
                             {
@@ -348,6 +348,7 @@ namespace PawnGame
                                             (int)(Room.Tiles[x, y].Y + Room.Tiles[x, y].Height / 2 - _pawnDimensions.Y / 2));
                                     }
                                     break;
+                                    #endregion
                             }
                         }
                         if (_mState.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
