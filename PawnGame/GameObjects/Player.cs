@@ -198,7 +198,7 @@ namespace PawnGame.GameObjects
                                          //Check WASD, Space
                     _velocity = _speed * direction;
                     //Space
-                    if (currentKBState.IsKeyDown(Keys.Space))
+                    if (currentKBState.IsKeyDown(Keys.Space) && previousKBState.IsKeyUp(Keys.Space))
                     {
                         UseAbility(direction);
                     }
@@ -208,7 +208,7 @@ namespace PawnGame.GameObjects
                 case PlayerState.Dizzy:
 
                     _velocity = _speed * direction;
-                    if (currentKBState.IsKeyDown(Keys.Space))
+                    if (currentKBState.IsKeyDown(Keys.Space) && previousKBState.IsKeyUp(Keys.Space))
                     {
                         UseAbility(direction);
                         _dizzyCounter = 0;
@@ -219,7 +219,7 @@ namespace PawnGame.GameObjects
                                              //WASD do not change velocity, but still change direction for abilities
                                              //Check WASD and Space
                                              //Space
-                    if (currentKBState.IsKeyDown(Keys.Space))
+                    if (currentKBState.IsKeyDown(Keys.Space) && previousKBState.IsKeyUp(Keys.Space))
                     {
                         /*
                         UseAbility(direction);
