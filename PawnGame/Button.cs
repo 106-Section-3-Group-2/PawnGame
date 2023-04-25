@@ -1,9 +1,11 @@
-﻿namespace PawnGame
+﻿using System.IO;
+
+namespace PawnGame
 {
     /// <summary>
     /// Represents a text box that is able to be clicked
     /// </summary>
-    internal struct Button
+    internal class Button
     {
         /// <summary>
         /// The type of button that has been created
@@ -28,17 +30,21 @@
 
         // The color of the button when it is hovered
         private Color _hoverColor;
+        private bool _mouseOver;
+        private bool _clicked;
 
         /// <summary>
         /// Returns a rectangle that holds the posiiton and size
         /// of the button
         /// </summary>
-        public Rectangle ButtonBox { get; set; }
+        public Vectangle ButtonBox { get; set; }
 
         /// <summary>
         /// Determines if a button is enabled or not
         /// </summary>
         public bool Enabled { get; set; }
+
+        public bool Clicked => _clicked;
 
         #region Constructors
         /// <summary>
@@ -60,6 +66,8 @@
             _btnHoverImage = null;
             btnType = ButtonType.Text;
             Enabled = true;
+            _mouseOver = false;
+            _clicked = false;
         }
 
         /// <summary>
@@ -83,6 +91,8 @@
             _btnHoverImage = null;
             btnType = ButtonType.ColorImage;
             Enabled = true;
+            _mouseOver = false;
+            _clicked = false;
         }
 
         /// <summary>
@@ -106,6 +116,8 @@
             _hoverColor = Color.White;
             btnType = ButtonType.HoverImage;
             Enabled = true;
+            _mouseOver = false;
+            _clicked = false;
         }
 
         /// <summary>
@@ -126,6 +138,8 @@
             _btnHoverImage = null;
             btnType = ButtonType.ColorImage;
             Enabled = true;
+            _mouseOver = false;
+            _clicked = false;
         }
 
         /// <summary>
@@ -146,35 +160,54 @@
             _hoverColor = Color.White;
             btnType = ButtonType.HoverImage;
             Enabled = true;
+            _mouseOver = false;
+            _clicked = false;
         }
         #endregion
+
+        /// <summary>
+        /// Updates if the mouse is being hovered over
+        /// </summary>
+        /// <param name="scale"></param>
+        public void Update(float scale)
+        {
+            if (MouseOver(scale))
+            {
+                _mouseOver = true;
+                _clicked = IsClickedOn();
+                return;
+            }
+            _mouseOver = false;
+            _clicked = false;
+        }
 
         /// <summary>
         /// Determines if the mouse is hovered over the button
         /// </summary>
         /// <returns>Whether or the mouse is over the button</returns>
-        public bool MouseOver()
+        public bool MouseOver(float scale)
         {
             MouseState mState = Mouse.GetState();
 
-            return ButtonBox.Contains(mState.X, mState.Y);
-        }
-
-        /// <summary>
-        /// Determines if the mouse is hovering over a button, and is clicked
-        /// </summary>
-        /// <returns>Whether the button has been clicked</returns>
-        public bool Clicked()
-        {
-            if (Enabled)
+            if (scale < 1)
             {
-                return MouseOver() && (Mouse.GetState().LeftButton == ButtonState.Pressed);
+                return (ButtonBox * scale).Contains(mState.X, mState.Y);
             }
             else
             {
-                return false;
-            }
+                return (ButtonBox / scale).Contains(mState.X, mState.Y);
+            }             
+
             
+        }
+
+        /// <summary>
+        /// Should only call if mouse over == true, then when called if mouse is left clicking and the button is active, returns true
+        /// </summary>
+        /// <returns>Whether the button has been clicked</returns>
+        private bool IsClickedOn()
+        {
+            return Enabled && (Mouse.GetState().LeftButton == ButtonState.Pressed);            
         }
 
         /// <summary>
@@ -183,8 +216,6 @@
         /// </summary>
         public void Draw(SpriteBatch sb)
         {
-            bool mouseOver = MouseOver();
-
             // Depending on the button type, draws the text or image with the specified color
             // to the screen
             if (Enabled)
@@ -193,7 +224,7 @@
                 {
                     // Text buttons are strings
                     case ButtonType.Text:
-                        if (mouseOver)
+                        if (_mouseOver)
                         {
                             sb.DrawString(_font, _text, new Vector2(ButtonBox.X, ButtonBox.Y), _hoverColor);
                         }
@@ -205,7 +236,7 @@
 
                     // Color image buttons change color when hovered
                     case ButtonType.ColorImage:
-                        if (mouseOver)
+                        if (_mouseOver)
                         {
                             sb.Draw(_btnImage, ButtonBox, _hoverColor);
                         }
@@ -217,7 +248,7 @@
 
                     // Hover Image buttons change texture when hovered
                     case ButtonType.HoverImage:
-                        if (mouseOver)
+                        if (_mouseOver)
                         {
                             sb.Draw(_btnHoverImage, ButtonBox, Color.White);
                         }

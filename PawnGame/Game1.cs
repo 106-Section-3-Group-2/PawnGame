@@ -148,7 +148,10 @@ namespace PawnGame
         }
 
         public int RenderTargetWidth => _renderTarget.Width;
+
         public int RenderTargetHeight => _renderTarget.Height;
+
+        public float Scale => _scale;
 
         #endregion
 
@@ -165,10 +168,10 @@ namespace PawnGame
         protected override void Initialize()
         {
             #region Screen and graphics size setup
-            _renderTarget = new(GraphicsDevice, 800, 480);
+            _renderTarget = new(GraphicsDevice, 1920, 1080);
 
-            _graphics.PreferredBackBufferWidth = 800;
-            _graphics.PreferredBackBufferHeight = 480;
+            _graphics.PreferredBackBufferWidth = 1920;
+            _graphics.PreferredBackBufferHeight = 1080;
             _graphics.ApplyChanges();
 
             _prevWidth = _graphics.PreferredBackBufferWidth;
@@ -181,7 +184,7 @@ namespace PawnGame
             Assets = new Dictionary<AssetNames, Texture2D>();
             LevelIndex = 0;
             _prevLevelIndex = 0;
-            _playerScale = 4;
+            _playerScale = 2;
             _spacebarActive = false;
             base.Initialize();
         }
@@ -212,8 +215,8 @@ namespace PawnGame
             Assets.Add(AssetNames.DebugError, Content.Load<Texture2D>("Error"));
             #endregion
 
-            _weapon = new Weapon(AssetNames.WeaponSword, new Rectangle(WindowWidth / 2, WindowHeight / 2, Assets[AssetNames.WeaponSword].Width / 2, Assets[AssetNames.WeaponSword].Height / 2));
-            _player = new Player(AssetNames.PawnBlack, new Rectangle(WindowWidth / 2, WindowHeight / 2, Assets[AssetNames.PawnBlack].Width/_playerScale, Assets[AssetNames.PawnBlack].Height/ _playerScale), _weapon);
+            _weapon = new Weapon(AssetNames.WeaponSword, new (RenderTargetWidth / 2, RenderTargetHeight / 2, Assets[AssetNames.WeaponSword].Width, Assets[AssetNames.WeaponSword].Height));
+            _player = new Player(AssetNames.PawnBlack, new (RenderTargetWidth / 2, RenderTargetHeight / 2, Assets[AssetNames.PawnBlack].Width/_playerScale, Assets[AssetNames.PawnBlack].Height/ _playerScale), _weapon);
             _heldAbilityTexture = null!;
 
             //initialize level editor (needs textures loaded)
@@ -221,6 +224,38 @@ namespace PawnGame
 
             //initialize and load the level array
             ResetLevel();
+
+            #region Add Menu buttons
+            #region Add main menu buttons
+            // Add menue buttons
+            _menuButtons.Add(new(_font, "New Game",
+                    new Vector2(RenderTargetWidth / 2 - _font.MeasureString("New Game").X / 2, RenderTargetHeight - 100),
+                Color.LightGray));
+            _menuButtons.Add(new(_font, "Load Game",
+                    new Vector2(RenderTargetWidth / 2 - _font.MeasureString("Load Game").X / 2, RenderTargetHeight - 75),
+                    Color.LightGray));
+            _menuButtons.Add(new(_font, "Level Editor",
+                    new Vector2(RenderTargetWidth / 2 - _font.MeasureString("Level Editor").X / 2, RenderTargetHeight - 50),
+                    Color.LightGray));
+            #endregion
+            #region Add debug menu buttons
+            _debugButtons.Add(new(_font, "Menu",
+                        new Vector2(RenderTargetWidth / 4 - _font.MeasureString("Menu").X / 2, RenderTargetHeight / 2),
+                        Color.LightGray));
+
+            _debugButtons.Add(new(_font, "Game",
+                new Vector2(RenderTargetWidth / 2 - _font.MeasureString("Game").X / 2, RenderTargetHeight / 4 + _font.MeasureString("Game").Y / 2),
+                Color.LightGray));
+
+            _debugButtons.Add(new(_font, "Level Editor",
+                    new Vector2(RenderTargetWidth - RenderTargetWidth / 4 - _font.MeasureString("Level Editor").X / 2, RenderTargetHeight / 2),
+                    Color.LightGray));
+
+            _debugButtons.Add(new(_font, "Victory",
+                new Vector2(RenderTargetWidth / 2 - _font.MeasureString("Victory").X / 2, ((RenderTargetHeight / 4) + RenderTargetHeight / 2) - _font.MeasureString("Victory").Y / 2),
+                Color.LightGray));
+            #endregion
+            #endregion
         }
 
         protected override void Update(GameTime gameTime)
@@ -242,26 +277,17 @@ namespace PawnGame
                 case GameState.Menu:
 
                     IsMouseVisible = true;
-                    _menuButtons.Clear();
 
-                    // Adding all 3 buttons on the menu screen
-                    // Note: Doing this in update so that their position updates
-                    // when  the window is fullscreened
-                    _menuButtons.Add(new(_font, "New Game",
-                            new Vector2(WindowWidth / 2 - _font.MeasureString("New Game").X / 2, WindowHeight - 100),
-                        Color.LightGray));
-                    _menuButtons.Add(new(_font, "Load Game",
-                            new Vector2(WindowWidth / 2 - _font.MeasureString("Load Game").X / 2, WindowHeight - 75),
-                            Color.LightGray));
-                    _menuButtons.Add(new(_font, "Level Editor",
-                            new Vector2(WindowWidth / 2 - _font.MeasureString("Level Editor").X / 2, WindowHeight - 50),
-                            Color.LightGray));
+                    for (int i = 0; i < _menuButtons.Count; i++)
+                    {
+                        _menuButtons[i].Update(_scale);
+                    }
 
                     // Updating the states depending on what button is clicked
                     // or what key is pressed
                     for (int i = 0; i < _menuButtons.Count; i++)
                     {
-                        if (_menuButtons[i].Clicked())
+                        if (_menuButtons[i].Clicked)
                         {
                             if (i == 0)
                             {
@@ -272,16 +298,19 @@ namespace PawnGame
                                 _player.HeldAbility = Player.Ability.None;
                                 Mouse.SetPosition(WindowWidth / 2, WindowHeight / 2);
                                 _gameState = GameState.Game;
+                                break;
                             }
                             else if (i == 1)
                             {
                                 // Load a level from a file
                                 _gameState = GameState.Game;
+                                break;
                             }
                             else
                             {
                                 // Open the level editor
                                 _gameState = GameState.LevelEditor;
+                                break;
                             }
                         }
                     }
@@ -294,57 +323,26 @@ namespace PawnGame
 
                     IsMouseVisible = true;
 
-                    // Make a button to each screen
-                    // but make the previous one disabled since they were already on it
                     // If the user presses escape, goes back to the previous state
                     if (_currKbState.IsKeyDown(Keys.Escape) && _prevKbState.IsKeyUp(Keys.Escape))
                     {
+                        _debugButtons[(int)_prevGameState].Enabled = true;
                         _gameState = _prevGameState;
                         _prevGameState = GameState.DebugMenu;
                     }
 
-                    _debugButtons.Clear();
-
-                    // Decide which button to disable
-                    #region Debug Button Adding
-
-                    _debugButtons.Add(new(_font, "Menu",
-                        new Vector2(WindowWidth / 4 - _font.MeasureString("Menu").X / 2, WindowHeight / 2),
-                        Color.LightGray));
-                    
-
-                    _debugButtons.Add(new(_font, "Game",
-                        new Vector2(WindowWidth / 2 - _font.MeasureString("Game").X / 2, WindowHeight /2),
-                        Color.LightGray));
-
-                    _debugButtons.Add(new(_font, "Level Editor",
-                            new Vector2(WindowWidth - WindowWidth / 4 - _font.MeasureString("Level Editor").X / 2, WindowHeight /2),
-                            Color.LightGray));
-
-                    _debugButtons.Add(new(_font, "Victory",
-                        new Vector2(WindowWidth / 2 - _font.MeasureString("Victory").X / 2, WindowHeight /2 + 100),
-                        Color.LightGray));
-
-                    // Looping through to disable the previous screen's button
-                    // as it doesn't make sense for the user to click it
-                    for (int i = 0; i < _debugButtons.Count; i++)
+                    if (_prevGameState != GameState.DebugMenu)
                     {
-                        if (i == (int)_prevGameState)
-                        {
-                            Button curr = _debugButtons[i];
-                            curr.Enabled = false;
-                            _debugButtons[i] = curr;
-
-                            break;
-                        }
+                        _debugButtons[(int)_prevGameState].Enabled = false;
                     }
-                    #endregion
 
-                    // Transitions to the corresponding screen
                     for (int i = 0; i < _debugButtons.Count; i++)
                     {
-                        if (_debugButtons[i].Clicked())
+                        _debugButtons[i].Update(_scale);
+
+                        if (_debugButtons[i].Clicked)
                         {
+                            _debugButtons[(int)_prevGameState].Enabled = true;
                             _gameState = (GameState)i;
 
                             // Resetting the level editor if the level editor was exited out of
@@ -355,7 +353,7 @@ namespace PawnGame
 
                             _prevGameState = GameState.DebugMenu;
 
-                            
+                            break;
                         }
                     }
 
@@ -364,6 +362,15 @@ namespace PawnGame
 
                 #region Game State
                 case GameState.Game:
+
+                    #if DEBUG
+                    //Debug level skip
+                    if (_currMouseState.MiddleButton == ButtonState.Pressed && _prevMouseState.MiddleButton == ButtonState.Released)
+                    {
+                        LevelIndex++;
+                        break;
+                    }
+                    #endif
 
                     IsMouseVisible = false;
 
@@ -381,10 +388,10 @@ namespace PawnGame
                     
                     //Vmouse has to update virst, and weapon has to update after player
 
-                    VMouse.Update(Mouse.GetState(), WindowWidth,WindowHeight);
+                    VMouse.Update(Mouse.GetState(), WindowWidth, WindowHeight);
                     Manager.Update(_player);
-                    _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState);
-                    _weapon.Update(_player,VMouse);
+                    _player.Update(_currKbState, _prevKbState, _currMouseState, _prevMouseState);
+                    _weapon.Update(_player, VMouse);
 
 
                     if (!_player.IsAlive)
@@ -439,7 +446,7 @@ namespace PawnGame
 
         protected override void Draw(GameTime gameTime) 
         {
-            #region Sets scale and sets up spritebatch to draw to the render target
+            #region Sets up spritebatch to draw to the render target
             _scale = 1 / ((float)_renderTarget.Height / GraphicsDevice.Viewport.Height);
 
             GraphicsDevice.SetRenderTarget(_renderTarget);
@@ -448,7 +455,7 @@ namespace PawnGame
             #endregion
 
             _spriteBatch.Begin();
-
+            
             switch (_gameState)
             {
                 #region Menu State
@@ -459,9 +466,8 @@ namespace PawnGame
                     // Drawing the logo to the screen
                     // Note: Doesn't scale properly on fullscreen
                     _spriteBatch.Draw(Assets[AssetNames.GameLogo],
-                        new Rectangle(WindowWidth / 4 - Assets[AssetNames.GameLogo].Width / 4,
-                        WindowHeight / 4 - Assets[AssetNames.GameLogo].Height / 2,
-                        Assets[AssetNames.GameLogo].Width * 2, Assets[AssetNames.GameLogo].Height * 2), Color.White);
+                        new Vectangle((RenderTargetWidth / 4), (RenderTargetHeight / 20), (RenderTargetWidth / 2), (RenderTargetHeight)),
+                        Color.White);
 
                     foreach (Button b in _menuButtons)
                     {
@@ -476,7 +482,7 @@ namespace PawnGame
                     // state
                     // Replace these tests later obviously
                     _spriteBatch.DrawString(_font, "Debug Menu",
-                        new Vector2(WindowWidth / 2 - _font.MeasureString("Debug Menu").X / 2, 100), Color.White);
+                        new Vector2(RenderTargetWidth / 2 - _font.MeasureString("Debug Menu").X / 2, RenderTargetHeight / 2 - _font.MeasureString("Debug Menu").Y / 2), Color.Red);
 
                     foreach(Button b in _debugButtons)
                     {
@@ -566,7 +572,7 @@ namespace PawnGame
                     #endregion
                     break;
             }
-
+            
             _spriteBatch.End();
 
             #region Draws render target to the screen

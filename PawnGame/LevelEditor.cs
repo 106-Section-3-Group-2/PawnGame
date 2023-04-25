@@ -76,7 +76,7 @@ namespace PawnGame
             _palette = new List<Button>();
 
             _playerScale = 4;
-            _pawnDimensions = new Point(Game1.Assets[AssetNames.PawnWhite].Width / _playerScale, Game1.Assets[AssetNames.PawnWhite].Height / _playerScale);
+            _pawnDimensions = new Point(Assets[AssetNames.PawnWhite].Width / _playerScale, Assets[AssetNames.PawnWhite].Height / _playerScale);
 
             int paletteDownscale = 4;
 
@@ -126,7 +126,7 @@ namespace PawnGame
                 Color.Green));
 
             //create options
-            float optionsX = _game.WindowWidth - _paletteTopLeft.X - Assets[AssetNames.IconLoad].Width;
+            float optionsX = _game.RenderTargetWidth - _paletteTopLeft.X - Assets[AssetNames.IconLoad].Width;
             //save
             _options.Add(new Button(
                 Assets[AssetNames.IconLoad],
@@ -144,8 +144,8 @@ namespace PawnGame
             _canClick = true;
 
             //populate tile array
-            int sideLength = _game.WindowHeight / _level.Tiles.GetLength(1);
-            int margin = (_game.WindowWidth / 2) - _level.Tiles.GetLength(0) * sideLength / 2;
+            int sideLength = _game.RenderTargetHeight / _level.Tiles.GetLength(1);
+            int margin = (_game.RenderTargetWidth / 2) - _level.Tiles.GetLength(0) * sideLength / 2;
 
             for(int x = 0; x < _level.Tiles.GetLength(0); x++)
             {
@@ -162,7 +162,7 @@ namespace PawnGame
                 }
             }
             //default spawn point
-            _level.SpawnPoint = _level.Tiles[0, 0].Hitbox.Location;
+            _level.SpawnPoint = _level.Tiles[1, 1].Hitbox.Location;
         }
 
         /// <summary>
@@ -179,19 +179,23 @@ namespace PawnGame
                 _canClick = true;
             }
 
-            //check for clicks on palette
+            //Update and check for click
             for (int i = 0; i < _palette.Count; i++)
             {
-                if (_palette[i].Clicked())
+                _palette[i].Update(_game.Scale);
+
+                if (_palette[i].Clicked)
                 {
                     _selected = i;
                 }
             }
 
-            //check for clicks on options
+            //Updates and check for clicks on options
             for (int i = 0; i < _options.Count; i++)
             {
-                if (_options[i].Clicked())
+                _options[i].Update(_game.Scale);
+
+                if (_options[i].Clicked)
                 {
                     switch (i)
                     {
@@ -419,7 +423,14 @@ namespace PawnGame
             {
                 return false;
             }
-            return _mState.X > g.X && _mState.Y > g.Y && _mState.X < g.X + g.Width && _mState.Y < g.Y + g.Height;
+            else if (_game.Scale < 1)
+            {
+                return (g.Hitbox * _game.Scale).Contains(_mState.X, _mState.Y);
+            }
+            else
+            {
+                return (g.Hitbox / _game.Scale).Contains(_mState.X, _mState.Y);
+            }            
         }
 
         /// <summary>

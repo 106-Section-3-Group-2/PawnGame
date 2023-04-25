@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ShapeUtils; 
 
 
 namespace PawnGame.GameObjects
@@ -134,7 +130,7 @@ namespace PawnGame.GameObjects
             Vector2 vector1 = new Vector2(MathF.Cos(VMouse.Rotation), MathF.Sin(VMouse.Rotation));
             //Vector2 vector1 = new Vector2(VMouse.X, VMouse.Y);
             vector1.Normalize();
-            vector1 *= 100;
+            vector1 *= 200;
             Vector2 vector2 = vector1 / 5 * 4;
             Vector2 vector3 = vector1 / 5 * 3;
             Vector2 vector4 = vector1 / 5 * 2;

@@ -63,7 +63,7 @@ namespace PawnGame.GameObjects
         public Player(Game1.AssetNames textureKey, Rectangle hitbox, Weapon weapon) : base(textureKey, hitbox)
         {
             _abilityTimer = 0;
-            _speed = 5;
+            _speed = 8;
             _heldAbility = Ability.None;
             _activeAbility = Ability.None;
             _currentWeapon = weapon;
@@ -292,7 +292,7 @@ namespace PawnGame.GameObjects
                     case Ability.Pawn:
                         _abilityMove = direction;
                         _activeAbility = Ability.Pawn;
-                        _abilityTimer = 10;
+                        _abilityTimer = 18;
                         break;
 
                     case Ability.Knight:
