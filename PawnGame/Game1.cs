@@ -170,8 +170,8 @@ namespace PawnGame
             #region Screen and graphics size setup
             _renderTarget = new(GraphicsDevice, 1920, 1080);
 
-            _graphics.PreferredBackBufferWidth = 1920;
-            _graphics.PreferredBackBufferHeight = 1080;
+            _graphics.PreferredBackBufferWidth = 1280;
+            _graphics.PreferredBackBufferHeight = 720;
             _graphics.ApplyChanges();
 
             _prevWidth = _graphics.PreferredBackBufferWidth;
