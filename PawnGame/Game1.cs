@@ -583,9 +583,9 @@ namespace PawnGame
 
             _spriteBatch.Begin();
             _spriteBatch.Draw(_renderTarget, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, _scale, SpriteEffects.None, 0);
-            #if DEBUG
+#if DEBUG
             _spriteBatch.DrawString(_font, Math.Round((1 / gameTime.ElapsedGameTime.TotalSeconds)).ToString(), Vector2.One, Color.White);
-            #endif
+#endif
             _spriteBatch.End();
             #endregion
 

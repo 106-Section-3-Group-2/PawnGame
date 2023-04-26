@@ -189,16 +189,7 @@ namespace PawnGame
         {
             MouseState mState = Mouse.GetState();
 
-            if (scale < 1)
-            {
-                return (ButtonBox * scale).Contains(mState.X, mState.Y);
-            }
-            else
-            {
-                return (ButtonBox / scale).Contains(mState.X, mState.Y);
-            }             
-
-            
+            return (ButtonBox * scale).Contains(mState.X, mState.Y);
         }
 
         /// <summary>
