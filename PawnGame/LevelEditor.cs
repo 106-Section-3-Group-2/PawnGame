@@ -175,8 +175,8 @@ namespace PawnGame
             _kbStatePrev = _kbState;
             _kbState = Keyboard.GetState();
             #region move between rooms
-            int inputVert = Convert.ToInt32(_kbState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.S) && !_kbStatePrev.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.S)) - Convert.ToInt32(_kbState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.W) && !_kbStatePrev.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.W));
-            int inputHoriz = Convert.ToInt32(_kbState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D) && !_kbStatePrev.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D)) - Convert.ToInt32(_kbState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.A) && !_kbStatePrev.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.A));
+            int inputVert = -Convert.ToInt32(_kbState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.S) && !_kbStatePrev.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.S)) + Convert.ToInt32(_kbState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.W) && !_kbStatePrev.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.W));
+            int inputHoriz = -Convert.ToInt32(_kbState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D) && !_kbStatePrev.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D)) + Convert.ToInt32(_kbState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.A) && !_kbStatePrev.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.A));
             Point activeRoomIndex = _level.ActiveRoomIndex;
             if (inputHoriz != 0 && activeRoomIndex.X + inputHoriz >= 0 && activeRoomIndex.X + inputHoriz < _level.Length(0))
             {
