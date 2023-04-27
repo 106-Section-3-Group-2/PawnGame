@@ -75,7 +75,7 @@ namespace PawnGame
             _options = new List<Button>();
             _palette = new List<Button>();
 
-            _playerScale = 4;
+            _playerScale = 2;
             _pawnDimensions = new Point(Assets[AssetNames.PawnWhite].Width / _playerScale, Assets[AssetNames.PawnWhite].Height / _playerScale);
 
             int paletteDownscale = 4;
