@@ -72,7 +72,7 @@ namespace PawnGame
 
         public void Draw(SpriteBatch sb,float scale)
         {
-            sb.Draw(crosshair, new Vectangle((X-30), (Y-30), 60, 60), Color.Red);
+            sb.Draw(crosshair, new Vectangle((X-30), (Y-30), 60, 60), Color.Blue);
         }
     }
 }
