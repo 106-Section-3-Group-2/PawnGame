@@ -138,25 +138,25 @@ namespace PawnGame
             switch (direction)
             {
                 case Direction.North:
-                    if (_activeRoomIndex.Y == 0 || _rooms[_activeRoomIndex.X,_activeRoomIndex.Y--] == null) 
+                    if (_activeRoomIndex.Y == 0 || _rooms[_activeRoomIndex.X,_activeRoomIndex.Y-1] == null) 
                         throw new InvalidOperationException("No room is north of the current room.");
 
                     _activeRoomIndex.Y--;
                     break;
                 case Direction.East:
-                    if (_activeRoomIndex.X == _rooms.GetLength(0) - 1 || _rooms[_activeRoomIndex.X++, _activeRoomIndex.Y] == null) 
+                    if (_activeRoomIndex.X == _rooms.GetLength(0) - 1 || _rooms[_activeRoomIndex.X+1, _activeRoomIndex.Y] == null) 
                         throw new InvalidOperationException("No room is east of the current room.");
 
                     _activeRoomIndex.X++;
                     break;
                 case Direction.South:
-                    if (_activeRoomIndex.Y == _rooms.GetLength(1) - 1 || _rooms[_activeRoomIndex.X, _activeRoomIndex.Y++] == null) 
+                    if (_activeRoomIndex.Y == _rooms.GetLength(1) - 1 || _rooms[_activeRoomIndex.X, _activeRoomIndex.Y+1] == null) 
                         throw new InvalidOperationException("No room is south of the current room.");
 
                     _activeRoomIndex.Y++;
                     break;
                 case Direction.West:
-                    if (_activeRoomIndex.X == 0 || _rooms[_activeRoomIndex.X--, _activeRoomIndex.Y] == null) 
+                    if (_activeRoomIndex.X == 0 || _rooms[_activeRoomIndex.X-1, _activeRoomIndex.Y] == null) 
                         throw new InvalidOperationException("No room is west of the current room.");
 
                     _activeRoomIndex.X--;

@@ -415,7 +415,7 @@ namespace PawnGame
 
                     if (LevelIndex > _prevLevelIndex)
                     {
-                        NextRoom();
+                        NextLevel();
                     }
 
                     #endregion
