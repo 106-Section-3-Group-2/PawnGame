@@ -373,7 +373,7 @@ namespace PawnGame
 
                     #if DEBUG
                     //Debug level skip
-                    if (_currMouseState.MiddleButton == ButtonState.Pressed && _prevMouseState.MiddleButton == ButtonState.Released)
+                    if (_currKbState.IsKeyDown(Keys.X) && _prevKbState.IsKeyUp(Keys.X))
                     {
                         s_levelIndex++;
                         break;

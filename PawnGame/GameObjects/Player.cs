@@ -78,26 +78,10 @@ namespace PawnGame.GameObjects
             ReadInputs(currentKBState, previousKBState,currentMouseState,prevMouseState);
             Move();
             KeepInBounds();
-            Weapon.Update(this,VirtualMouse.VMouse);
 
-            for (int i = 0; i < Game1.CurrentLevel.ActiveRoom.Tiles.GetLength(0); i++)
-            {
-                for (int j = 0; j < Game1.CurrentLevel.ActiveRoom.Tiles.GetLength(1); j++)
-                {
-                    if (CheckCollision(Game1.CurrentLevel.ActiveRoom.Tiles[i, j]))
-                    {
-                        if (Game1.CurrentLevel.ActiveRoom.Tiles[i, j].IsSolid)
-                        {
-                            ResolveCollisions(Game1.CurrentLevel.ActiveRoom.Tiles[i, j]);
-                        }
-                        //old room advancement code
-                        //else if (Game1.CurrentLevel.Tiles[i, j].IsExit && EnemyManager.Manager.Count <= 0)
-                        //{
-                        //    Game1.LevelIndex++; 
-                        //}
-                    }
-                }
-            }
+            ManageTileCollisions();
+
+            Weapon.Update(this,VirtualMouse.VMouse);            
         }
         protected void Move()
         {
