@@ -33,10 +33,14 @@ namespace PawnGame
         /// </summary>
         public enum AssetNames
         {
-            //General stuff
+            //UI
             GameLogo,
             IconSave,
             IconLoad,
+            /*ButtonUp,
+            ButtonDown,
+            ButtonLeft,
+            ButtonRight,*/
 
             //Tiles
             TileBlack,
@@ -77,8 +81,8 @@ namespace PawnGame
         #region GameStates and level
         private GameState _gameState;
         private GameState _prevGameState;
-        private Level[] _levels;
-        private Level _currLevel;
+        private Room[] _levels;
+        private Room _currLevel;
         private int _prevLevelIndex;
         #endregion
 
@@ -128,7 +132,7 @@ namespace PawnGame
         /// </summary>
         public static int LevelIndex;
 
-        public static Level CurrentLevel;
+        public static Room CurrentLevel;
 
 
         /// <summary>
@@ -213,6 +217,10 @@ namespace PawnGame
             Assets.Add(AssetNames.SpacebarActive, Content.Load<Texture2D>("SpacebarActive"));
             Assets.Add(AssetNames.SpacebarInactive, Content.Load<Texture2D>("SpacebarInactive"));
             Assets.Add(AssetNames.DebugError, Content.Load<Texture2D>("Error"));
+            /*Assets.Add(AssetNames.ButtonUp, Content.Load<Texture2D>("ButtonUp"));
+            Assets.Add(AssetNames.ButtonDown, Content.Load<Texture2D>("ButtonDown"));
+            Assets.Add(AssetNames.ButtonLeft, Content.Load<Texture2D>("ButtonLeft"));
+            Assets.Add(AssetNames.ButtonRight, Content.Load<Texture2D>("ButtonRight"));*/
             #endregion
 
             _weapon = new Weapon(AssetNames.WeaponSword, new (RenderTargetWidth / 2, RenderTargetHeight / 2, Assets[AssetNames.WeaponSword].Width, Assets[AssetNames.WeaponSword].Height));
@@ -411,7 +419,7 @@ namespace PawnGame
 
                     if (LevelIndex > _prevLevelIndex)
                     {
-                        NextLevel();
+                        NextRoom();
                     }
 
                     #endregion
@@ -657,10 +665,10 @@ namespace PawnGame
 
             //get all the levels from the levels folder, deserialize and store them
             string[] fileNames = Directory.GetFiles(Directory.GetCurrentDirectory() + "/Levels");
-            _levels = new Level[fileNames.Length];
+            _levels = new Room[fileNames.Length];
             for (int i = 0; i < _levels.Length; i++)
             {
-                _levels[i] = Level.Read(fileNames[i]);
+                _levels[i] = Room.Read(fileNames[i]);
             }
 
             _currLevel = _levels[0];
@@ -672,6 +680,19 @@ namespace PawnGame
             Manager.AddRange(_currLevel.EnemySpawns);
             LevelIndex = 0;
             _prevLevelIndex = 0;
+        }
+
+        /// <summary>
+        /// send the player to a room without adding enemies
+        /// </summary>
+        /// <param name="room"></param>
+        private void GotoRoom(Room room)
+        {
+            _currLevel = room;
+            CurrentLevel = _currLevel;
+            _player.X = _currLevel.SpawnPoint.X;
+            _player.Y = _currLevel.SpawnPoint.Y;
+            Manager.Clear();
         }
     }
 }

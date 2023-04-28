@@ -1,4 +1,5 @@
 ﻿using PawnGame.GameObjects.Enemies;
+using System;
 
 namespace PawnGame.GameObjects
 {
@@ -187,6 +188,13 @@ namespace PawnGame.GameObjects
             
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="currentKBState"></param>
+        /// <param name="previousKBState"></param>
+        /// <param name="currentMouseState"></param>
+        /// <param name="prevMouseState"></param>
         private void ReadInputs(KeyboardState currentKBState, KeyboardState previousKBState,MouseState currentMouseState, MouseState prevMouseState)
         {
             //Returns a normalized 2D vector of player's input direction
@@ -235,6 +243,10 @@ namespace PawnGame.GameObjects
             }
         }
 
+        /// <summary>
+        /// Draws the player to the screen.
+        /// </summary>
+        /// <param name="sb"></param>
         public override void Draw(SpriteBatch sb)
         {
             if (_isAlive)
@@ -245,7 +257,7 @@ namespace PawnGame.GameObjects
         }
 
         /// <summary>
-        /// Returns a 
+        /// Takes keyboard state and returns the input vector
         /// </summary>
         /// <param name="currentKBState"></param>
         /// <returns></returns>
@@ -282,6 +294,11 @@ namespace PawnGame.GameObjects
             return output;
         }
 
+        /// <summary>
+        /// Executes code based on the player's current ability.
+        /// Pawn effect: 
+        /// </summary>
+        /// <param name="direction"></param>
         private void UseAbility(Vector2 direction)
         {
             if (_heldAbility != Ability.None)
@@ -316,6 +333,10 @@ namespace PawnGame.GameObjects
 
         }
 
+        /// <summary>
+        /// If the player doesnt currently have an ability, give the player the entered ability.
+        /// </summary>
+        /// <param name="ability"></param>
         public void GetAbility(Ability ability)
         {
             if (_heldAbility == Ability.None)

@@ -1,195 +1,207 @@
-﻿using PawnGame.GameObjects;
-using PawnGame.GameObjects.Enemies;
+﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Diagnostics;
-using Newtonsoft.Json;
 
 namespace PawnGame
 {
-    /// <summary>
-    /// holds an array of tiles and lists of enemy. Serializable and has static functions to save and load.
-    /// </summary>
-    public class Level
+    internal class Level
     {
-        #region properties
         /// <summary>
-        /// the array of tiles which make up the level
+        /// Cardinal directions used for telling the level which room to move to
         /// </summary>
-        public Tile[,] Tiles { get; set; }
+        public enum Direction
+        {
+            North,
+            East,
+            South,
+            West
+        }
+
+        #region Fields
         /// <summary>
-        /// indexer property to access tile array
+        /// Grid of rooms in the level
         /// </summary>
-        /// <param name="index1"></param>
-        /// <param name="index2"></param>
+        [JsonProperty]
+        private readonly Room[,] _rooms;
+
+        /// <summary>
+        /// Vector storing the active room's X and Y index
+        /// </summary>
+        [JsonProperty]
+        private Point _activeRoomIndex;
+
+        //drawing values for minimap
+        private static int _mapBoxSize;
+        private static Point _margin;
+        private static Point _bottomRight;
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Gets the room at the specified cordinates
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="j"></param>
         /// <returns></returns>
-        public Tile this[int index1, int index2]
-        {
-            get
-            {
-                return Tiles[index1, index2];
-            }
-            set
-            {
-                Tiles[index1, index2] = value;
-            }
-        }
+        public Room this[int i, int j] => _rooms[i, j];
 
-        //lists of enemies
-        public List<Pawn> PawnSpawns { get; set; }
-        public List<Bishop> BishopSpawns { get; set; }
-        public List<Rook> RookSpawns { get; set; }
-        public List<Knight> KnightSpawns { get; set; }
-        public List<Queen> QueenSpawns { get; set; }
-        public List<King> KingSpawns { get; set; }
+        /// <summary>
+        /// The current active room in the level
+        /// </summary>
         [JsonIgnore]
-        public List<Enemy> EnemySpawns
+        public Room ActiveRoom => _rooms[_activeRoomIndex.X, _activeRoomIndex.Y];
+        /// <summary>
+        /// the index of the active room
+        /// </summary>
+        public Point ActiveRoomIndex => _activeRoomIndex;
+        #endregion
+
+        #region Constructors
+        /// <summary>
+        /// Makes a constructor with the entered values. If none are entered, defaults are picked.
+        /// </summary>
+        /// <param name="levelSize">Max size of the level. Default is 5x5.</param>
+        /// <param name="spawnRoomIndex">Index of the starting room. Default is room 3,3.</param>
+        /// <param name="game">requires a Game1 reference</param>
+        public Level(Game1 game, Point? levelSize = null, Point? spawnRoomIndex = null)
         {
-            get
+            #region Fill out values if any arent entered
+            levelSize ??= new(5);
+            spawnRoomIndex ??= new(3);
+            #endregion
+
+            _rooms = new Room[levelSize.Value.X, levelSize.Value.Y];
+            _activeRoomIndex = new(spawnRoomIndex.Value.X, spawnRoomIndex.Value.Y);
+            //populate rooms
+            for(int x = 0; x < levelSize.Value.X; x++)
             {
-                List<Enemy> enemies = new();
-                enemies.AddRange(PawnSpawns);
-                enemies.AddRange(BishopSpawns);
-                enemies.AddRange(RookSpawns);
-                enemies.AddRange(KnightSpawns);
-                enemies.AddRange(QueenSpawns);
-                enemies.AddRange(KingSpawns);
-                return enemies;
+                for(int y = 0; y < levelSize.Value.Y; y++)
+                {
+                    _rooms[x, y] = new Room(8, 8, game);
+                }
             }
+            Initialize();
         }
 
         /// <summary>
-        /// the spawn location of the player
+        /// Creates a room with the tile layout and starting position enterd. This constructor is used for JSON deserialization
         /// </summary>
-        public Vector2 SpawnPoint { get; set; }
-        /// <summary>
-        /// the width of the entire level
-        /// </summary>
-        public float Width
+        /// <param name="rooms"></param>
+        /// <param name="spawnRoomIndex"></param>
+        [JsonConstructor]
+        private Level(Room[,] rooms, Point spawnRoomIndex)
         {
-            get
-            {
-                return this[0, 0].Width * Tiles.GetLength(0);
-            }
-        }
-        /// <summary>
-        /// the height of the entire level
-        /// </summary>
-        public float Height
-        {
-            get
-            {
-                return this[0, 0].Height * Tiles.GetLength(1);
-            }
-        }
-        /// <summary>
-        /// the top-left corner of the level
-        /// </summary>
-        public Vector2 Location
-        {
-            get
-            {
-                return new Vector2(this[0, 0].X, this[0, 0].Y);
-            }
+            _rooms = rooms;
+            _activeRoomIndex = spawnRoomIndex;
+            Initialize();
         }
         #endregion
 
         /// <summary>
-        /// create a level that holds an array of tiles, and a spawnpoint.
+        /// initialize values for the Level
         /// </summary>
-        /// <param name="tiles"></param>
-        /// <param name="enemies"></param>
-        /// <param name="spawnPoint"></param>
-        public Level(Tile[,] tiles, Vector2 spawnPoint)
+        private void Initialize()
         {
-            Tiles = tiles;
-            SpawnPoint = spawnPoint;
-            PawnSpawns = new();
-            BishopSpawns = new();
-            RookSpawns = new();
-            KnightSpawns = new();
-            QueenSpawns = new();
-            KingSpawns = new();
+            _mapBoxSize = 10;
+            _bottomRight = new Point(800, 480);
+            _margin = new Point(10, 10);
         }
 
         /// <summary>
-        /// create a level with enemies (this is for serialization)
-        /// </summary>
-        /// <param name="tiles"></param>
-        /// <param name="pawnSpawns"></param>
-        /// <param name="bishopSpawns"></param>
-        /// <param name="rookSpawns"></param>
-        /// <param name="knightSpawns"></param>
-        /// <param name="queenSpawns"></param>
-        /// <param name="kingSpawns"></param>
-        /// <param name="spawnPoint"></param>
-        [JsonConstructor]
-        public Level(Tile[,] tiles, List<Pawn> pawnSpawns, List<Bishop> bishopSpawns, List<Rook> rookSpawns, List<Knight> knightSpawns, List<Queen> queenSpawns, List<King> kingSpawns, Vector2 spawnPoint)
-        {
-            Tiles = tiles;
-            PawnSpawns = pawnSpawns;
-            BishopSpawns = bishopSpawns;
-            RookSpawns = rookSpawns;
-            KnightSpawns = knightSpawns;
-            QueenSpawns = queenSpawns;
-            KingSpawns = kingSpawns;
-            SpawnPoint = spawnPoint;
-        }
-
-
-
-        /// <summary>
-        /// update the level
-        /// </summary>
-        /// <param name="gameTime"></param>
-        public void Update(GameTime gameTime)
-        {
-        }
-
-        /// <summary>
-        /// draw the level
+        /// draw the level's minimap
         /// </summary>
         /// <param name="sb"></param>
         public void Draw(SpriteBatch sb)
         {
-            foreach (Tile tile in Tiles)
+            Point bottomRight = _bottomRight - _margin - new Point(_mapBoxSize, _mapBoxSize);
+            for(int x = _rooms.GetLength(0) - 1; x >= 0; x--)
             {
-                if(tile != null)
+                for(int y = _rooms.GetLength(1) - 1; y >= 0; y--)
                 {
-                    tile.Draw(sb);
+                    Color drawColor = Color.Red;
+                    if(_activeRoomIndex.X == x  && _activeRoomIndex.Y == y)
+                    {
+                        drawColor = Color.White;
+                    }
+                    sb.Draw(Game1.Assets[Game1.AssetNames.TileWhite], new Rectangle(bottomRight.X - x * _mapBoxSize, bottomRight.Y - y * _mapBoxSize, _mapBoxSize, _mapBoxSize), drawColor);
                 }
             }
         }
 
         /// <summary>
-        /// writes the level to a filePath
+        /// Moves one room in the entered direction
         /// </summary>
-        /// <param name="level"></param>
-        /// <param name="filePath"></param>
-        public static void Write(Level level, string filePath)
+        /// <param name="direction">Direction to move</param>
+        /// <exception cref="InvalidOperationException">Thrown if there is no room in the entered direction</exception>
+        public void AdvanceRoom(Direction direction)
         {
-            try
+            switch (direction)
             {
-                using StreamWriter writer = new(filePath);
-                writer.Write(JsonConvert.SerializeObject(level));
-            }
-            catch(Exception e)
-            {
-                Debug.WriteLine(e.ToString());
-                throw new Exception("Could not write the file.");
+                case Direction.North:
+                    if (_activeRoomIndex.Y == 0 || _rooms[_activeRoomIndex.X,_activeRoomIndex.Y--] == null) 
+                        throw new InvalidOperationException("No room is north of the current room.");
+
+                    _activeRoomIndex.Y--;
+                    break;
+                case Direction.East:
+                    if (_activeRoomIndex.X == _rooms.GetLength(0) - 1 || _rooms[_activeRoomIndex.X++, _activeRoomIndex.Y] == null) 
+                        throw new InvalidOperationException("No room is east of the current room.");
+
+                    _activeRoomIndex.X++;
+                    break;
+                case Direction.South:
+                    if (_activeRoomIndex.Y == _rooms.GetLength(1) - 1 || _rooms[_activeRoomIndex.X, _activeRoomIndex.Y++] == null) 
+                        throw new InvalidOperationException("No room is south of the current room.");
+
+                    _activeRoomIndex.Y++;
+                    break;
+                case Direction.West:
+                    if (_activeRoomIndex.X == 0 || _rooms[_activeRoomIndex.X--, _activeRoomIndex.Y] == null) 
+                        throw new InvalidOperationException("No room is west of the current room.");
+
+                    _activeRoomIndex.X--;
+                    break;
             }
         }
 
         /// <summary>
-        /// returns a level loaded from the filePath. Throws an exception if there was an error writing to the file.
+        /// Saves the current level to both the dev and user level folders
         /// </summary>
-        /// <param name="filePath"></param>
-        /// <returns></returns>
-        public static Level Read(string filePath)
+        public void Save(string filePath)
+        {
+            string jsonLevel = JsonConvert.SerializeObject(this);
+
+            if (Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\Levels\")))
+            {
+                string fileName = filePath.Substring(filePath.LastIndexOf(@"\") + 1);
+
+                using StreamWriter devWriter = new(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\Levels\" + fileName));
+                devWriter.Write(jsonLevel);
+            }
+
+            using StreamWriter gameWriter = new(filePath);
+            gameWriter.Write(jsonLevel);
+        }
+
+        /// <summary>
+        /// Takes a file path and returns the level stored in that file
+        /// </summary>
+        /// <param name="filePath">path of the file to load</param>
+        /// <returns>Level stored in that file</returns>
+        public static Level Load(string filePath)
         {
             using StreamReader reader = new(filePath);
             return JsonConvert.DeserializeObject<Level>(reader.ReadLine());
+        }
+
+        /// <summary>
+        /// get the length (in rooms) of the level in a given dimension
+        /// </summary>
+        /// <param name="dimension"></param>
+        /// <returns></returns>
+        public int Length(int dimension)
+        {
+            return _rooms.GetLength(dimension);
         }
     }
 }

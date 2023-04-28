@@ -5,7 +5,7 @@ using System.CodeDom;
 namespace PawnGame
 {
     /// <summary>
-    /// Rectangle that uses float values instead of int values.
+    /// Rectangle that uses float values instead of int values
     /// </summary>
     public struct Vectangle
     {
