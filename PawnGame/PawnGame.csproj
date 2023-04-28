@@ -21,27 +21,7 @@
     <None Remove="Levels\04-3boxes.json" />
     <None Remove="Levels\05-around.json" />
     <None Remove="Levels\06-loop.json" />
-    <None Remove="Levels\arrows.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Levels\01-basic.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Levels\02-arrows.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Levels\03-lobby.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Levels\04-3boxes.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Levels\05-around.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Levels\06-loop.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <None Remove="Levels\test.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Icon.ico" />
@@ -54,6 +34,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\sprites\Weapons\" />
+    <Folder Include="Levels\" />
   </ItemGroup>
   <Target Name="RestoreDotnetTools" BeforeTargets="Restore">
     <Message Text="Restoring dotnet tools" Importance="High" />

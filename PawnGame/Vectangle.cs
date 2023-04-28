@@ -1,10 +1,11 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.CodeDom;
 
 namespace PawnGame
 {
     /// <summary>
-    /// Rectangle that uses float values instead of int values.
+    /// Rectangle that uses float values instead of int values
     /// </summary>
     public struct Vectangle
     {
@@ -233,6 +234,28 @@ namespace PawnGame
             float num4 = Math.Min(_y + _height, other._y + other._height);
 
             return new(num2, num3, num - num2, num4 - num3);
+        }
+
+        /// <summary>
+        /// Multiplies the vectangle values by the float value
+        /// </summary>
+        /// <param name="v"></param>
+        /// <param name="scalar"></param>
+        /// <returns></returns>
+        public static Vectangle operator *(Vectangle v, float scalar)
+        {
+            return new(v.X * scalar, v.Y * scalar, v.Width * scalar, v.Height * scalar);
+        }
+
+        /// <summary>
+        /// Devides the vectangle values by the float value
+        /// </summary>
+        /// <param name="v"></param>
+        /// <param name="scalar"></param>
+        /// <returns></returns>
+        public static Vectangle operator /(Vectangle v, float scalar)
+        {
+            return new(v.X / scalar, v.Y / scalar, v.Width / scalar, v.Height / scalar);
         }
 
         /// <summary>

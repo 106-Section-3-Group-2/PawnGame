@@ -1,4 +1,5 @@
 ﻿using PawnGame.GameObjects.Enemies;
+using System;
 
 namespace PawnGame.GameObjects
 {
@@ -63,7 +64,7 @@ namespace PawnGame.GameObjects
         public Player(Game1.AssetNames textureKey, Rectangle hitbox, Weapon weapon) : base(textureKey, hitbox)
         {
             _abilityTimer = 0;
-            _speed = 5;
+            _speed = 8;
             _heldAbility = Ability.None;
             _activeAbility = Ability.None;
             _currentWeapon = weapon;
@@ -77,25 +78,10 @@ namespace PawnGame.GameObjects
             ReadInputs(currentKBState, previousKBState,currentMouseState,prevMouseState);
             Move();
             KeepInBounds();
-            Weapon.Update(this,VirtualMouse.VMouse);
 
-            for (int i = 0; i < Game1.CurrentLevel.Tiles.GetLength(0); i++)
-            {
-                for (int j = 0; j < Game1.CurrentLevel.Tiles.GetLength(1); j++)
-                {
-                    if (CheckCollision(Game1.CurrentLevel.Tiles[i, j]))
-                    {
-                        if (Game1.CurrentLevel.Tiles[i, j].IsSolid)
-                        {
-                            ResolveCollisions(Game1.CurrentLevel.Tiles[i, j]);
-                        }
-                        else if (Game1.CurrentLevel.Tiles[i, j].IsExit && EnemyManager.Manager.Count <= 0)
-                        {
-                            Game1.LevelIndex++; 
-                        }
-                    }
-                }
-            }
+            ManageTileCollisions();
+
+            Weapon.Update(this,VirtualMouse.VMouse);            
         }
         protected void Move()
         {
@@ -187,6 +173,13 @@ namespace PawnGame.GameObjects
             
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="currentKBState"></param>
+        /// <param name="previousKBState"></param>
+        /// <param name="currentMouseState"></param>
+        /// <param name="prevMouseState"></param>
         private void ReadInputs(KeyboardState currentKBState, KeyboardState previousKBState,MouseState currentMouseState, MouseState prevMouseState)
         {
             //Returns a normalized 2D vector of player's input direction
@@ -235,6 +228,10 @@ namespace PawnGame.GameObjects
             }
         }
 
+        /// <summary>
+        /// Draws the player to the screen.
+        /// </summary>
+        /// <param name="sb"></param>
         public override void Draw(SpriteBatch sb)
         {
             if (_isAlive)
@@ -245,7 +242,7 @@ namespace PawnGame.GameObjects
         }
 
         /// <summary>
-        /// Returns a 
+        /// Takes keyboard state and returns the input vector
         /// </summary>
         /// <param name="currentKBState"></param>
         /// <returns></returns>
@@ -282,6 +279,11 @@ namespace PawnGame.GameObjects
             return output;
         }
 
+        /// <summary>
+        /// Executes code based on the player's current ability.
+        /// Pawn effect: 
+        /// </summary>
+        /// <param name="direction"></param>
         private void UseAbility(Vector2 direction)
         {
             if (_heldAbility != Ability.None)
@@ -292,7 +294,7 @@ namespace PawnGame.GameObjects
                     case Ability.Pawn:
                         _abilityMove = direction;
                         _activeAbility = Ability.Pawn;
-                        _abilityTimer = 10;
+                        _abilityTimer = 18;
                         break;
 
                     case Ability.Knight:
@@ -316,6 +318,10 @@ namespace PawnGame.GameObjects
 
         }
 
+        /// <summary>
+        /// If the player doesnt currently have an ability, give the player the entered ability.
+        /// </summary>
+        /// <param name="ability"></param>
         public void GetAbility(Ability ability)
         {
             if (_heldAbility == Ability.None)
