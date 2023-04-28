@@ -1,10 +1,14 @@
 ﻿using Newtonsoft.Json;
+using PawnGame.GameObjects;
 using System;
 using System.IO;
 
 namespace PawnGame
 {
-    internal class Level
+    /// <summary>
+    /// holds a 2D array of rooms the player can traverse between
+    /// </summary>
+    public class Level
     {
         /// <summary>
         /// Cardinal directions used for telling the level which room to move to
@@ -202,6 +206,11 @@ namespace PawnGame
         public int Length(int dimension)
         {
             return _rooms.GetLength(dimension);
+        }
+
+        public void Restart()
+        {
+            _activeRoomIndex = new Point(0, 0);
         }
     }
 }
