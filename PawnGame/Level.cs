@@ -106,8 +106,8 @@ namespace PawnGame
         /// </summary>
         private void Initialize()
         {
-            _mapBoxSize = 10;
-            _bottomRight = new Point(800, 480);
+            _mapBoxSize = 30;
+            _bottomRight = new Point(Game1.RenderTargetWidth, Game1.RenderTargetHeight);
             _margin = new Point(10, 10);
         }
 

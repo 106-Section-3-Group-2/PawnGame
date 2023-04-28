@@ -43,7 +43,7 @@ namespace PawnGame
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public LevelEditor(int x, int y, Game1 game)
+        public LevelEditor(Game1 game)
         {
             //Room = new Room(new Tile[x, y], new Vector2()); need new
             _game = game;
@@ -150,7 +150,7 @@ namespace PawnGame
                 Color.Green));
 
             //create options
-            float optionsX = _game.RenderTargetWidth - _paletteTopLeft.X - Assets[AssetNames.IconLoad].Width;
+            float optionsX = Game1.RenderTargetWidth - _paletteTopLeft.X - Assets[AssetNames.IconLoad].Width;
             //save
             _options.Add(new Button(
                 Assets[AssetNames.IconLoad],

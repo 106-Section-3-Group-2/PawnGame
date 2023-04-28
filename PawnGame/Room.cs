@@ -122,8 +122,8 @@ namespace PawnGame
         /// <param name="tileSize"></param>
         public Room(int width, int height, Game1 game)
         {
-            int sideLength = game.RenderTargetHeight / height;
-            int margin = (game.RenderTargetWidth / 2) - width * sideLength / 2;
+            int sideLength = RenderTargetHeight / height;
+            int margin = (RenderTargetWidth / 2) - width * sideLength / 2;
             Tiles = new Tile[width, height];
             for (int x = 0; x < width; x++)
             {
@@ -175,8 +175,6 @@ namespace PawnGame
             SpawnPoint = spawnPoint;
         }
 
-
-
         /// <summary>
         /// update the level
         /// </summary>
@@ -193,10 +191,7 @@ namespace PawnGame
         {
             foreach (Tile tile in Tiles)
             {
-                if(tile != null)
-                {
-                    tile.Draw(sb);
-                }
+                tile?.Draw(sb);
             }
         }
 

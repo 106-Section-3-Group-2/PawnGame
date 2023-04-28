@@ -15,6 +15,9 @@ namespace PawnGame
 {
     public class Game1 : Game
     {
+        public const int RenderTargetWidth = 1920;
+        public const int RenderTargetHeight = 1080;
+
         #region enums
         /// <summary>
         /// Represents the current screen that the game is on
@@ -70,7 +73,7 @@ namespace PawnGame
             SpacebarInactive,
             StartGame,
             LoadGame,
-            LevelEditor
+            LevelEditor,
             Crosshair,
         }
         #endregion
@@ -155,10 +158,6 @@ namespace PawnGame
             get { return Window.ClientBounds.Height; }
         }
 
-        public int RenderTargetWidth => _renderTarget.Width;
-
-        public int RenderTargetHeight => _renderTarget.Height;
-
         public float Scale => _scale;
 
         #endregion
@@ -176,7 +175,7 @@ namespace PawnGame
         protected override void Initialize()
         {
             #region Screen and graphics size setup
-            _renderTarget = new(GraphicsDevice, 1920, 1080);
+            _renderTarget = new(GraphicsDevice, RenderTargetWidth, RenderTargetHeight);
 
             _graphics.PreferredBackBufferWidth = 1280;
             _graphics.PreferredBackBufferHeight = 720;
@@ -185,7 +184,6 @@ namespace PawnGame
             _prevWidth = _graphics.PreferredBackBufferWidth;
             _prevHeight = _graphics.PreferredBackBufferHeight;
             #endregion
-
 
             random = new Random();
             _prevKbState = Keyboard.GetState();
@@ -199,7 +197,9 @@ namespace PawnGame
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+
             _font = Content.Load<SpriteFont>("Arial");
+
             #region load textures
             Assets.Add(AssetNames.GameLogo, Content.Load<Texture2D>("logo"));
             Assets.Add(AssetNames.IconSave, Content.Load<Texture2D>("IconSave"));
@@ -234,10 +234,8 @@ namespace PawnGame
             _player = new Player(AssetNames.PawnBlack, new Rectangle(RenderTargetWidth / 2, RenderTargetHeight / 2, Assets[AssetNames.PawnBlack].Width/_playerScale, Assets[AssetNames.PawnBlack].Height/ _playerScale), _weapon);
             _heldAbilityTexture = null!;
 
-            LoadLevels();
-
             //initialize level editor (needs textures loaded)
-            _levelEditor = new LevelEditor(8, 8, this);
+            _levelEditor = new LevelEditor(this);
 
             //initialize and load the level array
             LoadLevels();
@@ -246,15 +244,15 @@ namespace PawnGame
             #region Add main menu buttons
             // Add menue buttons
             _menuButtons.Add(new(Assets[AssetNames.StartGame],
-                    new Vector2(RenderTargetWidth / 2 - Assets[AssetNames.StartGame].Width/4/2, RenderTargetHeight - 200), 
+                    new Vector2(RenderTargetWidth / 2 - (Assets[AssetNames.StartGame].Width/4)/2, RenderTargetHeight - 200), 
                     Assets[AssetNames.StartGame].Width / 4, Assets[AssetNames.StartGame].Height / 4,
                 Color.LightGray));
             _menuButtons.Add(new(Assets[AssetNames.LoadGame],
-                    new Vector2(RenderTargetWidth / 2 - Assets[AssetNames.LoadGame].Width/4/2, RenderTargetHeight - 150),
+                    new Vector2(RenderTargetWidth / 2 - (Assets[AssetNames.LoadGame].Width/4)/2, RenderTargetHeight - 150),
                     Assets[AssetNames.LoadGame].Width / 4, Assets[AssetNames.LoadGame].Height / 4,
                     Color.LightGray));
             _menuButtons.Add(new(Assets[AssetNames.LevelEditor],
-                    new Vector2(RenderTargetWidth / 2 - Assets[AssetNames.LevelEditor].Width/4/2, RenderTargetHeight - 100),
+                    new Vector2(RenderTargetWidth / 2 - (Assets[AssetNames.LevelEditor].Width/4)/2, RenderTargetHeight - 100),
                     Assets[AssetNames.LevelEditor].Width / 4, Assets[AssetNames.LevelEditor].Height / 4,
                     Color.LightGray));
             #endregion
@@ -369,7 +367,7 @@ namespace PawnGame
                             // Resetting the level editor if the level editor was exited out of
                             if (i == 2 && _prevGameState != (GameState)2)
                             {
-                                _levelEditor = new LevelEditor(8, 8, this);
+                                _levelEditor = new LevelEditor(this);
                             }
 
                             _prevGameState = GameState.DebugMenu;
