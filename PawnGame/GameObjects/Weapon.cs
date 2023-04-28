@@ -82,14 +82,11 @@ namespace PawnGame.GameObjects
                     {
                         _currentSpeed = Math.Sign(VMouse.Speed);
                     }
-
                     
                     if (Math.Sign(_currentSpeed)!=Math.Sign(VMouse.Speed))
                     {
                         _activeCounter += 10;
                     }
-                    
-
 
                     MakeCollisionVectors(VMouse);
                     _activeCounter += 1;
