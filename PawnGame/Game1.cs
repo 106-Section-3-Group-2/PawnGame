@@ -126,6 +126,9 @@ namespace PawnGame
         /// </summary>
         public static Dictionary<AssetNames, Texture2D> Assets;
 
+        /// <summary>
+        /// the currently active level
+        /// </summary>
         public static Level CurrentLevel
         {
             get { return s_levels[s_levelIndex]; }
@@ -192,7 +195,6 @@ namespace PawnGame
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            LoadLevels();
             _font = Content.Load<SpriteFont>("Arial");
             #region load textures
             Assets.Add(AssetNames.GameLogo, Content.Load<Texture2D>("logo"));
@@ -222,6 +224,8 @@ namespace PawnGame
             _weapon = new Weapon(AssetNames.WeaponSword, new (RenderTargetWidth / 2, RenderTargetHeight / 2, Assets[AssetNames.WeaponSword].Width, Assets[AssetNames.WeaponSword].Height));
             _player = new Player(AssetNames.PawnBlack, new (RenderTargetWidth / 2, RenderTargetHeight / 2, Assets[AssetNames.PawnBlack].Width/_playerScale, Assets[AssetNames.PawnBlack].Height/ _playerScale), _weapon);
             _heldAbilityTexture = null!;
+
+            LoadLevels();
 
             //initialize level editor (needs textures loaded)
             _levelEditor = new LevelEditor(8, 8, this);
@@ -636,12 +640,22 @@ namespace PawnGame
         {
             //get all the levels from the levels folder, deserialize and store them
             string[] fileNames = Directory.GetFiles(Directory.GetCurrentDirectory() + "/Levels");
-            s_levels = new Level[fileNames.Length];
-            for (int i = 0; i < s_levels.Length; i++)
+            if(fileNames.Length == 0)
             {
-                s_levels[i] = Level.Load(fileNames[i]);
+                s_levels = new Level[1];
+                s_levels[0] = new Level(this);
+            }
+            else
+            {
+                s_levels = new Level[fileNames.Length];
+                for (int i = 0; i < s_levels.Length; i++)
+                {
+                    s_levels[i] = Level.Load(fileNames[i]);
+                }
             }
             s_levelIndex = 0;
+            
+            
 
             _player.X = CurrentLevel.ActiveRoom.SpawnPoint.X;
             _player.Y = CurrentLevel.ActiveRoom.SpawnPoint.Y;
