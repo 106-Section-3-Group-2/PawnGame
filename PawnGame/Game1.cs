@@ -56,7 +56,7 @@ namespace PawnGame
             PawnBlack,
             PawnWhite,
 
-            //Wepons
+            //Weapons
             WeaponSword,
 
             //Debug
@@ -68,6 +68,7 @@ namespace PawnGame
             //UI
             SpacebarActive,
             SpacebarInactive,
+            Crosshair,
         }
         #endregion
 
@@ -219,10 +220,12 @@ namespace PawnGame
             Assets.Add(AssetNames.ButtonDown, Content.Load<Texture2D>("ButtonDown"));
             Assets.Add(AssetNames.ButtonLeft, Content.Load<Texture2D>("ButtonLeft"));
             Assets.Add(AssetNames.ButtonRight, Content.Load<Texture2D>("ButtonRight"));*/
+            Assets.Add(AssetNames.Crosshair, Content.Load<Texture2D>("Crosshair"));
             #endregion
 
-            _weapon = new Weapon(AssetNames.WeaponSword, new (RenderTargetWidth / 2, RenderTargetHeight / 2, Assets[AssetNames.WeaponSword].Width, Assets[AssetNames.WeaponSword].Height));
-            _player = new Player(AssetNames.PawnBlack, new (RenderTargetWidth / 2, RenderTargetHeight / 2, Assets[AssetNames.PawnBlack].Width/_playerScale, Assets[AssetNames.PawnBlack].Height/ _playerScale), _weapon);
+            _weapon = new Weapon(AssetNames.WeaponSword, new Rectangle(WindowWidth / 2, WindowHeight / 2, Assets[AssetNames.WeaponSword].Width / 2, Assets[AssetNames.WeaponSword].Height / 2));
+            VMouse.SetCrosshair = Assets[AssetNames.Crosshair];
+            _player = new Player(AssetNames.PawnBlack, new Rectangle(WindowWidth / 2, WindowHeight / 2, Assets[AssetNames.PawnBlack].Width/_playerScale, Assets[AssetNames.PawnBlack].Height/ _playerScale), _weapon);
             _heldAbilityTexture = null!;
 
             LoadLevels();
@@ -395,10 +398,11 @@ namespace PawnGame
                     
                     //Vmouse has to update virst, and weapon has to update after player
 
-                    VMouse.Update(Mouse.GetState(), WindowWidth, WindowHeight);
+                    
                     Manager.Update(_player);
-                    _player.Update(_currKbState, _prevKbState, _currMouseState, _prevMouseState);
-                    _weapon.Update(_player, VMouse);
+                    _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState);
+                    VMouse.Update(Mouse.GetState(), _player);
+                    _weapon.Update(_player,VMouse);
 
 
                     if (!_player.IsAlive)
@@ -456,8 +460,8 @@ namespace PawnGame
             GraphicsDevice.Clear(Color.Black);
             #endregion
 
-            _spriteBatch.Begin();
-            
+            _spriteBatch.Begin(SpriteSortMode.Deferred,null,SamplerState.PointClamp);
+
             switch (_gameState)
             {
                 #region Menu State
@@ -501,7 +505,7 @@ namespace PawnGame
                     CurrentLevel.ActiveRoom.Draw(_spriteBatch);
                     _player.Draw(_spriteBatch);
                     Manager.Draw(_spriteBatch);
-                    //_weapon.Draw(_spriteBatch, _player, Mouse.GetState(),WindowWidth,WindowHeight);
+                    VMouse.Draw(_spriteBatch);
                     _weapon.Draw(_spriteBatch, _player, VMouse.Rotation);
 
                     //UI stuff
@@ -511,6 +515,12 @@ namespace PawnGame
                     _spriteBatch.DrawString(_font, "Ability:", new Vector2(UIPos.X - _font.MeasureString("Ability:").X /2,
                         UIPos.Y - 50), Color.White);
 
+                    #if DEBUG
+                    _spriteBatch.DrawString(_font, "Speed sign: " + Math.Sign(VMouse.Speed), new Vector2(UIPos.X - _font.MeasureString("Ability:").X,
+                        UIPos.Y), Color.White);
+                    _spriteBatch.DrawString(_font, "Rotation: " + VMouse.Rotation, new Vector2(UIPos.X - _font.MeasureString("Ability:").X,
+                        UIPos.Y+50), Color.White);
+#endif
                     if (_heldAbilityTexture != null!)
                     {
                         string abilityName = _heldAbilityTexture.Name.Substring(7);

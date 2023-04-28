@@ -22,7 +22,8 @@ namespace PawnGame.GameObjects
 
         private List<Vector4> _lastFramesSword;
 
-        private int _dizzyCounter;
+
+        private int _currentSpeed;
 
         private Color _color;
 
@@ -41,7 +42,7 @@ namespace PawnGame.GameObjects
             _isActive = false;
             _activeCounter = 0;
             _forgivenessCounter = 0;
-            _dizzyCounter = 0;
+            _currentSpeed = 1;
             _collisionVectors = new List<Vector2>();
             _lastCollisionVectors = new List<Vector2>();
             _lastFramesSword = new List<Vector4>();
@@ -52,7 +53,6 @@ namespace PawnGame.GameObjects
         public void Update(Player player, VirtualMouse VMouse)
         {   if (player.IsAlive)
             {
-
                 _hitbox.Location = player.Hitbox.Location + new Vector2(player.Hitbox.Width / 2, player.Hitbox.Height / 2);
 
                 Vector4 swordVector = new Vector4(MathF.Cos(VMouse.Rotation), MathF.Sin(VMouse.Rotation),_hitbox.X,_hitbox.Y);
@@ -73,10 +73,24 @@ namespace PawnGame.GameObjects
                 }
                 else if (player.WeaponOverride)
                 {
+                    MakeCollisionVectors(VMouse);
                     _activeCounter = -1;
                 }
                 else if (Math.Abs(VMouse.Speed) > MathF.PI / 26)
                 {
+                    if (_activeCounter == 0)
+                    {
+                        _currentSpeed = Math.Sign(VMouse.Speed);
+                    }
+
+                    
+                    if (Math.Sign(_currentSpeed)!=Math.Sign(VMouse.Speed))
+                    {
+                        _activeCounter += 10;
+                    }
+                    
+
+
                     MakeCollisionVectors(VMouse);
                     _activeCounter += 1;
                     _forgivenessCounter = 0;
@@ -90,6 +104,7 @@ namespace PawnGame.GameObjects
                 else
                 {
                     _activeCounter = 0;
+                    _currentSpeed = 0;
                 }
                 switch (_activeCounter)
                 {
@@ -186,10 +201,15 @@ namespace PawnGame.GameObjects
                         sb.Draw(Texture, _hitbox, null, alphaColor, MathF.Atan2(_lastFramesSword[i].Y, _lastFramesSword[i].X) + MathF.PI / 2, new Vector2(Texture.Width / 2, Texture.Height), SpriteEffects.None, 0);
                     }
                 }
-                
-
-
                 sb.Draw(Texture, _hitbox, null, _color, rotation + MathF.PI / 2, new Vector2(Texture.Width / 2, Texture.Height), SpriteEffects.None, 0);
+
+                /*
+                foreach (Vector2 vector in _collisionVectors)
+                {
+                    sb.Draw(Texture, _hitbox, null, _color, rotation + MathF.PI / 2, new Vector2(Texture.Width / 2, vector.Length()), SpriteEffects.None, 0);
+                }
+                */
+
             }
         }
     }
