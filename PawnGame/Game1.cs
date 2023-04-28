@@ -223,9 +223,9 @@ namespace PawnGame
             Assets.Add(AssetNames.Crosshair, Content.Load<Texture2D>("Crosshair"));
             #endregion
 
-            _weapon = new Weapon(AssetNames.WeaponSword, new Rectangle(WindowWidth / 2, WindowHeight / 2, Assets[AssetNames.WeaponSword].Width / 2, Assets[AssetNames.WeaponSword].Height / 2));
+            _weapon = new Weapon(AssetNames.WeaponSword, new Rectangle(RenderTargetWidth / 2, RenderTargetHeight / 2, Assets[AssetNames.WeaponSword].Width, Assets[AssetNames.WeaponSword].Height));
             VMouse.SetCrosshair = Assets[AssetNames.Crosshair];
-            _player = new Player(AssetNames.PawnBlack, new Rectangle(WindowWidth / 2, WindowHeight / 2, Assets[AssetNames.PawnBlack].Width/_playerScale, Assets[AssetNames.PawnBlack].Height/ _playerScale), _weapon);
+            _player = new Player(AssetNames.PawnBlack, new Rectangle(RenderTargetWidth / 2, RenderTargetHeight / 2, Assets[AssetNames.PawnBlack].Width/_playerScale, Assets[AssetNames.PawnBlack].Height/ _playerScale), _weapon);
             _heldAbilityTexture = null!;
 
             LoadLevels();
@@ -271,6 +271,8 @@ namespace PawnGame
 
         protected override void Update(GameTime gameTime)
         {
+
+
             _currKbState = Keyboard.GetState();
             _currMouseState = Mouse.GetState();
 
@@ -382,7 +384,7 @@ namespace PawnGame
                     }
                     #endif
 
-                    IsMouseVisible = false;
+                    IsMouseVisible = true;
 
                     // Play the game here
                     //TODO: Ask chris how GameTime works
@@ -401,7 +403,7 @@ namespace PawnGame
                     
                     Manager.Update(_player);
                     _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState);
-                    VMouse.Update(Mouse.GetState(), _player);
+                    VMouse.Update(Mouse.GetState(), _player, _scale);
                     _weapon.Update(_player,VMouse);
 
 
@@ -505,8 +507,8 @@ namespace PawnGame
                     CurrentLevel.ActiveRoom.Draw(_spriteBatch);
                     _player.Draw(_spriteBatch);
                     Manager.Draw(_spriteBatch);
-                    VMouse.Draw(_spriteBatch);
-                    _weapon.Draw(_spriteBatch, _player, VMouse.Rotation);
+                    VMouse.Draw(_spriteBatch,_scale);
+                    _weapon.Draw(_spriteBatch, _player, VMouse.Rotation, _scale);
 
                     //UI stuff
                     Vector2 UIPos = new Vector2(0 + CurrentLevel.ActiveRoom.Location.X / 2,

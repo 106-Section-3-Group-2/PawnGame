@@ -175,7 +175,7 @@ namespace PawnGame.GameObjects
             }
             return false;
         }
-        public void Draw(SpriteBatch sb, Player player, float rotation)
+        public void Draw(SpriteBatch sb, Player player, float rotation,float scale)
         {
             if (player.IsAlive)
             {
@@ -198,7 +198,10 @@ namespace PawnGame.GameObjects
                         sb.Draw(Texture, _hitbox, null, alphaColor, MathF.Atan2(_lastFramesSword[i].Y, _lastFramesSword[i].X) + MathF.PI / 2, new Vector2(Texture.Width / 2, Texture.Height), SpriteEffects.None, 0);
                     }
                 }
-                sb.Draw(Texture, _hitbox, null, _color, rotation + MathF.PI / 2, new Vector2(Texture.Width / 2, Texture.Height), SpriteEffects.None, 0);
+                
+                
+                
+                sb.Draw(Texture, _hitbox, null, _color, rotation + MathF.PI / 2, new Vector2(_hitbox.Width / 2, _hitbox.Height), SpriteEffects.None, 0);
 
                 /*
                 foreach (Vector2 vector in _collisionVectors)

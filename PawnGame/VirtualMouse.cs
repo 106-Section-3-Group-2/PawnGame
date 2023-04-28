@@ -45,7 +45,7 @@ namespace PawnGame
             set { crosshair = value; }
         }
 
-        public void Update(MouseState mouse, Player player)
+        public void Update(MouseState mouse, Player player,float scale)
         {
             /*
             #region Locking to circle
@@ -56,9 +56,9 @@ namespace PawnGame
             #endregion
             */
 
-            x = mouse.X;
-            y = mouse.Y;
-            rotation = MathF.Atan2(y - player.Y-player.Height/2, x - player.X-player.Width/2);
+            x = mouse.X/scale;
+            y = mouse.Y/scale;
+            rotation = MathF.Atan2(y-player.Y-player.Height/2, x - player.X-player.Width/2);
             speed = Rotation - lastRotation;
 
             if (Math.Sign(lastRotation) != Math.Sign(Rotation) && Math.Sign(x - player.X - player.Width / 2)<0)
@@ -70,9 +70,9 @@ namespace PawnGame
 
         }
 
-        public void Draw(SpriteBatch sb)
+        public void Draw(SpriteBatch sb,float scale)
         {
-            sb.Draw(crosshair, new Vectangle(X-15, Y-15,30,30), Color.Red);
+            sb.Draw(crosshair, new Vectangle((X-30), (Y-30), 60, 60), Color.Red);
         }
     }
 }
