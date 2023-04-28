@@ -515,7 +515,9 @@ namespace PawnGame
                     _spriteBatch.DrawString(_font, "Ability:", new Vector2(UIPos.X - _font.MeasureString("Ability:").X /2,
                         UIPos.Y - 50), Color.White);
 
-                    #if DEBUG
+                    CurrentLevel.Draw(_spriteBatch);
+
+#if DEBUG
                     _spriteBatch.DrawString(_font, "Speed sign: " + Math.Sign(VMouse.Speed), new Vector2(UIPos.X - _font.MeasureString("Ability:").X,
                         UIPos.Y), Color.White);
                     _spriteBatch.DrawString(_font, "Rotation: " + VMouse.Rotation, new Vector2(UIPos.X - _font.MeasureString("Ability:").X,
