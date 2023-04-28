@@ -56,7 +56,7 @@ namespace PawnGame
             PawnBlack,
             PawnWhite,
 
-            //Wepons
+            //Weapons
             WeaponSword,
 
             //Debug
@@ -71,6 +71,7 @@ namespace PawnGame
             StartGame,
             LoadGame,
             LevelEditor
+            Crosshair,
         }
         #endregion
 
@@ -84,9 +85,8 @@ namespace PawnGame
         #region GameStates and level
         private GameState _gameState;
         private GameState _prevGameState;
-        private Room[] _levels;
-        private Room _currLevel;
-        private int _prevLevelIndex;
+        private static Level[] s_levels;
+        private static int s_levelIndex;
         #endregion
 
         #region Keyboard and mouse states
@@ -131,11 +131,12 @@ namespace PawnGame
         public static Dictionary<AssetNames, Texture2D> Assets;
 
         /// <summary>
-        /// 
+        /// the currently active level
         /// </summary>
-        public static int LevelIndex;
-
-        public static Room CurrentLevel;
+        public static Level CurrentLevel
+        {
+            get { return s_levels[s_levelIndex]; }
+        }
 
 
         /// <summary>
@@ -189,8 +190,7 @@ namespace PawnGame
             random = new Random();
             _prevKbState = Keyboard.GetState();
             Assets = new Dictionary<AssetNames, Texture2D>();
-            LevelIndex = 0;
-            _prevLevelIndex = 0;
+            s_levelIndex = 0;
             _playerScale = 2;
             _spacebarActive = false;
             base.Initialize();
@@ -199,7 +199,6 @@ namespace PawnGame
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-
             _font = Content.Load<SpriteFont>("Arial");
             #region load textures
             Assets.Add(AssetNames.GameLogo, Content.Load<Texture2D>("logo"));
@@ -227,17 +226,21 @@ namespace PawnGame
             Assets.Add(AssetNames.ButtonDown, Content.Load<Texture2D>("ButtonDown"));
             Assets.Add(AssetNames.ButtonLeft, Content.Load<Texture2D>("ButtonLeft"));
             Assets.Add(AssetNames.ButtonRight, Content.Load<Texture2D>("ButtonRight"));*/
+            Assets.Add(AssetNames.Crosshair, Content.Load<Texture2D>("Crosshair"));
             #endregion
 
-            _weapon = new Weapon(AssetNames.WeaponSword, new (RenderTargetWidth / 2, RenderTargetHeight / 2, Assets[AssetNames.WeaponSword].Width, Assets[AssetNames.WeaponSword].Height));
-            _player = new Player(AssetNames.PawnBlack, new (RenderTargetWidth / 2, RenderTargetHeight / 2, Assets[AssetNames.PawnBlack].Width/_playerScale, Assets[AssetNames.PawnBlack].Height/ _playerScale), _weapon);
+            _weapon = new Weapon(AssetNames.WeaponSword, new Rectangle(WindowWidth / 2, WindowHeight / 2, Assets[AssetNames.WeaponSword].Width / 2, Assets[AssetNames.WeaponSword].Height / 2));
+            VMouse.SetCrosshair = Assets[AssetNames.Crosshair];
+            _player = new Player(AssetNames.PawnBlack, new Rectangle(WindowWidth / 2, WindowHeight / 2, Assets[AssetNames.PawnBlack].Width/_playerScale, Assets[AssetNames.PawnBlack].Height/ _playerScale), _weapon);
             _heldAbilityTexture = null!;
+
+            LoadLevels();
 
             //initialize level editor (needs textures loaded)
             _levelEditor = new LevelEditor(8, 8, this);
 
             //initialize and load the level array
-            ResetLevel();
+            LoadLevels();
 
             #region Add Menu buttons
             #region Add main menu buttons
@@ -310,8 +313,7 @@ namespace PawnGame
                             {
                                 // Start a new game
                                 // (whatever that means)
-                                ResetLevel();
-                                NextLevel();
+                                LoadLevels();
                                 _player.HeldAbility = Player.Ability.None;
                                 Mouse.SetPosition(WindowWidth / 2, WindowHeight / 2);
                                 _gameState = GameState.Game;
@@ -382,9 +384,9 @@ namespace PawnGame
 
                     #if DEBUG
                     //Debug level skip
-                    if (_currMouseState.MiddleButton == ButtonState.Pressed && _prevMouseState.MiddleButton == ButtonState.Released)
+                    if (_currKbState.IsKeyDown(Keys.X) && _prevKbState.IsKeyUp(Keys.X))
                     {
-                        LevelIndex++;
+                        s_levelIndex++;
                         break;
                     }
                     #endif
@@ -405,15 +407,16 @@ namespace PawnGame
                     
                     //Vmouse has to update virst, and weapon has to update after player
 
-                    VMouse.Update(Mouse.GetState(), WindowWidth, WindowHeight);
+                    
                     Manager.Update(_player);
-                    _player.Update(_currKbState, _prevKbState, _currMouseState, _prevMouseState);
-                    _weapon.Update(_player, VMouse);
+                    _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState);
+                    VMouse.Update(Mouse.GetState(), _player);
+                    _weapon.Update(_player,VMouse);
 
 
                     if (!_player.IsAlive)
                     {
-                        ResetLevel();
+                        LoadLevels();
                     }
 
                     switch (_player.HeldAbility)
@@ -424,11 +427,6 @@ namespace PawnGame
                         default:
                             _heldAbilityTexture = null!;
                             break;
-                    }
-
-                    if (LevelIndex > _prevLevelIndex)
-                    {
-                        NextLevel();
                     }
 
                     #endregion
@@ -471,8 +469,8 @@ namespace PawnGame
             GraphicsDevice.Clear(Color.Black);
             #endregion
 
-            _spriteBatch.Begin();
-            
+            _spriteBatch.Begin(SpriteSortMode.Deferred,null,SamplerState.PointClamp);
+
             switch (_gameState)
             {
                 #region Menu State
@@ -513,19 +511,27 @@ namespace PawnGame
                 #region Game State
                 case GameState.Game:
                     // Draw.. the game?
-                    _currLevel.Draw(_spriteBatch);
+                    CurrentLevel.ActiveRoom.Draw(_spriteBatch);
                     _player.Draw(_spriteBatch);
                     Manager.Draw(_spriteBatch);
-                    //_weapon.Draw(_spriteBatch, _player, Mouse.GetState(),WindowWidth,WindowHeight);
+                    VMouse.Draw(_spriteBatch);
                     _weapon.Draw(_spriteBatch, _player, VMouse.Rotation);
 
                     //UI stuff
-                    Vector2 UIPos = new Vector2(0 + _currLevel.Location.X / 2,
-                                (_currLevel.Location.Y + _currLevel.Height) / 2 + 50);
+                    Vector2 UIPos = new Vector2(0 + CurrentLevel.ActiveRoom.Location.X / 2,
+                                (CurrentLevel.ActiveRoom.Location.Y + CurrentLevel.ActiveRoom.Height) / 2 + 50);
 
                     _spriteBatch.DrawString(_font, "Ability:", new Vector2(UIPos.X - _font.MeasureString("Ability:").X /2,
                         UIPos.Y - 50), Color.White);
 
+                    CurrentLevel.Draw(_spriteBatch);
+
+#if DEBUG
+                    _spriteBatch.DrawString(_font, "Speed sign: " + Math.Sign(VMouse.Speed), new Vector2(UIPos.X - _font.MeasureString("Ability:").X,
+                        UIPos.Y), Color.White);
+                    _spriteBatch.DrawString(_font, "Rotation: " + VMouse.Rotation, new Vector2(UIPos.X - _font.MeasureString("Ability:").X,
+                        UIPos.Y+50), Color.White);
+#endif
                     if (_heldAbilityTexture != null!)
                     {
                         string abilityName = _heldAbilityTexture.Name.Substring(7);
@@ -643,64 +649,54 @@ namespace PawnGame
         private void NextLevel()
         {
             Manager.Clear();
-            if (LevelIndex < _levels.Length)
-            {
-                _currLevel = _levels[LevelIndex];
-                CurrentLevel = _currLevel;
-                Manager.AddRange(_currLevel.EnemySpawns);
-
-                if (LevelIndex > _prevLevelIndex)
-                {
-                    _prevLevelIndex++;
-                }
-                
-                _player.X = _currLevel.SpawnPoint.X;
-                _player.Y = _currLevel.SpawnPoint.Y;
-
-            }
-            else
-            {
-                _gameState = GameState.Victory;
-            }
+            throw new NotImplementedException();
             
         }
 
         /// <summary>
-        /// return the player to the beginning of the level
+        /// load all levels and send player to level 1
         /// </summary>
-        public void ResetLevel()
+        public void LoadLevels()
         {
-            _player.IsAlive = true; 
-
             //get all the levels from the levels folder, deserialize and store them
             string[] fileNames = Directory.GetFiles(Directory.GetCurrentDirectory() + "/Levels");
-            _levels = new Room[fileNames.Length];
-            for (int i = 0; i < _levels.Length; i++)
+            if(fileNames.Length == 0)
             {
-                _levels[i] = Room.Read(fileNames[i]);
+                s_levels = new Level[1];
+                s_levels[0] = new Level(this);
             }
+            else
+            {
+                s_levels = new Level[fileNames.Length];
+                for (int i = 0; i < s_levels.Length; i++)
+                {
+                    s_levels[i] = Level.Load(fileNames[i]);
+                }
+            }
+            s_levelIndex = 0;
+            
+            
 
-            _currLevel = _levels[0];
-            CurrentLevel = _currLevel;
-
-            _player.X = _currLevel.SpawnPoint.X;
-            _player.Y = _currLevel.SpawnPoint.Y;
+            _player.X = CurrentLevel.ActiveRoom.SpawnPoint.X;
+            _player.Y = CurrentLevel.ActiveRoom.SpawnPoint.Y;
             Manager.Clear();
-            Manager.AddRange(_currLevel.EnemySpawns);
-            LevelIndex = 0;
-            _prevLevelIndex = 0;
+            Manager.AddRange(CurrentLevel.ActiveRoom.EnemySpawns);
+        }
+
+        public void ResetLevel()
+        {
+            _player.IsAlive = true;
         }
 
         /// <summary>
         /// send the player to a room without adding enemies
         /// </summary>
         /// <param name="room"></param>
-        private void GotoRoom(Room room)
+        private void GotoRoom(Point index)
         {
-            _currLevel = room;
-            CurrentLevel = _currLevel;
-            _player.X = _currLevel.SpawnPoint.X;
-            _player.Y = _currLevel.SpawnPoint.Y;
+            CurrentLevel.Restart();
+            _player.X = CurrentLevel.ActiveRoom.SpawnPoint.X;
+            _player.Y = CurrentLevel.ActiveRoom.SpawnPoint.Y;
             Manager.Clear();
         }
     }

@@ -22,29 +22,14 @@
     <None Remove="Levels\05-around.json" />
     <None Remove="Levels\06-loop.json" />
     <None Remove="Levels\test.json" />
+    <None Remove="Levels\test1.json" />
+    <None Remove="Levels\test2.json" />
+    <None Remove="Levels\test3.json" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Levels\01-basic.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Levels\02-arrows.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Levels\03-lobby.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Levels\04-3boxes.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Levels\05-around.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Levels\06-loop.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Levels\test.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Levels\test1.json" />
+    <Content Include="Levels\test2.json" />
+    <Content Include="Levels\test3.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Icon.ico" />
