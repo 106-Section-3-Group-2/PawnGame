@@ -340,7 +340,7 @@ namespace PawnGame
                                     occupied = false;
                                     foreach (Enemy enemy in Room.EnemySpawns)
                                     {
-                                        if (enemy.Hitbox.Contains(_mState.X, _mState.Y) || Room.Tiles[x, y].IsSolid == true)
+                                        if ((enemy.Hitbox * _game.Scale).Contains(_mState.X, _mState.Y) || Room.Tiles[x, y].IsSolid == true)
                                         {
                                             occupied = true;
                                         }
@@ -360,7 +360,7 @@ namespace PawnGame
                             bool occupied = false;
                             for(int i = 0; i < Room.EnemySpawns.Count; i++)
                             {
-                                if (Room.EnemySpawns[i].Hitbox.Contains(_mState.X, _mState.Y))
+                                if ((Room.EnemySpawns[i].Hitbox * _game.Scale).Contains(_mState.X, _mState.Y))
                                 {
                                     #region remove enemy spawn
                                     if (Room.EnemySpawns[i] is Pawn)

@@ -302,7 +302,6 @@ namespace PawnGame
                                 // Start a new game
                                 // (whatever that means)
                                 LoadLevels();
-                                NextLevel();
                                 _player.HeldAbility = Player.Ability.None;
                                 Mouse.SetPosition(WindowWidth / 2, WindowHeight / 2);
                                 _gameState = GameState.Game;

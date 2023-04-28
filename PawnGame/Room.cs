@@ -122,8 +122,8 @@ namespace PawnGame
         /// <param name="tileSize"></param>
         public Room(int width, int height, Game1 game)
         {
-            int sideLength = game.WindowHeight / height;
-            int margin = (game.WindowWidth / 2) - width * sideLength / 2;
+            int sideLength = game.RenderTargetHeight / height;
+            int margin = (game.RenderTargetWidth / 2) - width * sideLength / 2;
             Tiles = new Tile[width, height];
             for (int x = 0; x < width; x++)
             {
