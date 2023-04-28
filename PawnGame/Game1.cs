@@ -81,8 +81,8 @@ namespace PawnGame
         #region GameStates and level
         private GameState _gameState;
         private GameState _prevGameState;
-        private Level[] _levels;
-        private int _levelIndex;
+        private static Level[] s_levels;
+        private static int s_levelIndex;
         #endregion
 
         #region Keyboard and mouse states
@@ -126,9 +126,9 @@ namespace PawnGame
         /// </summary>
         public static Dictionary<AssetNames, Texture2D> Assets;
 
-        private Level CurrentLevel
+        public static Level CurrentLevel
         {
-            get { return _levels[_levelIndex]; }
+            get { return s_levels[s_levelIndex]; }
         }
 
 
@@ -183,7 +183,7 @@ namespace PawnGame
             random = new Random();
             _prevKbState = Keyboard.GetState();
             Assets = new Dictionary<AssetNames, Texture2D>();
-            _levelIndex = 0;
+            s_levelIndex = 0;
             _playerScale = 2;
             _spacebarActive = false;
             base.Initialize();
@@ -371,7 +371,7 @@ namespace PawnGame
                     //Debug level skip
                     if (_currMouseState.MiddleButton == ButtonState.Pressed && _prevMouseState.MiddleButton == ButtonState.Released)
                     {
-                        LevelIndex++;
+                        s_levelIndex++;
                         break;
                     }
                     #endif
@@ -411,11 +411,6 @@ namespace PawnGame
                         default:
                             _heldAbilityTexture = null!;
                             break;
-                    }
-
-                    if (LevelIndex > _prevLevelIndex)
-                    {
-                        NextLevel();
                     }
 
                     #endregion
@@ -500,15 +495,15 @@ namespace PawnGame
                 #region Game State
                 case GameState.Game:
                     // Draw.. the game?
-                    _currLevel.Draw(_spriteBatch);
+                    CurrentLevel.ActiveRoom.Draw(_spriteBatch);
                     _player.Draw(_spriteBatch);
                     Manager.Draw(_spriteBatch);
                     //_weapon.Draw(_spriteBatch, _player, Mouse.GetState(),WindowWidth,WindowHeight);
                     _weapon.Draw(_spriteBatch, _player, VMouse.Rotation);
 
                     //UI stuff
-                    Vector2 UIPos = new Vector2(0 + _currLevel.Location.X / 2,
-                                (_currLevel.Location.Y + _currLevel.Height) / 2 + 50);
+                    Vector2 UIPos = new Vector2(0 + CurrentLevel.ActiveRoom.Location.X / 2,
+                                (CurrentLevel.ActiveRoom.Location.Y + CurrentLevel.ActiveRoom.Height) / 2 + 50);
 
                     _spriteBatch.DrawString(_font, "Ability:", new Vector2(UIPos.X - _font.MeasureString("Ability:").X /2,
                         UIPos.Y - 50), Color.White);
@@ -630,25 +625,7 @@ namespace PawnGame
         private void NextLevel()
         {
             Manager.Clear();
-            if (LevelIndex < _levels.Length)
-            {
-                _currLevel = _levels[LevelIndex];
-                CurrentLevel = _currLevel;
-                Manager.AddRange(_currLevel.EnemySpawns);
-
-                if (LevelIndex > _prevLevelIndex)
-                {
-                    _prevLevelIndex++;
-                }
-                
-                _player.X = _currLevel.SpawnPoint.X;
-                _player.Y = _currLevel.SpawnPoint.Y;
-
-            }
-            else
-            {
-                _gameState = GameState.Victory;
-            }
+            throw new NotImplementedException();
             
         }
 
@@ -659,12 +636,12 @@ namespace PawnGame
         {
             //get all the levels from the levels folder, deserialize and store them
             string[] fileNames = Directory.GetFiles(Directory.GetCurrentDirectory() + "/Levels");
-            _levels = new Level[fileNames.Length];
-            for (int i = 0; i < _levels.Length; i++)
+            s_levels = new Level[fileNames.Length];
+            for (int i = 0; i < s_levels.Length; i++)
             {
-                _levels[i] = Level.Load(fileNames[i]);
+                s_levels[i] = Level.Load(fileNames[i]);
             }
-            _levelIndex = 0;
+            s_levelIndex = 0;
 
             _player.X = CurrentLevel.ActiveRoom.SpawnPoint.X;
             _player.Y = CurrentLevel.ActiveRoom.SpawnPoint.Y;
@@ -681,12 +658,11 @@ namespace PawnGame
         /// send the player to a room without adding enemies
         /// </summary>
         /// <param name="room"></param>
-        private void GotoRoom(Room room)
+        private void GotoRoom(Point index)
         {
-            _currLevel = room;
-            CurrentLevel = _currLevel;
-            _player.X = _currLevel.SpawnPoint.X;
-            _player.Y = _currLevel.SpawnPoint.Y;
+            CurrentLevel.Restart();
+            _player.X = CurrentLevel.ActiveRoom.SpawnPoint.X;
+            _player.Y = CurrentLevel.ActiveRoom.SpawnPoint.Y;
             Manager.Clear();
         }
     }

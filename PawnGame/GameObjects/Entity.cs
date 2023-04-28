@@ -49,7 +49,7 @@ namespace PawnGame.GameObjects
         protected void ManageTileCollisions()
         {
             //Get curent entity tile
-            Point tilePos = new((int)((X - Game1.CurrentLevel.Tiles[0, 0].X) / Game1.CurrentLevel.Tiles[0, 0].Width), (int)(Y / Game1.CurrentLevel.Tiles[0, 0].Height));
+            Point tilePos = new((int)((X - Game1.CurrentLevel.ActiveRoom.Tiles[0, 0].X) / Game1.CurrentLevel.ActiveRoom.Tiles[0, 0].Width), (int)(Y / Game1.CurrentLevel.ActiveRoom.Tiles[0, 0].Height));
 
             //Prepare for the check
             tilePos.X--;
@@ -68,7 +68,7 @@ namespace PawnGame.GameObjects
                     }
 
                     //If the row is larger than the max row, quit the method as no more checks are needed
-                    else if (tilePos.Y >= Game1.CurrentLevel.Tiles.GetLength(1))
+                    else if (tilePos.Y >= Game1.CurrentLevel.ActiveRoom.Tiles.GetLength(1))
                     {
                         return;
                     }
@@ -81,13 +81,13 @@ namespace PawnGame.GameObjects
                     }
 
                     //If the column index is larger than the max, reset the column and change row
-                    else if (tilePos.X >= Game1.CurrentLevel.Tiles.GetLength(0))
+                    else if (tilePos.X >= Game1.CurrentLevel.ActiveRoom.Tiles.GetLength(0))
                     {
                         tilePos.X -= j;
                         break;
                     }
 
-                    Tile tileToCheck = Game1.CurrentLevel.Tiles[tilePos.X, tilePos.Y];
+                    Tile tileToCheck = Game1.CurrentLevel.ActiveRoom.Tiles[tilePos.X, tilePos.Y];
 
                     if (CheckCollision(tileToCheck))
                     {
@@ -95,10 +95,11 @@ namespace PawnGame.GameObjects
                         {
                             ResolveCollisions(tileToCheck);
                         }
-                        else if (tileToCheck.IsExit && EnemyManager.Manager.Count <= 0)
-                        {
-                            Game1.LevelIndex++;
-                        }
+                        //old exit code
+                        //else if (tileToCheck.IsExit && EnemyManager.Manager.Count <= 0)
+                        //{
+                        //    Game1.LevelIndex++;
+                        //}
                     }
 
                     //If the column index needs to be reset, reset it, else increase it
@@ -145,22 +146,22 @@ namespace PawnGame.GameObjects
         /// <param name="levelHeight">Height of the level</param>
         protected void KeepInBounds()
         {
-            if (X < Game1.CurrentLevel.Location.X)
+            if (X < Game1.CurrentLevel.ActiveRoom.Location.X)
             {
-                X += Game1.CurrentLevel.Location.X - X;
+                X += Game1.CurrentLevel.ActiveRoom.Location.X - X;
             }
-            else if (X + Width > Game1.CurrentLevel.Location.X + Game1.CurrentLevel.Width)
+            else if (X + Width > Game1.CurrentLevel.ActiveRoom.Location.X + Game1.CurrentLevel.ActiveRoom.Width)
             {
-                X -= (X + Width) - (Game1.CurrentLevel.Location.X + Game1.CurrentLevel.Width);
+                X -= (X + Width) - (Game1.CurrentLevel.ActiveRoom.Location.X + Game1.CurrentLevel.ActiveRoom.Width);
             }
 
-            if (Y < Game1.CurrentLevel.Location.Y)
+            if (Y < Game1.CurrentLevel.ActiveRoom.Location.Y)
             {
-                Y += Game1.CurrentLevel.Location.Y - Y;
+                Y += Game1.CurrentLevel.ActiveRoom.Location.Y - Y;
             }
-            else if (Y + Height > Game1.CurrentLevel.Location.Y + Game1.CurrentLevel.Height)
+            else if (Y + Height > Game1.CurrentLevel.ActiveRoom.Location.Y + Game1.CurrentLevel.ActiveRoom.Height)
             {
-                Y -= (Y + Height) - (Game1.CurrentLevel.Location.Y + Game1.CurrentLevel.Height);
+                Y -= (Y + Height) - (Game1.CurrentLevel.ActiveRoom.Location.Y + Game1.CurrentLevel.ActiveRoom.Height);
             }
         }
     }
