@@ -68,6 +68,9 @@ namespace PawnGame
             //UI
             SpacebarActive,
             SpacebarInactive,
+            StartGame,
+            LoadGame,
+            LevelEditor
         }
         #endregion
 
@@ -217,6 +220,9 @@ namespace PawnGame
             Assets.Add(AssetNames.SpacebarActive, Content.Load<Texture2D>("SpacebarActive"));
             Assets.Add(AssetNames.SpacebarInactive, Content.Load<Texture2D>("SpacebarInactive"));
             Assets.Add(AssetNames.DebugError, Content.Load<Texture2D>("Error"));
+            Assets.Add(AssetNames.StartGame, Content.Load<Texture2D>("StartGame"));
+            Assets.Add(AssetNames.LoadGame, Content.Load<Texture2D>("LoadGame"));
+            Assets.Add(AssetNames.LevelEditor, Content.Load<Texture2D>("LevelEditor"));
             /*Assets.Add(AssetNames.ButtonUp, Content.Load<Texture2D>("ButtonUp"));
             Assets.Add(AssetNames.ButtonDown, Content.Load<Texture2D>("ButtonDown"));
             Assets.Add(AssetNames.ButtonLeft, Content.Load<Texture2D>("ButtonLeft"));
@@ -236,14 +242,17 @@ namespace PawnGame
             #region Add Menu buttons
             #region Add main menu buttons
             // Add menue buttons
-            _menuButtons.Add(new(_font, "New Game",
-                    new Vector2(RenderTargetWidth / 2 - _font.MeasureString("New Game").X / 2, RenderTargetHeight - 100),
+            _menuButtons.Add(new(Assets[AssetNames.StartGame],
+                    new Vector2(RenderTargetWidth / 2 - Assets[AssetNames.StartGame].Width/4/2, RenderTargetHeight - 200), 
+                    Assets[AssetNames.StartGame].Width / 4, Assets[AssetNames.StartGame].Height / 4,
                 Color.LightGray));
-            _menuButtons.Add(new(_font, "Load Game",
-                    new Vector2(RenderTargetWidth / 2 - _font.MeasureString("Load Game").X / 2, RenderTargetHeight - 75),
+            _menuButtons.Add(new(Assets[AssetNames.LoadGame],
+                    new Vector2(RenderTargetWidth / 2 - Assets[AssetNames.LoadGame].Width/4/2, RenderTargetHeight - 150),
+                    Assets[AssetNames.LoadGame].Width / 4, Assets[AssetNames.LoadGame].Height / 4,
                     Color.LightGray));
-            _menuButtons.Add(new(_font, "Level Editor",
-                    new Vector2(RenderTargetWidth / 2 - _font.MeasureString("Level Editor").X / 2, RenderTargetHeight - 50),
+            _menuButtons.Add(new(Assets[AssetNames.LevelEditor],
+                    new Vector2(RenderTargetWidth / 2 - Assets[AssetNames.LevelEditor].Width/4/2, RenderTargetHeight - 100),
+                    Assets[AssetNames.LevelEditor].Width / 4, Assets[AssetNames.LevelEditor].Height / 4,
                     Color.LightGray));
             #endregion
             #region Add debug menu buttons
