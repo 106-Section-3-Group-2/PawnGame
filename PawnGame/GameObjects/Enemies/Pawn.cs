@@ -48,7 +48,7 @@ namespace PawnGame.GameObjects.Enemies
         }
         protected void CheckWeaponCollision(Weapon weapon)
         {
-            if (CheckCollision(weapon) && weapon.IsActive == true)
+            if (weapon.IsActive == true&& CheckCollision(weapon))
             {
                 IsAlive = false;
             }

@@ -233,7 +233,6 @@ namespace PawnGame
             VMouse.SetCrosshair = Assets[AssetNames.Crosshair];
             _player = new Player(AssetNames.PawnBlack, new Rectangle(RenderTargetWidth / 2, RenderTargetHeight / 2, Assets[AssetNames.PawnBlack].Width/_playerScale, Assets[AssetNames.PawnBlack].Height/ _playerScale), _weapon);
             _heldAbilityTexture = null!;
-
             //initialize level editor (needs textures loaded)
             _levelEditor = new LevelEditor(this);
 
@@ -391,7 +390,7 @@ namespace PawnGame
                     }
                     #endif
 
-                    IsMouseVisible = true;
+                    IsMouseVisible = false;
 
                     // Play the game here
                     //TODO: Ask chris how GameTime works
@@ -408,11 +407,11 @@ namespace PawnGame
                     //Vmouse has to update virst, and weapon has to update after player
 
                     
-                    Manager.Update(_player);
+                    
                     _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState);
                     VMouse.Update(Mouse.GetState(), _player, _scale);
                     _weapon.Update(_player,VMouse);
-
+                    Manager.Update(_player);
 
                     if (!_player.IsAlive)
                     {
