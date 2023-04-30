@@ -122,9 +122,9 @@ namespace PawnGame
                 Assets[AssetNames.TileWhite].Height / paletteDownscale,
                 Color.Green));
 
-            //exit
+            //door
             _palette.Add(new Button(
-                Assets[AssetNames.ExitWhite],
+                Assets[AssetNames.DoorWhite],
                 _paletteTopLeft + new Vector2(0,
                 (_palette[0].ButtonBox.Height + _ButtonSpacing) * 2),
                 Assets[AssetNames.TileWhite].Width / paletteDownscale,
@@ -145,6 +145,15 @@ namespace PawnGame
                 Assets[AssetNames.PawnBlack],
                 _paletteTopLeft + new Vector2(0,
                 (_palette[0].ButtonBox.Height + _ButtonSpacing) * 4),
+                Assets[AssetNames.TileWhite].Width / paletteDownscale,
+                Assets[AssetNames.TileWhite].Height / paletteDownscale,
+                Color.Green));
+
+            //exit
+            _palette.Add(new Button(
+                Assets[AssetNames.ExitWhite],
+                _paletteTopLeft + new Vector2(0,
+                (_palette[0].ButtonBox.Height + _ButtonSpacing) * 5),
                 Assets[AssetNames.TileWhite].Width / paletteDownscale,
                 Assets[AssetNames.TileWhite].Height / paletteDownscale,
                 Color.Green));
@@ -294,7 +303,7 @@ namespace PawnGame
                                     }
                                     break;
                                 case 2:
-                                    //create an exit
+                                    //create a door
                                     //place only on edges
                                     if(x != 0 && x != Room.Tiles.GetLength(0) - 1 && y != 0 && y != Room.Tiles.GetLength(1) - 1)
                                     {
@@ -307,11 +316,11 @@ namespace PawnGame
                                     }
                                     if ((x + y) % 2 == 0)
                                     {
-                                        Room.Tiles[x, y] = new Tile(AssetNames.ExitBlack, new Vectangle(Room.Tiles[x, y].X, Room.Tiles[x, y].Y, Room.Tiles[x, y].Width, Room.Tiles[x, y].Height), false, true);
+                                        Room.Tiles[x, y] = new Tile(AssetNames.DoorBlack, new Vectangle(Room.Tiles[x, y].X, Room.Tiles[x, y].Y, Room.Tiles[x, y].Width, Room.Tiles[x, y].Height), false, true);
                                     }
                                     else
                                     {
-                                        Room.Tiles[x, y] = new Tile(AssetNames.ExitWhite, new Vectangle(Room.Tiles[x, y].X, Room.Tiles[x, y].Y, Room.Tiles[x, y].Width, Room.Tiles[x, y].Height), false, true);
+                                        Room.Tiles[x, y] = new Tile(AssetNames.DoorWhite, new Vectangle(Room.Tiles[x, y].X, Room.Tiles[x, y].Y, Room.Tiles[x, y].Width, Room.Tiles[x, y].Height), false, true);
                                     }
                                     break;
                                 case 3:
@@ -350,6 +359,17 @@ namespace PawnGame
                                     {
                                         Room.SpawnPoint = new Vector2((int)(Room.Tiles[x, y].X + Room.Tiles[x, y].Width / 2 - _pawnDimensions.X / 2),
                                             (int)(Room.Tiles[x, y].Y + Room.Tiles[x, y].Height / 2 - _pawnDimensions.Y / 2));
+                                    }
+                                    break;
+                                case 5:
+                                    //create a level exit
+                                    if ((x + y) % 2 == 0)
+                                    {
+                                        Room.Tiles[x, y] = new Tile(AssetNames.ExitBlack, new Vectangle(Room.Tiles[x, y].X, Room.Tiles[x, y].Y, Room.Tiles[x, y].Width, Room.Tiles[x, y].Height), true);
+                                    }
+                                    else
+                                    {
+                                        Room.Tiles[x, y] = new Tile(AssetNames.ExitWhite, new Vectangle(Room.Tiles[x, y].X, Room.Tiles[x, y].Y, Room.Tiles[x, y].Width, Room.Tiles[x, y].Height), true);
                                     }
                                     break;
                             }
