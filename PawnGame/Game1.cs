@@ -27,9 +27,7 @@ namespace PawnGame
             Game,
             LevelEditor,
             Victory,
-#if DEBUG
             DebugMenu
-#endif
         }
 
         /// <summary>
@@ -55,6 +53,8 @@ namespace PawnGame
             HoleWhite,
             ExitBlack,
             ExitWhite,
+            DoorBlack,
+            DoorWhite,
 
             //Pieces
             PawnBlack,
@@ -243,6 +243,8 @@ namespace PawnGame
             Assets.Add(AssetNames.HoleWhite, Content.Load<Texture2D>("HoleWhite"));
             Assets.Add(AssetNames.ExitBlack, Content.Load<Texture2D>("ExitBlack"));
             Assets.Add(AssetNames.ExitWhite, Content.Load<Texture2D>("ExitWhite"));
+            Assets.Add(AssetNames.DoorBlack, Content.Load<Texture2D>("DoorBlack"));
+            Assets.Add(AssetNames.DoorWhite, Content.Load<Texture2D>("DoorWhite"));
             Assets.Add(AssetNames.WeaponSword, Content.Load<Texture2D>("Sword"));
             Assets.Add(AssetNames.AbilityDash, Content.Load<Texture2D>("AbilityDash"));
             Assets.Add(AssetNames.SpacebarActive, Content.Load<Texture2D>("SpacebarActive"));
