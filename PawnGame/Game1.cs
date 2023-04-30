@@ -28,7 +28,9 @@ namespace PawnGame
             Game,
             LevelEditor,
             Victory,
+#if DEBUG
             DebugMenu
+#endif
         }
 
         /// <summary>
@@ -385,7 +387,7 @@ namespace PawnGame
 
                     #endregion
                     break;
-
+#if DEBUG
                 #region Game State
                 case GameState.Game:
 
@@ -438,7 +440,7 @@ namespace PawnGame
 
                     #endregion
                     break;
-
+#endif
                 #region LevelEditor State
                 case GameState.LevelEditor:
                     IsMouseVisible = true;
@@ -497,7 +499,7 @@ namespace PawnGame
                     }
                     #endregion
                     break;
-
+#if DEBUG
                 #region DebugMenu State
                 case GameState.DebugMenu:
                     // Draw debug menu on top of last frame of previous
@@ -514,7 +516,7 @@ namespace PawnGame
                     
                     #endregion
                     break;
-
+#endif
                 #region Game State
                 case GameState.Game:
                     // Draw.. the game?
@@ -596,8 +598,8 @@ namespace PawnGame
                 #region Victory State
                 case GameState.Victory:
                     // Draw victory screen
-                    _spriteBatch.DrawString(_font, "You win",
-                        new Vector2(WindowWidth / 2 - _font.MeasureString("You win").X / 2, WindowHeight / 2), Color.White);
+                    _spriteBatch.DrawString(_font, "You Win!",
+                        new Vector2(RenderTargetWidth / 2 - _font.MeasureString("You Win!").X / 2, RenderTargetHeight / 2), Color.White);
                     #endregion
                     break;
             }
