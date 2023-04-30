@@ -571,7 +571,7 @@ namespace PawnGame
                     else
                     {
                         _spriteBatch.DrawString(_font, $"None", new Vector2(UIPos.X - _font.MeasureString("None").X / 2,
-                            UIPos.Y + 50), Color.White);
+                            UIPos.Y + 100), Color.White);
                     }
 
                     switch (s_player.HeldAbility)

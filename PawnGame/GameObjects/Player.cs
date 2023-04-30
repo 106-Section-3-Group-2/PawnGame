@@ -75,6 +75,11 @@ namespace PawnGame.GameObjects
 
         public void Update(KeyboardState currentKBState, KeyboardState previousKBState, MouseState currentMouseState, MouseState prevMouseState)
         {
+            if (_isAlive == false)
+            {
+                OnDeath();
+            }
+
             ReadInputs(currentKBState, previousKBState,currentMouseState,prevMouseState);
             Move();
             KeepInBounds();
@@ -83,6 +88,11 @@ namespace PawnGame.GameObjects
 
             Weapon.Update(this,VirtualMouse.VMouse);            
         }
+
+        /// <summary>
+        /// Moves the player based off its velocity and uses its ability
+        /// </summary>
+        /// <exception cref="System.Exception"></exception>
         protected void Move()
         {
             switch (_playerState)
@@ -174,7 +184,7 @@ namespace PawnGame.GameObjects
         }
 
         /// <summary>
-        /// 
+        /// Takes Keyboard inputs and modifies player information
         /// </summary>
         /// <param name="currentKBState"></param>
         /// <param name="previousKBState"></param>
@@ -332,7 +342,7 @@ namespace PawnGame.GameObjects
 
         protected void OnDeath()
         {
-            throw new System.NotImplementedException();
+            Game1.CurrentLevel.Reset();
         }
 
     }

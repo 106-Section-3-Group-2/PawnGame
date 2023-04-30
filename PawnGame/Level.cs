@@ -211,7 +211,7 @@ namespace PawnGame
             return _rooms.GetLength(dimension);
         }
 
-        public void Restart()
+        public void Reset()
         {
             _activeRoomIndex = new Point(0, 0);
 
@@ -220,6 +220,8 @@ namespace PawnGame
 
             EnemyManager.Manager.Clear();
             EnemyManager.Manager.AddRange(_rooms[_activeRoomIndex.X, _activeRoomIndex.Y].ActiveEnemies);
+
+            Game1.Player.IsAlive = true;
         }
     }
 }
