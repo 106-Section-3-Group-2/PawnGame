@@ -9,7 +9,6 @@ using PawnGame.GameObjects;
 using PawnGame.GameObjects.Enemies;
 using static PawnGame.GameObjects.Enemies.EnemyManager;
 using static PawnGame.VirtualMouse;
-using System.Reflection;
 
 namespace PawnGame
 {
@@ -88,8 +87,8 @@ namespace PawnGame
 
 
         #region GameStates and level
-        private GameState _gameState;
-        private GameState _prevGameState;
+        private static GameState s_gameState;
+        private static GameState _prevGameState;
         private static Level[] s_levels;
         private static int s_levelIndex;
         #endregion
@@ -105,9 +104,6 @@ namespace PawnGame
         private int _prevHeight;
 
         private LevelEditor _levelEditor;
-
-        private int testTimer = 300;
-        private Random random;
 
         //Entities
         private static Player s_player;
@@ -141,6 +137,31 @@ namespace PawnGame
         public static Level CurrentLevel
         {
             get { return s_levels[s_levelIndex]; }
+        }
+
+        public static GameState State
+        {
+            get
+            {
+                return s_gameState;
+            }
+            set
+            {
+                s_gameState = value;
+            }
+        }
+
+        public static int LevelIndex
+        {
+            get
+            {
+                return s_levelIndex;
+            }
+            set
+            {
+                if (value >= s_levels.Length) throw new ArgumentOutOfRangeException("There is no level at that index.");
+                s_levelIndex = value;
+            }
         }
 
         /// <summary>
@@ -194,7 +215,6 @@ namespace PawnGame
             _prevHeight = _graphics.PreferredBackBufferHeight;
             #endregion
 
-            random = new Random();
             _prevKbState = Keyboard.GetState();
             Assets = new Dictionary<AssetNames, Texture2D>();
             s_levelIndex = 0;
@@ -300,7 +320,7 @@ namespace PawnGame
                 ToggleFullscreen();
             }
 
-            switch (_gameState)
+            switch (s_gameState)
             {
                 #region Menu State
                 case GameState.Menu:
@@ -325,19 +345,19 @@ namespace PawnGame
                                 LoadLevels();
                                 s_player.HeldAbility = Player.Ability.None;
                                 Mouse.SetPosition(WindowWidth / 2, WindowHeight / 2);
-                                _gameState = GameState.Game;
+                                s_gameState = GameState.Game;
                                 break;
                             }
                             else if (i == 1)
                             {
                                 // Load a level from a file
-                                _gameState = GameState.Game;
+                                s_gameState = GameState.Game;
                                 break;
                             }
                             else
                             {
                                 // Open the level editor
-                                _gameState = GameState.LevelEditor;
+                                s_gameState = GameState.LevelEditor;
                                 break;
                             }
                         }
@@ -345,7 +365,7 @@ namespace PawnGame
 
                     #endregion
                     break;
-
+#if DEBUG
                 #region DebugMenu State
                 case GameState.DebugMenu:
 
@@ -355,7 +375,7 @@ namespace PawnGame
                     if (_currKbState.IsKeyDown(Keys.Escape) && _prevKbState.IsKeyUp(Keys.Escape))
                     {
                         _debugButtons[(int)_prevGameState].Enabled = true;
-                        _gameState = _prevGameState;
+                        s_gameState = _prevGameState;
                         _prevGameState = GameState.DebugMenu;
                     }
 
@@ -371,7 +391,7 @@ namespace PawnGame
                         if (_debugButtons[i].Clicked)
                         {
                             _debugButtons[(int)_prevGameState].Enabled = true;
-                            _gameState = (GameState)i;
+                            s_gameState = (GameState)i;
 
                             // Resetting the level editor if the level editor was exited out of
                             if (i == 2 && _prevGameState != (GameState)2)
@@ -387,7 +407,7 @@ namespace PawnGame
 
                     #endregion
                     break;
-#if DEBUG
+#endif
                 #region Game State
                 case GameState.Game:
 
@@ -402,16 +422,6 @@ namespace PawnGame
 
                     IsMouseVisible = false;
 
-                    // Play the game here
-                    //TODO: Ask chris how GameTime works
-                    testTimer--;
-                    if (testTimer <= 0)
-                    {
-                        //Adds a random pawn, for the demo
-                        // Commented for bug testing
-                        //Manager.Add(new Pawn(AssetNames.PawnWhite, new Rectangle(random.Next(0, 2) * WindowWidth, random.Next(0, 2) * WindowHeight, Assets[AssetNames.PawnWhite].Width/_playerScale, Assets[AssetNames.PawnWhite].Height/ _playerScale)));
-                        testTimer = 300;
-                    }
                     //Virtual mouse stuff
                     
                     //Vmouse has to update virst, and weapon has to update after player
@@ -440,7 +450,7 @@ namespace PawnGame
 
                     #endregion
                     break;
-#endif
+
                 #region LevelEditor State
                 case GameState.LevelEditor:
                     IsMouseVisible = true;
@@ -457,10 +467,10 @@ namespace PawnGame
             }
 
             // Regardless of state, you can get to the debug menus
-            if (_currKbState.IsKeyDown(Keys.Escape) && _prevKbState.IsKeyUp(Keys.Escape) && _gameState != GameState.DebugMenu)
+            if (_currKbState.IsKeyDown(Keys.Escape) && _prevKbState.IsKeyUp(Keys.Escape) && s_gameState != GameState.DebugMenu)
             {
-                _prevGameState = _gameState;
-                _gameState = GameState.DebugMenu;
+                _prevGameState = s_gameState;
+                s_gameState = GameState.DebugMenu;
             }
 
             _prevMouseState = _currMouseState;
@@ -480,7 +490,7 @@ namespace PawnGame
 
             _spriteBatch.Begin(SpriteSortMode.Deferred,null,SamplerState.PointClamp);
 
-            switch (_gameState)
+            switch (s_gameState)
             {
                 #region Menu State
                 case GameState.Menu:

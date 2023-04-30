@@ -133,6 +133,17 @@ namespace PawnGame.GameObjects
                                 }
                             }
                         }
+                        else if (tileToCheck.IsExit && EnemyManager.Manager.Count <= 0)
+                        {
+                            try
+                            {
+                                Game1.LevelIndex++;
+                            }
+                            catch
+                            {
+                                Game1.State = Game1.GameState.Victory;
+                            }
+                        }
                     }
 
                     //If the column index needs to be reset, reset it, else increase it
