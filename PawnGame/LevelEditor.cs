@@ -317,7 +317,7 @@ namespace PawnGame
                                 case 3:
                                     //make sure there isn't already an enemy or solid wall there
                                     occupied = false;
-                                    foreach(Enemy enemy in Room.EnemySpawns)
+                                    foreach(Enemy enemy in Room.Enemies)
                                     {
                                         if (enemy.Hitbox.Intersects(Room.Tiles[x, y].Hitbox) || Room.Tiles[x, y].IsSolid == true)
                                         {
@@ -327,7 +327,7 @@ namespace PawnGame
                                     //create an pawn enemy
                                     if (!occupied)
                                     {
-                                        Room.PawnSpawns.Add(new Pawn(AssetNames.PawnWhite, new Rectangle(
+                                        Room.Enemies.Add(new Pawn(AssetNames.PawnWhite, new Rectangle(
                                             (int)(Room.Tiles[x, y].X + Room.Tiles[x, y].Width / 2 - _pawnDimensions.X / 2),
                                             (int)(Room.Tiles[x, y].Y + Room.Tiles[x, y].Height / 2 - _pawnDimensions.Y / 2),
                                             (int)_pawnDimensions.X,
@@ -338,7 +338,7 @@ namespace PawnGame
                                 case 4:
                                     //make sure there isn't already an enemy, solid wall, or exit there
                                     occupied = false;
-                                    foreach (Enemy enemy in Room.EnemySpawns)
+                                    foreach (Enemy enemy in Room.Enemies)
                                     {
                                         if ((enemy.Hitbox * _game.Scale).Contains(_mState.X, _mState.Y) || Room.Tiles[x, y].IsSolid == true)
                                         {
@@ -358,36 +358,12 @@ namespace PawnGame
                         {
                             //if there's an enemy on top of the tile, remove it first
                             bool occupied = false;
-                            for(int i = 0; i < Room.EnemySpawns.Count; i++)
+                            for(int i = 0; i < Room.Enemies.Count; i++)
                             {
-                                if ((Room.EnemySpawns[i].Hitbox * _game.Scale).Contains(_mState.X, _mState.Y))
+                                if ((Room.Enemies[i].Hitbox * _game.Scale).Contains(_mState.X, _mState.Y))
                                 {
-                                    #region remove enemy spawn
-                                    if (Room.EnemySpawns[i] is Pawn)
-                                    {
-                                        Room.PawnSpawns.Remove((Pawn)Room.EnemySpawns[i]);
-                                    }
-                                    else if (Room.EnemySpawns[i] is Bishop)
-                                    {
-                                        Room.BishopSpawns.Remove((Bishop)Room.EnemySpawns[i]);
-                                    }
-                                    else if (Room.EnemySpawns[i] is Knight)
-                                    {
-                                        Room.KnightSpawns.Remove((Knight)Room.EnemySpawns[i]);
-                                    }
-                                    else if (Room.EnemySpawns[i] is Rook)
-                                    {
-                                        Room.RookSpawns.Remove((Rook)Room.EnemySpawns[i]);
-                                    }
-                                    else if (Room.EnemySpawns[i] is Queen)
-                                    {
-                                        Room.QueenSpawns.Remove((Queen)Room.EnemySpawns[i]);
-                                    }
-                                    else if (Room.EnemySpawns[i] is King)
-                                    {
-                                        Room.KingSpawns.Remove((King)Room.EnemySpawns[i]);
-                                    }
-                                    #endregion
+                                    Room.Enemies.Remove((Pawn)Room.Enemies[i]);
+
                                     occupied = true;
                                     _canClick = false;
                                     break;
@@ -435,9 +411,9 @@ namespace PawnGame
                 _options[i].Draw(sb);
             }
             //draw enemies
-            for(int i = 0; i < Room.EnemySpawns.Count; i++)
+            for(int i = 0; i < Room.Enemies.Count; i++)
             {
-                Room.EnemySpawns[i].Draw(sb);
+                Room.Enemies[i].Draw(sb);
             }
             //draw spawn point
             sb.Draw(

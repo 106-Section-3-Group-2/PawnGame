@@ -685,24 +685,7 @@ namespace PawnGame
             s_player.X = CurrentLevel.ActiveRoom.SpawnPoint.X;
             s_player.Y = CurrentLevel.ActiveRoom.SpawnPoint.Y;
             Manager.Clear();
-            Manager.AddRange(CurrentLevel.ActiveRoom.EnemySpawns);
-        }
-
-        public void ResetLevel()
-        {
-            s_player.IsAlive = true;
-        }
-
-        /// <summary>
-        /// send the player to a room without adding enemies
-        /// </summary>
-        /// <param name="room"></param>
-        private void GotoRoom(Point index)
-        {
-            CurrentLevel.Restart();
-            s_player.X = CurrentLevel.ActiveRoom.SpawnPoint.X;
-            s_player.Y = CurrentLevel.ActiveRoom.SpawnPoint.Y;
-            Manager.Clear();
+            Manager.AddRange(CurrentLevel.ActiveRoom.Enemies);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using PawnGame.GameObjects;
+using PawnGame.GameObjects.Enemies;
 using System;
 using System.IO;
 
@@ -81,7 +82,7 @@ namespace PawnGame
             {
                 for(int y = 0; y < levelSize.Value.Y; y++)
                 {
-                    _rooms[x, y] = new Room(8, 8, game);
+                    _rooms[x, y] = new Room(8, 8);
                 }
             }
             Initialize();
@@ -175,7 +176,7 @@ namespace PawnGame
         /// </summary>
         public void Save(string filePath)
         {
-            string jsonLevel = JsonConvert.SerializeObject(this);
+            string jsonLevel = JsonConvert.SerializeObject(this, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All });
 
             if (Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\Levels\")))
             {
@@ -197,7 +198,7 @@ namespace PawnGame
         public static Level Load(string filePath)
         {
             using StreamReader reader = new(filePath);
-            return JsonConvert.DeserializeObject<Level>(reader.ReadLine());
+            return JsonConvert.DeserializeObject<Level>(reader.ReadLine(), new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All });
         }
 
         /// <summary>
@@ -213,6 +214,12 @@ namespace PawnGame
         public void Restart()
         {
             _activeRoomIndex = new Point(0, 0);
+
+            Game1.Player.X = _rooms[_activeRoomIndex.X, _activeRoomIndex.Y].SpawnPoint.X;
+            Game1.Player.Y = _rooms[_activeRoomIndex.X, _activeRoomIndex.Y].SpawnPoint.Y;
+
+            EnemyManager.Manager.Clear();
+            EnemyManager.Manager.AddRange(_rooms[_activeRoomIndex.X, _activeRoomIndex.Y].ActiveEnemies);
         }
     }
 }

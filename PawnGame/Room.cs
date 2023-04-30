@@ -37,25 +37,24 @@ namespace PawnGame
             }
         }
 
-        //lists of enemies
-        public List<Pawn> PawnSpawns { get; set; }
-        public List<Bishop> BishopSpawns { get; set; }
-        public List<Rook> RookSpawns { get; set; }
-        public List<Knight> KnightSpawns { get; set; }
-        public List<Queen> QueenSpawns { get; set; }
-        public List<King> KingSpawns { get; set; }
+        [JsonProperty]
+        private List<Enemy> _enemies;
+
         [JsonIgnore]
-        public List<Enemy> EnemySpawns
+        public List<Enemy> Enemies => _enemies;
+
+        [JsonIgnore]
+        public List<Enemy> ActiveEnemies
         {
             get
             {
                 List<Enemy> enemies = new();
-                enemies.AddRange(PawnSpawns);
-                enemies.AddRange(BishopSpawns);
-                enemies.AddRange(RookSpawns);
-                enemies.AddRange(KnightSpawns);
-                enemies.AddRange(QueenSpawns);
-                enemies.AddRange(KingSpawns);
+
+                for (int i = 0; i < Enemies.Count; i++)
+                {
+                    enemies.Add(Enemies[i].Clone() as Enemy);
+                }
+
                 return enemies;
             }
         }
@@ -106,12 +105,8 @@ namespace PawnGame
         {
             Tiles = tiles;
             SpawnPoint = spawnPoint;
-            PawnSpawns = new();
-            BishopSpawns = new();
-            RookSpawns = new();
-            KnightSpawns = new();
-            QueenSpawns = new();
-            KingSpawns = new();
+
+            _enemies = new();
         }
 
         /// <summary>
@@ -120,7 +115,7 @@ namespace PawnGame
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <param name="tileSize"></param>
-        public Room(int width, int height, Game1 game)
+        public Room(int width, int height)
         {
             int sideLength = RenderTargetHeight / height;
             int margin = (RenderTargetWidth / 2) - width * sideLength / 2;
@@ -142,13 +137,7 @@ namespace PawnGame
             //default spawn point
             SpawnPoint = Tiles[0, 0].Hitbox.Location;
 
-            //initialize lists
-            PawnSpawns = new();
-            BishopSpawns = new();
-            RookSpawns = new();
-            KnightSpawns = new();
-            QueenSpawns = new();
-            KingSpawns = new();
+            _enemies = new();
         }
 
         /// <summary>
@@ -163,16 +152,10 @@ namespace PawnGame
         /// <param name="kingSpawns"></param>
         /// <param name="spawnPoint"></param>
         [JsonConstructor]
-        public Room(Tile[,] tiles, List<Pawn> pawnSpawns, List<Bishop> bishopSpawns, List<Rook> rookSpawns, List<Knight> knightSpawns, List<Queen> queenSpawns, List<King> kingSpawns, Vector2 spawnPoint)
+        public Room(Tile[,] tiles, List<Enemy> enemies)
         {
             Tiles = tiles;
-            PawnSpawns = pawnSpawns;
-            BishopSpawns = bishopSpawns;
-            RookSpawns = rookSpawns;
-            KnightSpawns = knightSpawns;
-            QueenSpawns = queenSpawns;
-            KingSpawns = kingSpawns;
-            SpawnPoint = spawnPoint;
+            _enemies = enemies;
         }
 
         /// <summary>
@@ -193,36 +176,6 @@ namespace PawnGame
             {
                 tile?.Draw(sb);
             }
-        }
-
-        /// <summary>
-        /// writes the level to a filePath
-        /// </summary>
-        /// <param name="level"></param>
-        /// <param name="filePath"></param>
-        public static void Write(Room level, string filePath)
-        {
-            try
-            {
-                using StreamWriter writer = new(filePath);
-                writer.Write(JsonConvert.SerializeObject(level));
-            }
-            catch(Exception e)
-            {
-                Debug.WriteLine(e.ToString());
-                throw new Exception("Could not write the file.");
-            }
-        }
-
-        /// <summary>
-        /// returns a level loaded from the filePath. Throws an exception if there was an error writing to the file.
-        /// </summary>
-        /// <param name="filePath"></param>
-        /// <returns></returns>
-        public static Room Read(string filePath)
-        {
-            using StreamReader reader = new(filePath);
-            return JsonConvert.DeserializeObject<Room>(reader.ReadLine());
         }
     }
 }

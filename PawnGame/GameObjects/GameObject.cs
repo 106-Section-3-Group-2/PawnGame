@@ -1,9 +1,10 @@
 ﻿using Newtonsoft.Json;
+using System;
 using static PawnGame.Game1;
 
 namespace PawnGame.GameObjects
 {
-    public abstract class GameObject
+    public abstract class GameObject : ICloneable
     {
         #region Fields
         [JsonProperty]
@@ -83,6 +84,15 @@ namespace PawnGame.GameObjects
         public virtual void Draw(SpriteBatch sb)
         {
             sb.Draw(Texture, _hitbox, Color.White);
+        }
+
+        /// <summary>
+        /// Returns a shallow copy of the game object
+        /// </summary>
+        /// <returns></returns>
+        public object Clone()
+        {
+            return MemberwiseClone();
         }
     }
 }
