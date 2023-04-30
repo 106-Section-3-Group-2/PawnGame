@@ -95,7 +95,7 @@ namespace PawnGame.GameObjects
                         {
                             ResolveCollisions(tileToCheck);
                         }
-                        else if (tileToCheck.IsExit && EnemyManager.Manager.Count <= 0)
+                        else if (tileToCheck.IsDoor && EnemyManager.Manager.Count <= 0)
                         {
                             //choose a direction to change rooms
                             Level.Direction direction;
