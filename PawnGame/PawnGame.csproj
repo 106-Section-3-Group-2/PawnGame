@@ -27,9 +27,15 @@
     <None Remove="Levels\test3.json" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Levels\test1.json" />
-    <Content Include="Levels\test2.json" />
-    <Content Include="Levels\test3.json" />
+    <Content Include="Levels\test1.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Levels\test2.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Levels\test3.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Icon.ico" />
