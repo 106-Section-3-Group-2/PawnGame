@@ -17,6 +17,12 @@ namespace PawnGame.GameObjects
         /// If the tile is an exit
         /// </summary>
         [JsonProperty]
+        private bool _isDoor;
+
+        /// <summary>
+        /// If the tile is an exit
+        /// </summary>
+        [JsonProperty]
         private bool _isExit;
 
         /// <summary>
@@ -50,6 +56,21 @@ namespace PawnGame.GameObjects
                 _isExit = value;
             }
         }
+        /// <summary>
+        /// represents whether the tile is a door and can trigger a room movement
+        /// </summary>
+        [JsonIgnore]
+        public bool IsDoor
+        {
+            get
+            {
+                return _isDoor;
+            }
+            set
+            {
+                _isDoor = value;
+            }
+        }
 
         /// <summary>
         /// create a new tile, specifying whether it is solid
@@ -60,7 +81,7 @@ namespace PawnGame.GameObjects
         public Tile(Game1.AssetNames textureKey, Vectangle hitbox, bool solid) : base(textureKey, hitbox)
         {
             _isSolid = solid;
-            _isExit = false;
+            _isDoor = false;
         }
 
         /// <summary>
@@ -73,7 +94,7 @@ namespace PawnGame.GameObjects
         public Tile(Game1.AssetNames textureKey, Vectangle hitbox, bool solid, bool exit) : base(textureKey, hitbox)
         {
             _isSolid = solid;
-            _isExit = exit;
+            _isDoor = exit;
         }
     }
 }
