@@ -73,28 +73,17 @@ namespace PawnGame.GameObjects
         }
 
         /// <summary>
-        /// create a new tile, specifying whether it is solid
-        /// </summary>
-        /// <param name="texture"></param>
-        /// <param name="hitbox"></param>
-        /// <param name="solid"></param>
-        public Tile(Game1.AssetNames textureKey, Vectangle hitbox, bool solid) : base(textureKey, hitbox)
-        {
-            _isSolid = solid;
-            _isDoor = false;
-        }
-
-        /// <summary>
         /// create a new tile, specifying whether it is solid and whether it is an exit
         /// </summary>
         /// <param name="texture"></param>
         /// <param name="hitbox"></param>
         /// <param name="solid"></param>
         [JsonConstructor]
-        public Tile(Game1.AssetNames textureKey, Vectangle hitbox, bool solid, bool exit) : base(textureKey, hitbox)
+        public Tile(Game1.AssetNames textureKey, Vectangle hitbox, bool solid, bool exit = false, bool door = false) : base(textureKey, hitbox)
         {
             _isSolid = solid;
-            _isDoor = exit;
+            _isExit = exit;
+            _isDoor = door;
         }
     }
 }
