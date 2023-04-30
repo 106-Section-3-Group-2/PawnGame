@@ -274,10 +274,11 @@ namespace PawnGame
             _debugButtons.Add(new(_font, "Level Editor",
                     new Vector2(RenderTargetWidth - RenderTargetWidth / 4 - _font.MeasureString("Level Editor").X / 2, RenderTargetHeight / 2),
                     Color.LightGray));
-
+            #if DEBUG
             _debugButtons.Add(new(_font, "Victory",
                 new Vector2(RenderTargetWidth / 2 - _font.MeasureString("Victory").X / 2, ((RenderTargetHeight / 4) + RenderTargetHeight / 2) - _font.MeasureString("Victory").Y / 2),
                 Color.LightGray));
+            #endif
             #endregion
             #endregion
         }
@@ -388,14 +389,14 @@ namespace PawnGame
                 #region Game State
                 case GameState.Game:
 
-                    #if DEBUG
+#if DEBUG
                     //Debug level skip
                     if (_currKbState.IsKeyDown(Keys.X) && _prevKbState.IsKeyUp(Keys.X))
                     {
                         s_levelIndex++;
                         break;
                     }
-                    #endif
+#endif
 
                     IsMouseVisible = false;
 
@@ -454,7 +455,7 @@ namespace PawnGame
             }
 
             // Regardless of state, you can get to the debug menus
-            if (_currKbState.IsKeyDown(Keys.F) && _prevKbState.IsKeyUp(Keys.F) && _gameState != GameState.DebugMenu)
+            if (_currKbState.IsKeyDown(Keys.Escape) && _prevKbState.IsKeyUp(Keys.Escape) && _gameState != GameState.DebugMenu)
             {
                 _prevGameState = _gameState;
                 _gameState = GameState.DebugMenu;
@@ -502,8 +503,8 @@ namespace PawnGame
                     // Draw debug menu on top of last frame of previous
                     // state
                     // Replace these tests later obviously
-                    _spriteBatch.DrawString(_font, "Debug Menu",
-                        new Vector2(RenderTargetWidth / 2 - _font.MeasureString("Debug Menu").X / 2, RenderTargetHeight / 2 - _font.MeasureString("Debug Menu").Y / 2), Color.Red);
+                    _spriteBatch.DrawString(_font, "Menu",
+                        new Vector2(RenderTargetWidth / 2 - _font.MeasureString("Menu").X / 2, RenderTargetHeight / 2 - _font.MeasureString("Menu").Y / 2), Color.Red);
 
                     foreach(Button b in _debugButtons)
                     {
