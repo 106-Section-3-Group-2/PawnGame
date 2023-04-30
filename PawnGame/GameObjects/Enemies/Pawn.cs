@@ -6,7 +6,7 @@ namespace PawnGame.GameObjects.Enemies
     {
         public Pawn(Game1.AssetNames textureKey, Rectangle hitbox) : base(textureKey, hitbox)
         {
-            _speed = 2;
+            _speed = 4;
         }
 
         public override void Update(Player player)
