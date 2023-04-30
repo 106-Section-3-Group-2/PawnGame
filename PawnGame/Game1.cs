@@ -108,7 +108,7 @@ namespace PawnGame
         private Random random;
 
         //Entities
-        private Player _player;
+        private static Player s_player;
         private Texture2D _heldAbilityTexture;
         private Weapon _weapon;
         private int _playerScale;
@@ -141,6 +141,13 @@ namespace PawnGame
             get { return s_levels[s_levelIndex]; }
         }
 
+        /// <summary>
+        /// the player object
+        /// </summary>
+        public static Player Player
+        {
+            get { return s_player; }
+        }
 
         /// <summary>
         /// Gets the width of the window
@@ -231,7 +238,7 @@ namespace PawnGame
 
             _weapon = new Weapon(AssetNames.WeaponSword, new Rectangle(RenderTargetWidth / 2, RenderTargetHeight / 2, Assets[AssetNames.WeaponSword].Width, Assets[AssetNames.WeaponSword].Height));
             VMouse.SetCrosshair = Assets[AssetNames.Crosshair];
-            _player = new Player(AssetNames.PawnBlack, new Rectangle(RenderTargetWidth / 2, RenderTargetHeight / 2, Assets[AssetNames.PawnBlack].Width/_playerScale, Assets[AssetNames.PawnBlack].Height/ _playerScale), _weapon);
+            s_player = new Player(AssetNames.PawnBlack, new Rectangle(RenderTargetWidth / 2, RenderTargetHeight / 2, Assets[AssetNames.PawnBlack].Width/_playerScale, Assets[AssetNames.PawnBlack].Height/ _playerScale), _weapon);
             _heldAbilityTexture = null!;
             //initialize level editor (needs textures loaded)
             _levelEditor = new LevelEditor(this);
@@ -313,7 +320,7 @@ namespace PawnGame
                                 // Start a new game
                                 // (whatever that means)
                                 LoadLevels();
-                                _player.HeldAbility = Player.Ability.None;
+                                s_player.HeldAbility = Player.Ability.None;
                                 Mouse.SetPosition(WindowWidth / 2, WindowHeight / 2);
                                 _gameState = GameState.Game;
                                 break;
@@ -408,17 +415,17 @@ namespace PawnGame
 
                     
                     
-                    _player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState);
-                    VMouse.Update(Mouse.GetState(), _player, _scale);
-                    _weapon.Update(_player,VMouse);
-                    Manager.Update(_player);
+                    s_player.Update(_currKbState, _prevKbState,_currMouseState,_prevMouseState);
+                    VMouse.Update(Mouse.GetState(), s_player, _scale);
+                    _weapon.Update(s_player,VMouse);
+                    Manager.Update(s_player);
 
-                    if (!_player.IsAlive)
+                    if (!s_player.IsAlive)
                     {
                         LoadLevels();
                     }
 
-                    switch (_player.HeldAbility)
+                    switch (s_player.HeldAbility)
                     {
                         case Player.Ability.Pawn:
                             _heldAbilityTexture = Assets[AssetNames.AbilityDash];
@@ -511,11 +518,11 @@ namespace PawnGame
                 case GameState.Game:
                     // Draw.. the game?
                     CurrentLevel.ActiveRoom.Draw(_spriteBatch);
-                    _player.Draw(_spriteBatch);
+                    s_player.Draw(_spriteBatch);
                     Manager.Draw(_spriteBatch);
                     CurrentLevel.Draw(_spriteBatch);
                     VMouse.Draw(_spriteBatch,_scale);
-                    _weapon.Draw(_spriteBatch, _player, VMouse.Rotation, _scale);
+                    _weapon.Draw(_spriteBatch, s_player, VMouse.Rotation, _scale);
 
                     //UI stuff
                     Vector2 UIPos = new Vector2(0 + CurrentLevel.ActiveRoom.Location.X / 2,
@@ -567,7 +574,7 @@ namespace PawnGame
                             UIPos.Y + 50), Color.White);
                     }
 
-                    switch (_player.HeldAbility)
+                    switch (s_player.HeldAbility)
                     {
                         case Player.Ability.Pawn:
                             _spriteBatch.Draw(_heldAbilityTexture, new Rectangle((int)UIPos.X - (_heldAbilityTexture.Width / _playerScale) / 2, 
@@ -675,15 +682,15 @@ namespace PawnGame
             
             
 
-            _player.X = CurrentLevel.ActiveRoom.SpawnPoint.X;
-            _player.Y = CurrentLevel.ActiveRoom.SpawnPoint.Y;
+            s_player.X = CurrentLevel.ActiveRoom.SpawnPoint.X;
+            s_player.Y = CurrentLevel.ActiveRoom.SpawnPoint.Y;
             Manager.Clear();
             Manager.AddRange(CurrentLevel.ActiveRoom.EnemySpawns);
         }
 
         public void ResetLevel()
         {
-            _player.IsAlive = true;
+            s_player.IsAlive = true;
         }
 
         /// <summary>
@@ -693,8 +700,8 @@ namespace PawnGame
         private void GotoRoom(Point index)
         {
             CurrentLevel.Restart();
-            _player.X = CurrentLevel.ActiveRoom.SpawnPoint.X;
-            _player.Y = CurrentLevel.ActiveRoom.SpawnPoint.Y;
+            s_player.X = CurrentLevel.ActiveRoom.SpawnPoint.X;
+            s_player.Y = CurrentLevel.ActiveRoom.SpawnPoint.Y;
             Manager.Clear();
         }
     }
