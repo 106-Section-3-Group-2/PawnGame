@@ -147,7 +147,7 @@ namespace PawnGame.GameObjects
             Vector2 vector3 = vector1 / 5 * 3;
             Vector2 vector4 = vector1 / 5 * 2;
             Vector2 vector5 = vector1 / 5;
-            shin_collisionVectors.Add(vector1);
+            _collisionVectors.Add(vector1);
             _collisionVectors.Add(vector2);
             _collisionVectors.Add(vector3);
             _collisionVectors.Add(vector4);
