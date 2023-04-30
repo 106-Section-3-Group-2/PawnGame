@@ -118,16 +118,16 @@ namespace PawnGame
         public void Draw(SpriteBatch sb)
         {
             Point bottomRight = _bottomRight - _margin - new Point(_mapBoxSize, _mapBoxSize);
-            for(int x = _rooms.GetLength(0) - 1; x >= 0; x--)
+            for(int x = 0; x < _rooms.GetLength(0); x++)
             {
-                for(int y = _rooms.GetLength(1) - 1; y >= 0; y--)
+                for(int y = 0; y < _rooms.GetLength(1); y++)
                 {
                     Color drawColor = Color.Red;
                     if(_activeRoomIndex.X == x  && _activeRoomIndex.Y == y)
                     {
                         drawColor = Color.White;
                     }
-                    sb.Draw(Game1.Assets[Game1.AssetNames.TileWhite], new Rectangle(bottomRight.X - x * _mapBoxSize, bottomRight.Y - y * _mapBoxSize, _mapBoxSize, _mapBoxSize), drawColor);
+                    sb.Draw(Game1.Assets[Game1.AssetNames.TileWhite], new Rectangle(bottomRight.X - (_rooms.GetLength(0) - 1 - x) * _mapBoxSize, bottomRight.Y - (_rooms.GetLength(1) - 1 - y) * _mapBoxSize, _mapBoxSize, _mapBoxSize), drawColor);
                 }
             }
         }
