@@ -257,7 +257,6 @@ namespace PawnGame
                             {
                                 _level.Save(saveFileDialog.FileName);
                             }
-                            _game.LoadLevels();
                             break;
                         //load error, should always be last case
                         case 3:

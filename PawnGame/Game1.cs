@@ -244,8 +244,6 @@ namespace PawnGame
             s_player = new Player(AssetNames.PawnBlack, new Rectangle(RenderTargetWidth / 2, RenderTargetHeight / 2, Assets[AssetNames.PawnBlack].Width/_playerScale, Assets[AssetNames.PawnBlack].Height/ _playerScale), _weapon);
             _heldAbilityTexture = null!;
 
-            LoadLevels();
-
             //initialize level editor (needs textures loaded)
             _levelEditor = new LevelEditor(this);
 
@@ -275,7 +273,7 @@ namespace PawnGame
 
             _debugButtons.Add(new(_font, "Game",
                 new Vector2(RenderTargetWidth / 2 - _font.MeasureString("Game").X / 2, RenderTargetHeight / 4 + _font.MeasureString("Game").Y / 2),
-                Color.LightGray));
+                Color.LightGray) { Enabled = false });
 
             _debugButtons.Add(new(_font, "Level Editor",
                     new Vector2(RenderTargetWidth - RenderTargetWidth / 4 - _font.MeasureString("Level Editor").X / 2, RenderTargetHeight / 2),
@@ -322,8 +320,8 @@ namespace PawnGame
                         {
                             if (i == 0)
                             {
-                                // Start a new game
-                                // (whatever that means)
+                                LoadLevels();
+
                                 s_player.HeldAbility = Player.Ability.None;
                                 Mouse.SetPosition(WindowWidth / 2, WindowHeight / 2);
                                 s_gameState = GameState.Game;
