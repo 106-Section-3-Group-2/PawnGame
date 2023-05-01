@@ -434,11 +434,7 @@ namespace PawnGame
                     VMouse.Update(Mouse.GetState(), s_player, _scale);
                     _weapon.Update(s_player,VMouse);
                     Manager.Update(s_player);
-
-                    if (!s_player.IsAlive)
-                    {
-                        LoadLevels();
-                    }
+                    CurrentLevel.ActiveRoom.Update();
 
                     switch (s_player.HeldAbility)
                     {
