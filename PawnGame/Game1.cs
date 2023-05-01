@@ -11,6 +11,8 @@ using static PawnGame.GameObjects.Enemies.EnemyManager;
 using static PawnGame.VirtualMouse;
 using Newtonsoft.Json.Linq;
 
+
+//This is the best game of all time
 namespace PawnGame
 {
     public class Game1 : Game
