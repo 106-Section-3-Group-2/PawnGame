@@ -528,10 +528,6 @@ namespace PawnGame
 #endif
                     if (_heldAbilityTexture != null!)
                     {
-                        string abilityName = _heldAbilityTexture.Name.Substring(7);
-                        _spriteBatch.DrawString(_font, $"{abilityName}", new Vector2(UIPos.X - _font.MeasureString(abilityName).X / 2,
-                            UIPos.Y + 50), Color.White);
-
                         // Making the spacebar indicator blink
                         // to make it look more dynamic
                         if (!_spacebarActive)
