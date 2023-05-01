@@ -148,17 +148,17 @@ namespace PawnGame
 
                     _activeRoomIndex.Y--;
                     break;
+                case Direction.South:
+                    if (_activeRoomIndex.Y == _rooms.GetLength(1) - 1 || _rooms[_activeRoomIndex.X, _activeRoomIndex.Y + 1] == null)
+                        throw new InvalidOperationException("No room is south of the current room.");
+
+                    _activeRoomIndex.Y++;
+                    break;
                 case Direction.East:
                     if (_activeRoomIndex.X == _rooms.GetLength(0) - 1 || _rooms[_activeRoomIndex.X+1, _activeRoomIndex.Y] == null) 
                         throw new InvalidOperationException("No room is east of the current room.");
 
                     _activeRoomIndex.X++;
-                    break;
-                case Direction.South:
-                    if (_activeRoomIndex.Y == _rooms.GetLength(1) - 1 || _rooms[_activeRoomIndex.X, _activeRoomIndex.Y+1] == null) 
-                        throw new InvalidOperationException("No room is south of the current room.");
-
-                    _activeRoomIndex.Y++;
                     break;
                 case Direction.West:
                     if (_activeRoomIndex.X == 0 || _rooms[_activeRoomIndex.X-1, _activeRoomIndex.Y] == null) 
@@ -167,10 +167,62 @@ namespace PawnGame
                     _activeRoomIndex.X--;
                     break;
             }
+            _rooms[_activeRoomIndex.X, _activeRoomIndex.Y].ActivateRoom();
+
+            //find a suitable spawnpoint for the player
             Game1.Player.X = ActiveRoom.SpawnPoint.X;
             Game1.Player.Y = ActiveRoom.SpawnPoint.Y;
-
-            _rooms[_activeRoomIndex.X, _activeRoomIndex.Y].ActivateRoom();
+            switch (direction)
+            {
+                case Direction.North:
+                    for(int x = 0; x < ActiveRoom.Tiles.GetLength(0) - 1; x++)
+                    {
+                        Tile spawnTile = ActiveRoom.Tiles[x, ActiveRoom.Tiles.GetLength(1) - 2];
+                        if (ActiveRoom.Tiles[x, ActiveRoom.Tiles.GetLength(1) - 1].IsDoor && !spawnTile.IsSolid)
+                        {
+                            Point newSpawn = new Point((int)spawnTile.X, (int)spawnTile.Y);
+                            Game1.Player.X = newSpawn.X;
+                            Game1.Player.Y = newSpawn.Y;
+                        }
+                    }
+                    break;
+                case Direction.South:
+                    for (int x = 0; x < ActiveRoom.Tiles.GetLength(0) - 1; x++)
+                    {
+                        Tile spawnTile = ActiveRoom.Tiles[x, 1];
+                        if (ActiveRoom.Tiles[x, 0].IsDoor && !spawnTile.IsSolid)
+                        {
+                            Point newSpawn = new Point((int)spawnTile.X, (int)spawnTile.Y);
+                            Game1.Player.X = newSpawn.X;
+                            Game1.Player.Y = newSpawn.Y;
+                        }
+                    }
+                    break;
+                case Direction.East:
+                    for (int y = 0; y < ActiveRoom.Tiles.GetLength(1) - 1; y++)
+                    {
+                        Tile spawnTile = ActiveRoom.Tiles[1, y];
+                        if (ActiveRoom.Tiles[0,y].IsDoor && !spawnTile.IsSolid)
+                        {
+                            Point newSpawn = new Point((int)spawnTile.X, (int)spawnTile.Y);
+                            Game1.Player.X = newSpawn.X;
+                            Game1.Player.Y = newSpawn.Y;
+                        }
+                    }
+                    break;
+                case Direction.West:
+                    for (int y = 0; y < ActiveRoom.Tiles.GetLength(1) - 1; y++)
+                    {
+                        Tile spawnTile = ActiveRoom.Tiles[ActiveRoom.Tiles.GetLength(0) - 2, y];
+                        if (ActiveRoom.Tiles[ActiveRoom.Tiles.GetLength(1) - 1, y].IsDoor && !spawnTile.IsSolid)
+                        {
+                            Point newSpawn = new Point((int)spawnTile.X, (int)spawnTile.Y);
+                            Game1.Player.X = newSpawn.X;
+                            Game1.Player.Y = newSpawn.Y;
+                        }
+                    }
+                    break;
+            }
         }
 
         /// <summary>
