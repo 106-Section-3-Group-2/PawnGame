@@ -349,7 +349,7 @@ namespace PawnGame
 
                     IsMouseVisible = true;
 
-                    if (_prevGameState != GameState.DebugMenu)
+                    if (s_prevGameState != GameState.DebugMenu)
                     {
                         _debugButtons[(int)s_prevGameState].Enabled = false;
                     }
@@ -436,15 +436,15 @@ namespace PawnGame
             {
                 if (s_gameState != GameState.DebugMenu)
                 {
-                    _prevGameState = s_gameState;
+                    s_prevGameState = s_gameState;
                     s_gameState = GameState.DebugMenu;
                 }
                 // If in the debug menu, goes back to previous game state
                 else
                 {
-                    _debugButtons[(int)_prevGameState].Enabled = true;
-                    s_gameState = _prevGameState;
-                    _prevGameState = GameState.DebugMenu;
+                    _debugButtons[(int)s_prevGameState].Enabled = true;
+                    s_gameState = s_prevGameState;
+                    s_prevGameState = GameState.DebugMenu;
                 }
             }
 
