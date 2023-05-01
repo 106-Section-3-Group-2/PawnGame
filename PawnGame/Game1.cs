@@ -244,7 +244,7 @@ namespace PawnGame
             _levelEditor = new LevelEditor(this);
 
             //initialize and load the level array
-            LoadLevels();
+            //LoadLevels();
 
             #region Add Menu buttons
             #region Add main menu buttons
@@ -680,7 +680,7 @@ namespace PawnGame
             s_player.X = CurrentLevel.ActiveRoom.SpawnPoint.X;
             s_player.Y = CurrentLevel.ActiveRoom.SpawnPoint.Y;
             Manager.Clear();
-            Manager.AddRange(CurrentLevel.ActiveRoom.Enemies);
+            Manager.AddRange(CurrentLevel.ActiveRoom.ActiveEnemies);
         }
     }
 }

@@ -167,10 +167,10 @@ namespace PawnGame
                     _activeRoomIndex.X--;
                     break;
             }
+            _rooms[_activeRoomIndex.X, _activeRoomIndex.Y].ActivateRoom();
+
             Game1.Player.X = ActiveRoom.SpawnPoint.X;
             Game1.Player.Y = ActiveRoom.SpawnPoint.Y;
-
-            _rooms[_activeRoomIndex.X, _activeRoomIndex.Y].ActivateRoom();
         }
 
         /// <summary>

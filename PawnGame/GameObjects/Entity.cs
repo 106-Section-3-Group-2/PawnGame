@@ -98,10 +98,12 @@ namespace PawnGame.GameObjects
                         else if (this is Player && tileToCheck.IsDoor && EnemyManager.Manager.Count <= 0)
                         {
                             MoveThroughDoor(tilePos);
+                            return;
                         }
                         else if (this is Player && tileToCheck.IsExit && EnemyManager.Manager.Count <= 0)
                         {
                             Game1.NextLevel();
+                            return;
                         }
                     }
 
