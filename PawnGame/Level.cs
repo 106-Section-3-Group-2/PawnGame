@@ -169,6 +169,8 @@ namespace PawnGame
             }
             Game1.Player.X = ActiveRoom.SpawnPoint.X;
             Game1.Player.Y = ActiveRoom.SpawnPoint.Y;
+
+            _rooms[_activeRoomIndex.X, _activeRoomIndex.Y].ActivateRoom();
         }
 
         /// <summary>
@@ -211,6 +213,9 @@ namespace PawnGame
             return _rooms.GetLength(dimension);
         }
 
+        /// <summary>
+        /// Resets the level by setting the player to the start position, reseting 
+        /// </summary>
         public void Reset()
         {
             _activeRoomIndex = new Point(0, 0);
@@ -218,8 +223,15 @@ namespace PawnGame
             Game1.Player.X = _rooms[_activeRoomIndex.X, _activeRoomIndex.Y].SpawnPoint.X;
             Game1.Player.Y = _rooms[_activeRoomIndex.X, _activeRoomIndex.Y].SpawnPoint.Y;
 
-            EnemyManager.Manager.Clear();
-            EnemyManager.Manager.AddRange(_rooms[_activeRoomIndex.X, _activeRoomIndex.Y].ActiveEnemies);
+            for (int i = 0; i < _rooms.GetLength(0); i++)
+            {
+                for (int j = 0; j < _rooms.GetLength(1); j++)
+                {
+                    _rooms[i, j].Cleared = false;
+                }
+            }
+
+            ActiveRoom.ActivateRoom();
 
             Game1.Player.IsAlive = true;
         }

@@ -40,6 +40,9 @@ namespace PawnGame
         [JsonProperty]
         private List<Enemy> _enemies;
 
+        [JsonProperty]
+        private bool _cleared;
+
         [JsonIgnore]
         public List<Enemy> Enemies => _enemies;
 
@@ -58,6 +61,19 @@ namespace PawnGame
                 return enemies;
             }
         }
+
+        public bool Cleared
+        {
+            get
+            {
+                return _cleared;
+            }
+            set
+            {
+                _cleared = value;
+            }
+        }
+
 
         /// <summary>
         /// the spawn location of the player
@@ -162,8 +178,12 @@ namespace PawnGame
         /// update the level
         /// </summary>
         /// <param name="gameTime"></param>
-        public void Update(GameTime gameTime)
+        public void Update()
         {
+            if (EnemyManager.Manager.Count == 0)
+            {
+                _cleared = true;
+            }
         }
 
         /// <summary>
@@ -175,6 +195,18 @@ namespace PawnGame
             foreach (Tile tile in Tiles)
             {
                 tile?.Draw(sb);
+            }
+        }
+
+        /// <summary>
+        /// If the room has not been cleared already, set the room with its enemies
+        /// </summary>
+        public void ActivateRoom()
+        {
+            if (!_cleared)
+            {
+                EnemyManager.Manager.Clear();
+                EnemyManager.Manager.AddRange(ActiveEnemies);
             }
         }
     }

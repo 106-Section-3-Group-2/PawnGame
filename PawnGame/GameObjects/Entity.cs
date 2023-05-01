@@ -95,45 +95,11 @@ namespace PawnGame.GameObjects
                         {
                             ResolveCollisions(tileToCheck);
                         }
-                        else if (tileToCheck.IsDoor && EnemyManager.Manager.Count <= 0)
+                        else if (this is Player && tileToCheck.IsDoor && EnemyManager.Manager.Count <= 0)
                         {
-                            //choose a direction to change rooms
-                            Level.Direction direction;
-                            bool validExit = true;
-                            if (tilePos.X == 0)
-                            {
-                                direction = Level.Direction.West;
-                            }
-                            else if(tilePos.Y == 0)
-                            {
-                                direction = Level.Direction.North;
-                            }
-                            else if(tilePos.X == Game1.CurrentLevel.ActiveRoom.Tiles.GetLength(0) - 1)
-                            {
-                                direction = Level.Direction.East;
-                            }
-                            else if (tilePos.Y == Game1.CurrentLevel.ActiveRoom.Tiles.GetLength(1) - 1)
-                            {
-                                direction = Level.Direction.South;
-                            }
-                            else
-                            {
-                                validExit = false;
-                                direction = Level.Direction.West;
-                            }
-                            if(validExit)
-                            {
-                                try
-                                {
-                                    Game1.CurrentLevel.AdvanceRoom(direction);
-                                }
-                                catch
-                                {
-
-                                }
-                            }
+                            MoveThroughDoor(tilePos);
                         }
-                        else if (tileToCheck.IsExit && EnemyManager.Manager.Count <= 0)
+                        else if (this is Player && tileToCheck.IsExit && EnemyManager.Manager.Count <= 0)
                         {
                             try
                             {
@@ -206,6 +172,46 @@ namespace PawnGame.GameObjects
             else if (Y + Height > Game1.CurrentLevel.ActiveRoom.Location.Y + Game1.CurrentLevel.ActiveRoom.Height)
             {
                 Y -= (Y + Height) - (Game1.CurrentLevel.ActiveRoom.Location.Y + Game1.CurrentLevel.ActiveRoom.Height);
+            }
+        }
+
+        protected void MoveThroughDoor(Point tilePos)
+        {
+            //choose a direction to change rooms
+            Level.Direction direction;
+            bool validExit = true;
+
+            if (tilePos.X == 0)
+            {
+                direction = Level.Direction.West;
+            }
+            else if (tilePos.Y == 0)
+            {
+                direction = Level.Direction.North;
+            }
+            else if (tilePos.X == Game1.CurrentLevel.ActiveRoom.Tiles.GetLength(0) - 1)
+            {
+                direction = Level.Direction.East;
+            }
+            else if (tilePos.Y == Game1.CurrentLevel.ActiveRoom.Tiles.GetLength(1) - 1)
+            {
+                direction = Level.Direction.South;
+            }
+            else
+            {
+                validExit = false;
+                direction = Level.Direction.West;
+            }
+            if (validExit)
+            {
+                try
+                {
+                    Game1.CurrentLevel.AdvanceRoom(direction);
+                }
+                catch
+                {
+
+                }
             }
         }
     }
