@@ -101,14 +101,7 @@ namespace PawnGame.GameObjects
                         }
                         else if (this is Player && tileToCheck.IsExit && EnemyManager.Manager.Count <= 0)
                         {
-                            try
-                            {
-                                Game1.LevelIndex++;
-                            }
-                            catch
-                            {
-                                Game1.State = Game1.GameState.Victory;
-                            }
+                            Game1.NextLevel();
                         }
                     }
 
