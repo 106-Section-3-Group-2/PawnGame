@@ -124,6 +124,10 @@ namespace PawnGame
                 for(int y = 0; y < _rooms.GetLength(1); y++)
                 {
                     Color drawColor = Color.Red;
+                    if (_rooms[x,y].Cleared)
+                    {
+                        drawColor = Color.Green;
+                    }
                     if(_activeRoomIndex.X == x  && _activeRoomIndex.Y == y)
                     {
                         drawColor = Color.White;

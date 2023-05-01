@@ -653,7 +653,7 @@ namespace PawnGame
                 if (s_levelIndex + 1 >= s_levels.Length) throw new ArgumentOutOfRangeException("There is no level at that index.");
                 s_levelIndex++;
 
-                CurrentLevel.ActiveRoom.ActivateRoom();
+                CurrentLevel.Reset();
             }
             catch
             {
