@@ -76,6 +76,8 @@ namespace PawnGame
             LoadGame,
             LevelEditor,
             Crosshair,
+
+            Victory,
         }
         #endregion
 
@@ -258,6 +260,7 @@ namespace PawnGame
             Assets.Add(AssetNames.ButtonLeft, Content.Load<Texture2D>("ButtonLeft"));
             Assets.Add(AssetNames.ButtonRight, Content.Load<Texture2D>("ButtonRight"));*/
             Assets.Add(AssetNames.Crosshair, Content.Load<Texture2D>("Crosshair"));
+            Assets.Add(AssetNames.Victory, Content.Load<Texture2D>("Victory"));
             #endregion
 
             _weapon = new Weapon(AssetNames.WeaponSword, new Rectangle(RenderTargetWidth / 2, RenderTargetHeight / 2, Assets[AssetNames.WeaponSword].Width, Assets[AssetNames.WeaponSword].Height));
@@ -609,8 +612,14 @@ namespace PawnGame
                 #region Victory State
                 case GameState.Victory:
                     // Draw victory screen
+                    _spriteBatch.Draw(Assets[AssetNames.Victory],
+                        new Vectangle(0, 0, (RenderTargetWidth), (RenderTargetHeight)),
+                        Color.Gray);
+
                     _spriteBatch.DrawString(_font, "You Win!",
                         new Vector2(RenderTargetWidth / 2 - _font.MeasureString("You Win!").X / 2, RenderTargetHeight / 2), Color.White);
+
+
                     #endregion
                     break;
             }
