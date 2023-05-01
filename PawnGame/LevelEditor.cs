@@ -90,7 +90,7 @@ namespace PawnGame
             //initialize static level if it hasn't been
             if(_level == null)
             {
-                _level = new Level(_game, new Point(3, 3), new Point(0, 0));
+                _level = new Level(_game, new Point(5, 5), new Point(0, 0));
             }
 
             //set up buttons and variables
