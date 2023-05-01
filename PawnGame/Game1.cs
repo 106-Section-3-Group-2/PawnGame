@@ -263,8 +263,8 @@ namespace PawnGame
                     Color.LightGray));
             #endregion
             #region Add debug menu buttons
-            _debugButtons.Add(new(_font, "Menu",
-                        new Vector2(RenderTargetWidth / 4 - _font.MeasureString("Menu").X / 2, RenderTargetHeight / 2),
+            _debugButtons.Add(new(_font, "Main Menu",
+                        new Vector2(RenderTargetWidth / 4 - _font.MeasureString("Main Menu").X / 2, RenderTargetHeight / 2),
                         Color.LightGray));
 
             _debugButtons.Add(new(_font, "Game",
@@ -349,15 +349,7 @@ namespace PawnGame
 
                     IsMouseVisible = true;
 
-                    // If the user presses escape, goes back to the previous state
-                    if (_currKbState.IsKeyDown(Keys.Escape) && _prevKbState.IsKeyUp(Keys.Escape))
-                    {
-                        _debugButtons[(int)s_prevGameState].Enabled = true;
-                        s_gameState = s_prevGameState;
-                        s_prevGameState = GameState.DebugMenu;
-                    }
-
-                    if (s_prevGameState != GameState.DebugMenu)
+                    if (_prevGameState != GameState.DebugMenu)
                     {
                         _debugButtons[(int)s_prevGameState].Enabled = false;
                     }
@@ -439,11 +431,21 @@ namespace PawnGame
                     break;
             }
 
-            // Regardless of state, you can get to the debug menus
-            if (_currKbState.IsKeyDown(Keys.Escape) && _prevKbState.IsKeyUp(Keys.Escape) && s_gameState != GameState.DebugMenu)
+            // Regardless of state, you can get to the menus
+            if (_currKbState.IsKeyDown(Keys.Escape) && _prevKbState.IsKeyUp(Keys.Escape))
             {
-                s_prevGameState = s_gameState;
-                s_gameState = GameState.DebugMenu;
+                if (s_gameState != GameState.DebugMenu)
+                {
+                    _prevGameState = s_gameState;
+                    s_gameState = GameState.DebugMenu;
+                }
+                // If in the debug menu, goes back to previous game state
+                else
+                {
+                    _debugButtons[(int)_prevGameState].Enabled = true;
+                    s_gameState = _prevGameState;
+                    _prevGameState = GameState.DebugMenu;
+                }
             }
 
             _prevMouseState = _currMouseState;
