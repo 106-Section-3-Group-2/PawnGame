@@ -343,7 +343,7 @@ namespace PawnGame
 
                     #endregion
                     break;
-#if DEBUG
+
                 #region DebugMenu State
                 case GameState.DebugMenu:
 
@@ -385,7 +385,6 @@ namespace PawnGame
 
                     #endregion
                     break;
-#endif
                 #region Game State
                 case GameState.Game:
 
@@ -483,7 +482,6 @@ namespace PawnGame
                     }
                     #endregion
                     break;
-#if DEBUG
                 #region DebugMenu State
                 case GameState.DebugMenu:
                     // Draw debug menu on top of last frame of previous
@@ -500,7 +498,6 @@ namespace PawnGame
                     
                     #endregion
                     break;
-#endif
                 #region Game State
                 case GameState.Game:
                     // Draw.. the game?
