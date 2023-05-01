@@ -243,6 +243,9 @@ namespace PawnGame
             VMouse.SetCrosshair = Assets[AssetNames.Crosshair];
             s_player = new Player(AssetNames.PawnBlack, new Rectangle(RenderTargetWidth / 2, RenderTargetHeight / 2, Assets[AssetNames.PawnBlack].Width/_playerScale, Assets[AssetNames.PawnBlack].Height/ _playerScale), _weapon);
             _heldAbilityTexture = null!;
+
+            LoadLevels();
+
             //initialize level editor (needs textures loaded)
             _levelEditor = new LevelEditor(this);
 
@@ -288,8 +291,6 @@ namespace PawnGame
 
         protected override void Update(GameTime gameTime)
         {
-
-
             _currKbState = Keyboard.GetState();
             _currMouseState = Mouse.GetState();
 
@@ -323,7 +324,6 @@ namespace PawnGame
                             {
                                 // Start a new game
                                 // (whatever that means)
-                                LoadLevels();
                                 s_player.HeldAbility = Player.Ability.None;
                                 Mouse.SetPosition(WindowWidth / 2, WindowHeight / 2);
                                 s_gameState = GameState.Game;
@@ -437,19 +437,26 @@ namespace PawnGame
             // Regardless of state, you can get to the menus
             if (_currKbState.IsKeyDown(Keys.Escape) && _prevKbState.IsKeyUp(Keys.Escape))
             {
-                if (s_gameState != GameState.DebugMenu)
+                if (s_gameState != GameState.DebugMenu && s_gameState != GameState.Victory)
                 {
                     s_prevGameState = s_gameState;
                     s_gameState = GameState.DebugMenu;
+                }
+                else if (s_gameState == GameState.Victory)
+                {
+                    s_gameState = GameState.DebugMenu;
+                    s_prevGameState = GameState.Game;
                 }
                 // If in the debug menu, goes back to previous game state
                 else
                 {
                     _debugButtons[(int)s_prevGameState].Enabled = true;
+
                     s_gameState = s_prevGameState;
                     s_prevGameState = GameState.DebugMenu;
                 }
             }
+            
 
             _prevMouseState = _currMouseState;
             _prevKbState = _currKbState;
