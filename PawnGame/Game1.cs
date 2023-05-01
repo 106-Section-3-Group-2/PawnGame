@@ -387,7 +387,7 @@ namespace PawnGame
                     //Debug level skip
                     if (_currKbState.IsKeyDown(Keys.X) && _prevKbState.IsKeyUp(Keys.X))
                     {
-                        s_levelIndex++;
+                        NextLevel();
                         break;
                     }
 #endif
