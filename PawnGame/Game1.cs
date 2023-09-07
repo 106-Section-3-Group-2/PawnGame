@@ -250,7 +250,7 @@ namespace PawnGame
             _levelEditor = new LevelEditor(this);
 
             //initialize and load the level array
-            //LoadLevels();
+            LoadLevels();
 
             #region Add Menu buttons
             #region Add main menu buttons
